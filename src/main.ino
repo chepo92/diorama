@@ -76,7 +76,7 @@ vs1053 MP3player;
 #include <Adafruit_PWMServoDriver.h>
 
 // called this way, it uses the default address 0x40
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+Adafruit_PWMServoDriver PCA = Adafruit_PWMServoDriver();
 // you can also call it with a different address you want
 //Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x41);
 // you can also call it with a different address and I2C interface
@@ -131,12 +131,12 @@ void setup() {
   // delay(500);
 
 
-  pwm.begin();
+  PCA.begin();
   // In theory the internal oscillator is 25MHz but it really isn't
   // that precise. You can 'calibrate' by tweaking this number till
   // you get the frequency you're expecting!
-  pwm.setOscillatorFrequency(27000000);  // The int.osc. is closer to 27MHz
-  pwm.setPWMFreq(1600);  // This is the maximum PWM frequency
+  PCA.setOscillatorFrequency(27000000);  // The int.osc. is closer to 27MHz
+  PCA.setPWMFreq(1600);  // This is the maximum PWM frequency
 
   // if you want to really speed stuff up, you can go into 'fast 400khz I2C' mode
   // some i2c devices dont like this so much so if you're sharing the bus, watch
@@ -147,6 +147,44 @@ void setup() {
 
 }
 
+
+/* Servo Control */
+
+#define PCA_PIN_SERVO 12
+
+
+unsigned int pos0=172; // position 0°
+unsigned int pos180=565; // position 180°
+
+int current_position = 0 ; 
+
+int servo_step = 1 ; 
+
+
+void set_servo_angle(uint8_t n_servo, int angulo) {
+  int duty;
+  duty = map(angulo,0,180,pos0, pos180);
+  PCA.setPWM(n_servo, 0, duty);  
+}
+
+void servo_continuous(uint8_t n_servo, int dir) {
+  int duty;
+  if (dir > 0 )  // CW 
+  {
+    PCA.setPWM(n_servo, 0, duty);  
+  } else {
+
+  }
+  
+  
+  
+}
+
+
+
+/* LED control */
+
+boolean led_state = false ;
 long led_timer;
 long led_period;
 
@@ -154,8 +192,13 @@ long led_period;
 #define PCA_PIN_LEDS_M 9
 
 void turn_on_led(){
-  pwm.setPWM(PCA_PIN_LEDS_E, 0, 4095 );
-  pwm.setPWM(PCA_PIN_LEDS_E, 4095, 0 );
+  PCA.setPWM(PCA_PIN_LEDS_E, 0, 2045 );
+  PCA.setPWM(PCA_PIN_LEDS_E, 2045, 4090 );
+}
+
+void turn_off_led(){
+  PCA.setPWM(PCA_PIN_LEDS_E, 0, 0 );
+  PCA.setPWM(PCA_PIN_LEDS_E, 0, 0 );
 }
 
 //------------------------------------------------------------------------------
@@ -174,7 +217,20 @@ void turn_on_led(){
  */
 void loop() {
 
+  
+  // set_servo_angle(PCA_PIN_SERVO, current_position); 
+  // current_position = current_position + servo_step ; 
 
+  // if (current_position <= 0 )
+  // {
+  //   servo_step = abs(servo_step); 
+  // }
+  // if (current_position >= 180 )
+  // {
+  //   servo_step  = - abs(servo_step);
+  // }
+  
+  
   // // Drive each PWM in a 'wave'
   // for (uint16_t i=0; i<4096; i += 8) {
   //   for (uint8_t pwmnum=0; pwmnum < 16; pwmnum++) {
@@ -194,7 +250,7 @@ void loop() {
 
   if(Serial.available()) {
     parse_menu(Serial.read()); // get command from serial input
-    turn_on_led();
+    
   }
 
   delay(100);
@@ -583,7 +639,19 @@ void parse_menu(byte key_command) {
 
   } else if(key_command == 'h') {
     help();
+  
+  } else if(key_command == 'l') {
+    led_state = !led_state; 
+    if (led_state)
+    {
+      turn_on_led();
+    }
+    else
+    {
+      turn_off_led(); 
+    }
   }
+
 
   // print prompt after key stroke has been processed.
   Serial.print(F("Time since last command: "));  
