@@ -23,17 +23,17 @@
 #include <SPI.h>
 #include <FreeStack.h>
 
-//Add the SdFat Libraries
+// Add the SdFat Libraries
 #include <SdFat.h>
 
-//and the MP3 Shield Library
+// and the MP3 Shield Library
 #include <vs1053_SdFat.h>
 
 // Below is not needed if interrupt driven. Safe to remove if not using.
 #if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
-  #include <TimerOne.h>
+#include <TimerOne.h>
 #elif defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
-  #include <SimpleTimer.h>
+#include <SimpleTimer.h>
 #endif
 
 /**
@@ -71,44 +71,47 @@ vs1053 MP3player;
 // // initialize the stepper library on pins 8 through 11:
 // Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);
 
-
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
 // called this way, it uses the default address 0x40
 Adafruit_PWMServoDriver PCA = Adafruit_PWMServoDriver();
 // you can also call it with a different address you want
-//Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x41);
+// Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x41);
 // you can also call it with a different address and I2C interface
-//Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40, Wire);
- 
-void setup() {
+// Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40, Wire);
 
-  uint8_t result; //result code from some function as to be tested at later time.
+void setup()
+{
+
+  uint8_t result; // result code from some function as to be tested at later time.
 
   Serial.begin(115200);
 
   Serial.print(F("F_CPU = "));
   Serial.println(F_CPU);
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
-  Serial.print(FreeStack(), DEC);  // FreeStack() is provided by SdFat
+  Serial.print(FreeStack(), DEC); // FreeStack() is provided by SdFat
   Serial.println(F(" Should be a base line of 1028, on ATmega328 when using INTx"));
 
-
-  //Initialize the SdCard.
-  if(!sd.begin(SD_SEL, SPI_FULL_SPEED)) sd.initErrorHalt();
+  // Initialize the SdCard.
+  if (!sd.begin(SD_SEL, SPI_FULL_SPEED))
+    sd.initErrorHalt();
   // depending upon your SdCard environment, SPI_HAVE_SPEED may work better.
-  if(!sd.chdir("/")) sd.errorHalt("sd.chdir");
+  if (!sd.chdir("/"))
+    sd.errorHalt("sd.chdir");
 
-  //Initialize the MP3 Player Shield
+  // Initialize the MP3 Player Shield
   result = MP3player.begin();
-  //check result, see readme for error codes.
-  if(result != 0) {
+  // check result, see readme for error codes.
+  if (result != 0)
+  {
     Serial.print(F("Error code: "));
     Serial.print(result);
     Serial.println(F(" when trying to start MP3 player"));
-    if( result == 6 ) {
-      Serial.println(F("Warning: patch file not found, skipping.")); // can be removed for space, if needed.
+    if (result == 6)
+    {
+      Serial.println(F("Warning: patch file not found, skipping."));           // can be removed for space, if needed.
       Serial.println(F("Use the \"d\" command to verify SdCard can be read")); // can be removed for space, if needed.
     }
   }
@@ -116,12 +119,12 @@ void setup() {
 #if defined(__BIOFEEDBACK_MEGA__) // or other reasons, of your choosing.
   // Typically not used by most shields, hence commented out.
   Serial.println(F("Applying ADMixer patch."));
-  if(MP3player.ADMixerLoad("admxster.053") == 0) {
+  if (MP3player.ADMixerLoad("admxster.053") == 0)
+  {
     Serial.println(F("Setting ADMixer Volume."));
     MP3player.ADMixerVol(-3);
   }
 #endif
-
 
   // // set the speed at 60 rpm:
   // myStepper.setSpeed(60);
@@ -130,75 +133,98 @@ void setup() {
   // myStepper.step(stepsPerRevolution);
   // delay(500);
 
-
   PCA.begin();
   // In theory the internal oscillator is 25MHz but it really isn't
   // that precise. You can 'calibrate' by tweaking this number till
   // you get the frequency you're expecting!
-  PCA.setOscillatorFrequency(27000000);  // The int.osc. is closer to 27MHz
-  PCA.setPWMFreq(1600);  // This is the maximum PWM frequency
+  PCA.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
+  PCA.setPWMFreq(500);                  // This is the maximum PWM frequency
 
   // if you want to really speed stuff up, you can go into 'fast 400khz I2C' mode
   // some i2c devices dont like this so much so if you're sharing the bus, watch
   // out for this!
   Wire.setClock(400000);
-  
+
   help();
-
 }
-
 
 /* Servo Control */
 
 #define PCA_PIN_SERVO 12
 
+unsigned int pos0 = 172;   // position 0°
+unsigned int pos180 = 565; // position 180°
 
-unsigned int pos0=172; // position 0°
-unsigned int pos180=565; // position 180°
+int current_position = 0;
 
-int current_position = 0 ; 
+int servo_step = 1;
 
-int servo_step = 1 ; 
+bool servo_angle_active; 
 
-
-void set_servo_angle(uint8_t n_servo, int angulo) {
+void set_servo_angle(uint8_t n_servo, int angulo)
+{
   int duty;
-  duty = map(angulo,0,180,pos0, pos180);
-  PCA.setPWM(n_servo, 0, duty);  
+  duty = map(angulo, 0, 180, pos0, pos180);
+  PCA.setPWM(n_servo, 0, duty);
 }
 
-void servo_continuous(uint8_t n_servo, int dir) {
-  int duty;
-  if (dir > 0 )  // CW 
-  {
-    PCA.setPWM(n_servo, 0, duty);  
-  } else {
-
+// Needs debug/calibration
+void servo_continuous(uint8_t n_servo, int dir)
+{
+  if (dir > 0)
+  { // CW
+    PCA.setPWM(n_servo, 0, 180);
   }
-  
-  
-  
+  else if (dir < 0)
+  { // CCW
+    PCA.setPWM(n_servo, 0, 360);
+  }
+  else
+  {
+    PCA.setPWM(n_servo, 0, 300);
+  }
 }
 
+/* Stepper Control */
 
+#define PCA_PIN_STEPPER1 4
+#define PCA_PIN_STEPPER2 5
+#define PCA_PIN_STEPPER3 6
+#define PCA_PIN_STEPPER4 7
+
+void one_step()
+{
+  PCA.setPWM(PCA_PIN_STEPPER1, 0, 1000);
+  PCA.setPWM(PCA_PIN_STEPPER2, 1000, 2000);
+  PCA.setPWM(PCA_PIN_STEPPER3, 2000, 3000);
+  PCA.setPWM(PCA_PIN_STEPPER4, 3000, 4000);
+  // // Drive each PWM in a 'wave'
+  // for (uint16_t i=0; i<4096; i += 8) {
+  //   for (uint8_t pwmnum=0; pwmnum < 16; pwmnum++) {
+  //     pwm.setPWM(pwmnum, 0, (i + (4096/16)*pwmnum) % 4096 );
+  //   }
+  // }
+}
 
 /* LED control */
 
-boolean led_state = false ;
+boolean led_state = false;
 long led_timer;
 long led_period;
 
 #define PCA_PIN_LEDS_E 8
 #define PCA_PIN_LEDS_M 9
 
-void turn_on_led(){
-  PCA.setPWM(PCA_PIN_LEDS_E, 0, 2045 );
-  PCA.setPWM(PCA_PIN_LEDS_E, 2045, 4090 );
+void turn_on_led()
+{
+  PCA.setPWM(PCA_PIN_LEDS_E, 0, 2045);
+  PCA.setPWM(PCA_PIN_LEDS_E, 2045, 4090);
 }
 
-void turn_off_led(){
-  PCA.setPWM(PCA_PIN_LEDS_E, 0, 0 );
-  PCA.setPWM(PCA_PIN_LEDS_E, 0, 0 );
+void turn_off_led()
+{
+  PCA.setPWM(PCA_PIN_LEDS_E, 0, 0);
+  PCA.setPWM(PCA_PIN_LEDS_E, 0, 0);
 }
 
 //------------------------------------------------------------------------------
@@ -215,22 +241,27 @@ void turn_off_led(){
  * \note Actual examples of the libraries public functions are implemented in
  * the parse_menu() function.
  */
-void loop() {
+void loop()
+{
 
-  
-  // set_servo_angle(PCA_PIN_SERVO, current_position); 
-  // current_position = current_position + servo_step ; 
+  one_step();
+  // servo_continuous(PCA_PIN_SERVO, -1);
 
-  // if (current_position <= 0 )
-  // {
-  //   servo_step = abs(servo_step); 
-  // }
-  // if (current_position >= 180 )
-  // {
-  //   servo_step  = - abs(servo_step);
-  // }
-  
-  
+  if (servo_angle_active)
+  {
+    Serial.println(current_position);
+    set_servo_angle(PCA_PIN_SERVO, current_position);
+    current_position = current_position + servo_step;
+    if (current_position <= 0)
+    {
+      servo_step = abs(servo_step);
+    }
+    if (current_position >= 180)
+    {
+      servo_step = -abs(servo_step);
+    }
+  }
+
   // // Drive each PWM in a 'wave'
   // for (uint16_t i=0; i<4096; i += 8) {
   //   for (uint8_t pwmnum=0; pwmnum < 16; pwmnum++) {
@@ -238,25 +269,21 @@ void loop() {
   //   }
   // }
 
-  
-
 // Below is only needed if not interrupt driven. Safe to remove if not using.
-#if defined(USE_MP3_REFILL_MEANS) \
-    && ( (USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer) \
-    ||   (USE_MP3_REFILL_MEANS == USE_MP3_Polled)      )
+#if defined(USE_MP3_REFILL_MEANS) && ((USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer) || (USE_MP3_REFILL_MEANS == USE_MP3_Polled))
 
   MP3player.available();
 #endif
 
-  if(Serial.available()) {
+  if (Serial.available())
+  {
     parse_menu(Serial.read()); // get command from serial input
-    
   }
 
   delay(100);
 }
 
-uint32_t  millis_prv;
+uint32_t millis_prv;
 
 //------------------------------------------------------------------------------
 /**
@@ -266,102 +293,131 @@ uint32_t  millis_prv;
  * MP3player library functions and features then displaying a brief menu and
  * prompting for next input command.
  */
-void parse_menu(byte key_command) {
+void parse_menu(byte key_command)
+{
 
   uint8_t result; // result code from some function as to be tested at later time.
 
   // Note these buffer may be desired to exist globably.
   // but do take much space if only needed temporarily, hence they are here.
-  char title[30]; // buffer to contain the extract the Title from the current filehandles
+  char title[30];  // buffer to contain the extract the Title from the current filehandles
   char artist[30]; // buffer to contain the extract the artist name from the current filehandles
-  char album[30]; // buffer to contain the extract the album name from the current filehandles
+  char album[30];  // buffer to contain the extract the album name from the current filehandles
 
   Serial.print(F("Received command: "));
   Serial.write(key_command);
   Serial.println(F(" "));
 
-  //if s, stop the current track
-  if(key_command == 's') {
+  // if s, stop the current track
+  if (key_command == 's')
+  {
     Serial.println(F("Stopping"));
     MP3player.stopTrack();
 
-  //if 1-9, play corresponding track
-  } else if(key_command >= '1' && key_command <= '9') {
-    //convert ascii numbers to real numbers
+    // if 1-9, play corresponding track
+  }
+  else if (key_command >= '1' && key_command <= '9')
+  {
+    // convert ascii numbers to real numbers
     key_command = key_command - 48;
 
 #if USE_MULTIPLE_CARDS
     sd.chvol(); // assign desired sdcard's volume.
 #endif
-    //tell the MP3 Shield to play a track
+    // tell the MP3 Shield to play a track
     result = MP3player.playTrack(key_command);
 
-    //check result, see readme for error codes.
-    if(result != 0) {
+    // check result, see readme for error codes.
+    if (result != 0)
+    {
       Serial.print(F("Error code: "));
       Serial.print(result);
       Serial.println(F(" when trying to play track"));
-    } else {
+    }
+    else
+    {
 
       Serial.println(F("Playing:"));
 
-      //we can get track info by using the following functions and arguments
-      //the functions will extract the requested information, and put it in the array we pass in
-      MP3player.trackTitle((char*)&title);
-      MP3player.trackArtist((char*)&artist);
-      MP3player.trackAlbum((char*)&album);
+      // we can get track info by using the following functions and arguments
+      // the functions will extract the requested information, and put it in the array we pass in
+      MP3player.trackTitle((char *)&title);
+      MP3player.trackArtist((char *)&artist);
+      MP3player.trackAlbum((char *)&album);
 
-      //print out the arrays of track information
-      Serial.write((byte*)&title, 30);
+      // print out the arrays of track information
+      Serial.write((byte *)&title, 30);
       Serial.println();
       Serial.print(F("by:  "));
-      Serial.write((byte*)&artist, 30);
+      Serial.write((byte *)&artist, 30);
       Serial.println();
       Serial.print(F("Album:  "));
-      Serial.write((byte*)&album, 30);
+      Serial.write((byte *)&album, 30);
       Serial.println();
     }
 
-  //if +/- to change volume
-  } else if((key_command == '-') || (key_command == '+')) {
-    union twobyte mp3_vol; // create key_command existing variable that can be both word and double byte of left and right.
+    // if +/- to change volume
+  }
+  else if ((key_command == '-') || (key_command == '+'))
+  {
+    union twobyte mp3_vol;                // create key_command existing variable that can be both word and double byte of left and right.
     mp3_vol.word = MP3player.getVolume(); // returns a double uint8_t of Left and Right packed into int16_t
 
-    if(key_command == '-') { // note dB is negative
+    if (key_command == '-')
+    { // note dB is negative
       // assume equal balance and use byte[1] for math
-      if(mp3_vol.byte[1] >= 254) { // range check
+      if (mp3_vol.byte[1] >= 254)
+      { // range check
         mp3_vol.byte[1] = 254;
-      } else {
+      }
+      else
+      {
         mp3_vol.byte[1] += 2; // keep it simpler with whole dB's
       }
-    } else {
-      if(mp3_vol.byte[1] <= 2) { // range check
+    }
+    else
+    {
+      if (mp3_vol.byte[1] <= 2)
+      { // range check
         mp3_vol.byte[1] = 2;
-      } else {
+      }
+      else
+      {
         mp3_vol.byte[1] -= 2;
       }
     }
     // push byte[1] into both left and right assuming equal balance.
     MP3player.setVolume(mp3_vol.byte[1], mp3_vol.byte[1]); // commit new volume
     Serial.print(F("Volume changed to -"));
-    Serial.print(mp3_vol.byte[1]>>1, 1);
+    Serial.print(mp3_vol.byte[1] >> 1, 1);
     Serial.println(F("[dB]"));
 
-  //if < or > to change Play Speed
-  } else if((key_command == '>') || (key_command == '<')) {
+    // if < or > to change Play Speed
+  }
+  else if ((key_command == '>') || (key_command == '<'))
+  {
     uint16_t playspeed = MP3player.getPlaySpeed(); // create key_command existing variable
     // note playspeed of Zero is equal to ONE, normal speed.
-    if(key_command == '>') { // note dB is negative
+    if (key_command == '>')
+    { // note dB is negative
       // assume equal balance and use byte[1] for math
-      if(playspeed >= 254) { // range check
+      if (playspeed >= 254)
+      { // range check
         playspeed = 5;
-      } else {
+      }
+      else
+      {
         playspeed += 1; // keep it simpler with whole dB's
       }
-    } else {
-      if(playspeed == 0) { // range check
+    }
+    else
+    {
+      if (playspeed == 0)
+      { // range check
         playspeed = 0;
-      } else {
+      }
+      else
+      {
         playspeed -= 1;
       }
     }
@@ -369,74 +425,99 @@ void parse_menu(byte key_command) {
     Serial.print(F("playspeed to "));
     Serial.println(playspeed, DEC);
 
-  /* Alterativly, you could call a track by it's file name by using playMP3(filename);
-  But you must stick to 8.1 filenames, only 8 characters long, and 3 for the extension */
-  } else if(key_command == 'f' || key_command == 'F') {
+    /* Alterativly, you could call a track by it's file name by using playMP3(filename);
+    But you must stick to 8.1 filenames, only 8 characters long, and 3 for the extension */
+  }
+  else if (key_command == 'f' || key_command == 'F')
+  {
     uint32_t offset = 0;
-    if (key_command == 'F') {
+    if (key_command == 'F')
+    {
       offset = 2000;
     }
 
-    //create a string with the filename
+    // create a string with the filename
     char trackName[] = "track001.mp3";
 
 #if USE_MULTIPLE_CARDS
     sd.chvol(); // assign desired sdcard's volume.
 #endif
-    //tell the MP3 Shield to play that file
+    // tell the MP3 Shield to play that file
     result = MP3player.playMP3(trackName, offset);
-    //check result, see readme for error codes.
-    if(result != 0) {
+    // check result, see readme for error codes.
+    if (result != 0)
+    {
       Serial.print(F("Error code: "));
       Serial.print(result);
       Serial.println(F(" when trying to play track"));
     }
 
-  /* Display the file on the SdCard */
-  } else if(key_command == 'd') {
-    if(!MP3player.isPlaying()) {
+    /* Display the file on the SdCard */
+  }
+  else if (key_command == 'd')
+  {
+    if (!MP3player.isPlaying())
+    {
       // prevent root.ls when playing, something locks the dump. but keeps playing.
       // yes, I have tried another unique instance with same results.
       // something about SdFat and its 500byte cache.
       Serial.println(F("Files found (name date time size):"));
       sd.ls(LS_R | LS_DATE | LS_SIZE);
-    } else {
+    }
+    else
+    {
       Serial.println(F("Busy Playing Files, try again later."));
     }
 
-  /* Get and Display the Audio Information */
-  } else if(key_command == 'i') {
+    /* Get and Display the Audio Information */
+  }
+  else if (key_command == 'i')
+  {
     MP3player.getAudioInfo();
-
-  } else if(key_command == 'p') {
-    if( MP3player.getState() == playback) {
+  }
+  else if (key_command == 'p')
+  {
+    if (MP3player.getState() == playback)
+    {
       MP3player.pauseMusic();
       Serial.println(F("Pausing"));
-    } else if( MP3player.getState() == paused_playback) {
+    }
+    else if (MP3player.getState() == paused_playback)
+    {
       MP3player.resumeMusic();
       Serial.println(F("Resuming"));
-    } else {
+    }
+    else
+    {
       Serial.println(F("Not Playing!"));
     }
-
-  } else if(key_command == 't') {
+  }
+  else if (key_command == 't')
+  {
     int8_t teststate = MP3player.enableTestSineWave(126);
-    if(teststate == -1) {
+    if (teststate == -1)
+    {
       Serial.println(F("Un-Available while playing music or chip in reset."));
-    } else if(teststate == 1) {
+    }
+    else if (teststate == 1)
+    {
       Serial.println(F("Enabling Test Sine Wave"));
-    } else if(teststate == 2) {
+    }
+    else if (teststate == 2)
+    {
       MP3player.disableTestSineWave();
       Serial.println(F("Disabling Test Sine Wave"));
     }
-
-  } else if(key_command == 'S') {
+  }
+  else if (key_command == 'S')
+  {
     Serial.println(F("Current State of VS10xx is."));
     Serial.print(F("isPlaying() = "));
     Serial.println(MP3player.isPlaying());
 
     Serial.print(F("getState() = "));
-    switch (MP3player.getState()) {
+    switch (MP3player.getState())
+    {
     case uninitialized:
       Serial.print(F("uninitialized"));
       break;
@@ -466,98 +547,123 @@ void parse_menu(byte key_command) {
       break;
     }
     Serial.println();
-
-   } else if(key_command == 'b') {
+  }
+  else if (key_command == 'b')
+  {
     Serial.println(F("Playing Static MIDI file."));
     MP3player.SendSingleMIDInote();
     Serial.println(F("Ended Static MIDI file."));
 
-
 #if !defined(__AVR_ATmega32U4__)
-  } else if(key_command == 'm') {
-      uint16_t teststate = MP3player.memoryTest();
-    if(teststate == -1) {
+  }
+  else if (key_command == 'm')
+  {
+    uint16_t teststate = MP3player.memoryTest();
+    if (teststate == -1)
+    {
       Serial.println(F("Un-Available while playing music or chip in reset."));
-    } else if(teststate == 2) {
+    }
+    else if (teststate == 2)
+    {
       teststate = MP3player.disableTestSineWave();
       Serial.println(F("Un-Available while Sine Wave Test"));
-    } else {
+    }
+    else
+    {
       Serial.print(F("Memory Test Results = "));
       Serial.println(teststate, HEX);
       Serial.println(F("Result should be 0x83FF."));
       Serial.println(F("Reset is needed to recover to normal operation"));
     }
-
-  } else if(key_command == 'e') {
+  }
+  else if (key_command == 'e')
+  {
     uint8_t earspeaker = MP3player.getEarSpeaker();
-    if(earspeaker >= 3){
+    if (earspeaker >= 3)
+    {
       earspeaker = 0;
-    } else {
+    }
+    else
+    {
       earspeaker++;
     }
     MP3player.setEarSpeaker(earspeaker); // commit new earspeaker
     Serial.print(F("earspeaker to "));
     Serial.println(earspeaker, DEC);
-
-  } else if(key_command == 'r') {
+  }
+  else if (key_command == 'r')
+  {
     MP3player.resumeMusic(2000);
-
-  } else if(key_command == 'R') {
+  }
+  else if (key_command == 'R')
+  {
     MP3player.stopTrack();
     MP3player.vs_init();
     Serial.println(F("Reseting VS10xx chip"));
-
-  } else if(key_command == 'g') {
+  }
+  else if (key_command == 'g')
+  {
     int32_t offset_ms = 20000; // Note this is just an example, try your own number.
     Serial.print(F("jumping to "));
     Serial.print(offset_ms, DEC);
     Serial.println(F("[milliseconds]"));
     result = MP3player.skipTo(offset_ms);
-    if(result != 0) {
+    if (result != 0)
+    {
       Serial.print(F("Error code: "));
       Serial.print(result);
       Serial.println(F(" when trying to skip track"));
     }
-
-  } else if(key_command == 'k') {
+  }
+  else if (key_command == 'k')
+  {
     int32_t offset_ms = -1000; // Note this is just an example, try your own number.
     Serial.print(F("moving = "));
     Serial.print(offset_ms, DEC);
     Serial.println(F("[milliseconds]"));
     result = MP3player.skip(offset_ms);
-    if(result != 0) {
+    if (result != 0)
+    {
       Serial.print(F("Error code: "));
       Serial.print(result);
       Serial.println(F(" when trying to skip track"));
     }
-
-  } else if(key_command == 'O') {
+  }
+  else if (key_command == 'O')
+  {
     MP3player.end();
     Serial.println(F("VS10xx placed into low power reset mode."));
-
-  } else if(key_command == 'o') {
+  }
+  else if (key_command == 'o')
+  {
     MP3player.begin();
     Serial.println(F("VS10xx restored from low power reset mode."));
-
-  } else if(key_command == 'D') {
+  }
+  else if (key_command == 'D')
+  {
     uint16_t diff_state = MP3player.getDifferentialOutput();
     Serial.print(F("Differential Mode "));
-    if(diff_state == 0) {
+    if (diff_state == 0)
+    {
       MP3player.setDifferentialOutput(1);
       Serial.println(F("Enabled."));
-    } else {
+    }
+    else
+    {
       MP3player.setDifferentialOutput(0);
       Serial.println(F("Disabled."));
     }
-
-  } else if(key_command == 'V') {
+  }
+  else if (key_command == 'V')
+  {
     MP3player.setVUmeter(1);
     Serial.println(F("Use \"No line ending\""));
     Serial.print(F("VU meter = "));
     Serial.println(MP3player.getVUmeter());
     Serial.println(F("Hit Any key to stop."));
 
-    while(!Serial.available()) {
+    while (!Serial.available())
+    {
       union twobyte vu;
       vu.word = MP3player.getVUlevel();
       Serial.print(F("VU: L = "));
@@ -572,90 +678,117 @@ void parse_menu(byte key_command) {
     MP3player.setVUmeter(0);
     Serial.print(F("VU meter = "));
     Serial.println(MP3player.getVUmeter());
-
-  } else if(key_command == 'T') {
+  }
+  else if (key_command == 'T')
+  {
     uint16_t TrebleFrequency = MP3player.getTrebleFrequency();
     Serial.print(F("Former TrebleFrequency = "));
     Serial.println(TrebleFrequency, DEC);
-    if (TrebleFrequency >= 15000) { // Range is from 0 - 1500Hz
+    if (TrebleFrequency >= 15000)
+    { // Range is from 0 - 1500Hz
       TrebleFrequency = 0;
-    } else {
+    }
+    else
+    {
       TrebleFrequency += 1000;
     }
     MP3player.setTrebleFrequency(TrebleFrequency);
     Serial.print(F("New TrebleFrequency = "));
     Serial.println(MP3player.getTrebleFrequency(), DEC);
-
-  } else if(key_command == 'E') {
+  }
+  else if (key_command == 'E')
+  {
     int8_t TrebleAmplitude = MP3player.getTrebleAmplitude();
     Serial.print(F("Former TrebleAmplitude = "));
     Serial.println(TrebleAmplitude, DEC);
-    if (TrebleAmplitude >= 7) { // Range is from -8 - 7dB
+    if (TrebleAmplitude >= 7)
+    { // Range is from -8 - 7dB
       TrebleAmplitude = -8;
-    } else {
+    }
+    else
+    {
       TrebleAmplitude++;
     }
     MP3player.setTrebleAmplitude(TrebleAmplitude);
     Serial.print(F("New TrebleAmplitude = "));
     Serial.println(MP3player.getTrebleAmplitude(), DEC);
-
-  } else if(key_command == 'B') {
+  }
+  else if (key_command == 'B')
+  {
     uint16_t BassFrequency = MP3player.getBassFrequency();
     Serial.print(F("Former BassFrequency = "));
     Serial.println(BassFrequency, DEC);
-    if (BassFrequency >= 150) { // Range is from 20hz - 150hz
+    if (BassFrequency >= 150)
+    { // Range is from 20hz - 150hz
       BassFrequency = 0;
-    } else {
+    }
+    else
+    {
       BassFrequency += 10;
     }
     MP3player.setBassFrequency(BassFrequency);
     Serial.print(F("New BassFrequency = "));
     Serial.println(MP3player.getBassFrequency(), DEC);
-
-  } else if(key_command == 'C') {
+  }
+  else if (key_command == 'C')
+  {
     uint16_t BassAmplitude = MP3player.getBassAmplitude();
     Serial.print(F("Former BassAmplitude = "));
     Serial.println(BassAmplitude, DEC);
-    if (BassAmplitude >= 15) { // Range is from 0 - 15dB
+    if (BassAmplitude >= 15)
+    { // Range is from 0 - 15dB
       BassAmplitude = 0;
-    } else {
+    }
+    else
+    {
       BassAmplitude++;
     }
     MP3player.setBassAmplitude(BassAmplitude);
     Serial.print(F("New BassAmplitude = "));
     Serial.println(MP3player.getBassAmplitude(), DEC);
-
-  } else if(key_command == 'M') {
+  }
+  else if (key_command == 'M')
+  {
     uint16_t monostate = MP3player.getMonoMode();
     Serial.print(F("Mono Mode "));
-    if(monostate == 0) {
+    if (monostate == 0)
+    {
       MP3player.setMonoMode(1);
       Serial.println(F("Enabled."));
-    } else {
+    }
+    else
+    {
       MP3player.setMonoMode(0);
       Serial.println(F("Disabled."));
     }
 #endif
-
-  } else if(key_command == 'h') {
+  }
+  else if (key_command == 'h')
+  {
     help();
-  
-  } else if(key_command == 'l') {
-    led_state = !led_state; 
+  }
+  else if (key_command == 'l')
+  {
+    led_state = !led_state;
     if (led_state)
     {
       turn_on_led();
+      //servo_continuous(PCA_PIN_SERVO, 1);
     }
     else
     {
-      turn_off_led(); 
+      turn_off_led();
+      //servo_continuous(PCA_PIN_SERVO, -1);
     }
   }
-
+  else if (key_command == 'w')
+  {
+    servo_angle_active =!servo_angle_active;
+  }
 
   // print prompt after key stroke has been processed.
-  Serial.print(F("Time since last command: "));  
-  Serial.println((float) (millis() -  millis_prv)/1000, 2);  
+  Serial.print(F("Time since last command: "));
+  Serial.println((float)(millis() - millis_prv) / 1000, 2);
   millis_prv = millis();
   Serial.print(F("Enter s,1-9,+,-,>,<,f,F,d,i,p,t,S,b"));
 #if !defined(__AVR_ATmega32U4__)
@@ -670,7 +803,8 @@ void parse_menu(byte key_command) {
  *
  * Prints a full menu of the commands available along with descriptions.
  */
-void help() {
+void help()
+{
   Serial.println(F("Arduino vs1053 Library Example:"));
   Serial.println(F(" courtesy of Bill Porter & Michael P. Flaga"));
   Serial.println(F("COMMANDS:"));
