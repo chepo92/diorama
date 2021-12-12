@@ -1,0 +1,331 @@
+make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+ 
+# GNU Make 4.3
+# Built for Windows32
+# Copyright (C) 1988-2020 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+
+# Make data base, printed on Sat Dec 11 15:03:06 2021
+
+# Variables
+
+# environment
+FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
+# environment
+SYSTEMDRIVE = C:
+# environment
+LC_ALL = C
+# environment
+USERPROFILE = C:\Users\Axel
+# environment
+KINECTSDK10_DIR = C:\Program Files\Microsoft SDKs\Kinect\v1.8\
+# environment
+LOCALAPPDATA = C:\Users\Axel\AppData\Local
+# environment
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-37c54f30-446f-4c19-b7d3-a5f7b39ed93b-sock
+# environment
+VSCODE_CWD = C:\Users\Axel\AppData\Local\Programs\Microsoft VS Code
+# environment
+CARBON_MEM_DISABLE = 1
+# environment
+CHOCOLATEYINSTALL = C:\ProgramData\chocolatey
+# environment
+SYSTEMROOT = C:\WINDOWS
+# environment
+PROCESSOR_LEVEL = 6
+# environment
+PSMODULEPATH = C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules\
+# default
+MAKE_COMMAND := C:/ProgramData/chocolatey/lib/make/tools/install/bin/make.exe
+# automatic
+@D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
+# environment
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_2848_WXVPSMXDOBQETQJN
+# environment
+FPS_BROWSER_USER_PROFILE_STRING = Default
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# default
+.VARIABLES := 
+# automatic
+%D = $(patsubst %/,%,$(patsubst %\,%,$(dir $%)))
+# automatic
+^D = $(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
+# environment
+VSCODE_LOG_STACK = false
+# automatic
+%F = $(notdir $%)
+# environment
+VSCODE_CODE_CACHE_PATH = C:\Users\Axel\AppData\Roaming\Code\CachedData\ccbaa2d27e38e5afa3e5c21c1c7bef4657064247
+# environment
+LANG = C
+# default
+.LOADED := 
+# environment
+TMP = C:\Users\Axel\AppData\Local\Temp
+# default
+.INCLUDE_DIRS = .
+# environment
+PROCESSOR_ARCHITEW6432 = AMD64
+# makefile
+MAKEFLAGS = pqrR
+# environment
+INTEL_DEV_REDIST = C:\Program Files (x86)\Common Files\Intel\Shared Libraries\
+# environment
+ONEDRIVE = C:\Users\Axel\OneDrive
+# makefile
+CURDIR := h:/Mi unidad/Proyectos/Arduino/Proyectos/Diorama
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# environment
+PYLON_DEV_DIR = C:\Program Files\Basler\pylon 6\Development\
+# automatic
+*D = $(patsubst %/,%,$(patsubst %\,%,$(dir $*)))
+# environment
+OPENNI2_LIB64 = C:\Program Files\OpenNI2\Lib\
+# environment
+PROGRAMFILES = C:\Program Files (x86)
+# environment
+MFLAGS = -pqrR
+# default
+.SHELLFLAGS := -c
+# environment
+COMMONPROGRAMW6432 = C:\Program Files\Common Files
+# automatic
++D = $(patsubst %/,%,$(patsubst %\,%,$(dir $+)))
+# makefile
+MAKEFILE_LIST := 
+# automatic
+@F = $(notdir $@)
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+VSCODE_PID = 2848
+# environment
+GENICAM_GENTL64_PATH = C:\Program Files\Basler\pylon 6\Runtime\x64\
+# automatic
+?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
+# automatic
+*F = $(notdir $*)
+# automatic
+<D = $(patsubst %/,%,$(patsubst %\,%,$(dir $<)))
+# environment
+VSCODE_NLS_CONFIG = {"locale":"es","availableLanguages":{},"_languagePackSupport":true}
+# environment
+ONEDRIVECONSUMER = C:\Users\Axel\OneDrive
+# default
+MAKE_HOST := Windows32
+# environment
+PROGRAMDATA = C:\ProgramData
+# default
+SHELL := C:/msys64/usr/bin/sh.exe
+# environment
+OPENNI2_REDIST64 = C:\Program Files\OpenNI2\Redist\
+# environment
+HOMEPATH = \Users\Axel
+# environment
+PLATFORMIO_CALLER = vscode
+# default
+MAKECMDGOALS := all
+# environment
+GNUARMEMB_TOOLCHAIN_PATH = C:\gnu_arm_embedded
+# environment
+DRIVERDATA = C:\Windows\System32\Drivers\DriverData
+# environment
+COMSPEC = C:\WINDOWS\system32\cmd.exe
+# environment
+WINDIR = C:\WINDOWS
+# environment
+MAKELEVEL := 0
+# default
+MAKE = $(MAKE_COMMAND)
+# environment
+MOSQUITTO_DIR = C:\Program Files\mosquitto
+# environment
+PATH = C:\Python310\Scripts\;C:\Python310\;C:\Python39\Scripts\;C:\Python39\;C:\Program Files\Basler\pylon 6\Runtime\x64\;C:\Program Files\Basler\pylon 6\Runtime\Win32\;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32\mpirt;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32\compiler;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files (x86)\Skype\Phone\;C:\Program Files\PuTTY\;C:\Program Files\MATLAB\R2021a\bin;F:\MATLAB\runtime\win64;F:\MATLAB\bin;C:\Program Files\dotnet\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Users\Axel\.platformio\penv\Scripts;C:\Ruby30-x64\bin\;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\ProgramData\Anaconda3\condabin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\msys64\usr\bin;C:\Program Files (x86)\SEGGER\JLink\;C:\msys64\;C:\xampp\php;C:\ProgramData\ComposerSetup\bin;C:\ProgramData\chocolatey\bin;C;C:\Program Files\CMake\bin;C:\Users\Axel\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Ruby30-x64\bin;C:\Users\Axel\.windows-build-tools\python27\;C:\Program Files (x86)\GNU Arm Embedded Toolchain\10 2020-q4-major\bin;C:\Users\Axel\.cargo\bin;C:\Program Files (x86)\GNU Tools ARM Embedded\8 2018-q4-major\bin;C:\Program Files (x86)\GNU Tools ARM Embedded\5.4 2016q3\bin;C:\Program Files (x86)\Atmel\sam-ba_2.16\drv\;C:\Program Files (x86)\Atmel\sam-ba_2.16;C:\Users\Axel\.platformio\penv\Scripts;C:\Users\Axel\AppData\Local\atom\bin;C:\Users\Axel\AppData\Local\Programs\Microsoft VS Code\bin;C:\ProgramData\Anaconda3\condabin\;C:\Users\Axel\AppData\Local\GitHubDesktop\bin;C:\Users\Axel\AppData\Local\Microsoft\WindowsApps;C:\Users\Axel\AppData\Roaming\Composer\vendor\bin;C:\Users\Axel\AppData\Local\Programs\Julia-1.6.0\bin;C:\Users\Axel\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\Axel\AppData\Roaming\npm
+# environment
+COMPUTERNAME = LAMBORGHINI
+# default
+MAKEFILES := 
+# automatic
+^F = $(notdir $^)
+# environment
+PROMPT = $P$G
+# environment
+CHOCOLATEYLASTPATHUPDATE = 132626646325376001
+# environment
+GENICAM_GENTL32_PATH = C:\Program Files\Basler\pylon 6\Runtime\Win32\
+# environment
+LOGONSERVER = \\LAMBORGHINI
+# environment
+MSYS2_PATH_TYPE = inherit
+# environment
+VSCODE_LOG_NATIVE = false
+# environment
+USERNAME = Axel
+# environment
+COMMONPROGRAMFILES = C:\Program Files (x86)\Common Files
+# automatic
+?F = $(notdir $?)
+# environment
+PROGRAMW6432 = C:\Program Files
+# environment
+KINECTSDK20_DIR = C:\Program Files\Microsoft SDKs\Kinect\v2.0_1409\
+# environment
+NO_PROXY = 127.0.0.1
+# environment
+PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW;.RB;.RBW
+# automatic
++F = $(notdir $+)
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+USERDOMAIN = LAMBORGHINI
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+OS = Windows_NT
+# environment
+FP_NO_HOST_CHECK = NO
+# environment
+GYP_MSVS_VERSION = 2015
+# environment
+PLATFORMIO_PATH = C:\Users\Axel\.platformio\python3;C:\Python310\Scripts\;C:\Python310\;C:\Python39\Scripts\;C:\Python39\;C:\Program Files\Basler\pylon 6\Runtime\x64\;C:\Program Files\Basler\pylon 6\Runtime\Win32\;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32\mpirt;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32\compiler;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files (x86)\Skype\Phone\;C:\Program Files\PuTTY\;C:\Program Files\MATLAB\R2021a\bin;F:\MATLAB\runtime\win64;F:\MATLAB\bin;C:\Program Files\dotnet\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Users\Axel\.platformio\penv\Scripts;C:\Ruby30-x64\bin\;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\ProgramData\Anaconda3\condabin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\msys64\usr\bin;C:\Program Files (x86)\SEGGER\JLink\;C:\msys64\;C:\xampp\php;C:\ProgramData\ComposerSetup\bin;C:\ProgramData\chocolatey\bin;C;C:\Program Files\CMake\bin;C:\Users\Axel\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Ruby30-x64\bin;C:\Users\Axel\.windows-build-tools\python27\;C:\Program Files (x86)\GNU Arm Embedded Toolchain\10 2020-q4-major\bin;C:\Users\Axel\.cargo\bin;C:\Program Files (x86)\GNU Tools ARM Embedded\8 2018-q4-major\bin;C:\Program Files (x86)\GNU Tools ARM Embedded\5.4 2016q3\bin;C:\Program Files (x86)\Atmel\sam-ba_2.16\drv\;C:\Program Files (x86)\Atmel\sam-ba_2.16;C:\Users\Axel\.platformio\penv\Scripts;C:\Users\Axel\AppData\Local\atom\bin;C:\Users\Axel\AppData\Local\Programs\Microsoft VS Code\bin;C:\ProgramData\Anaconda3\condabin\;C:\Users\Axel\AppData\Local\GitHubDesktop\bin;C:\Users\Axel\AppData\Local\Microsoft\WindowsApps;C:\Users\Axel\AppData\Roaming\Composer\vendor\bin;C:\Users\Axel\AppData\Local\Programs\Julia-1.6.0\bin;C:\Users\Axel\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\Axel\AppData\Roaming\npm;C:\Python310\Scripts\;C:\Python310\;C:\Python39\Scripts\;C:\Python39\;C:\Program Files\Basler\pylon 6\Runtime\x64\;C:\Program Files\Basler\pylon 6\Runtime\Win32\;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32\mpirt;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32\compiler;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files (x86)\Skype\Phone\;C:\Program Files\PuTTY\;C:\Program Files\MATLAB\R2021a\bin;F:\MATLAB\runtime\win64;F:\MATLAB\bin;C:\Program Files\dotnet\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Users\Axel\.platformio\penv\Scripts;C:\Ruby30-x64\bin\;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\ProgramData\Anaconda3\condabin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\msys64\usr\bin;C:\Program Files (x86)\SEGGER\JLink\;C:\msys64\;C:\xampp\php;C:\ProgramData\ComposerSetup\bin;C:\ProgramData\chocolatey\bin;C;C:\Program Files\CMake\bin;C:\Users\Axel\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Ruby30-x64\bin;C:\Users\Axel\.windows-build-tools\python27\;C:\Program Files (x86)\GNU Arm Embedded Toolchain\10 2020-q4-major\bin;C:\Users\Axel\.cargo\bin;C:\Program Files (x86)\GNU Tools ARM Embedded\8 2018-q4-major\bin;C:\Program Files (x86)\GNU Tools ARM Embedded\5.4 2016q3\bin;C:\Program Files (x86)\Atmel\sam-ba_2.16\drv\;C:\Program Files (x86)\Atmel\sam-ba_2.16;C:\Users\Axel\.platformio\penv\Scripts;C:\Users\Axel\AppData\Local\atom\bin;C:\Users\Axel\AppData\Local\Programs\Microsoft VS Code\bin;C:\ProgramData\Anaconda3\condabin\;C:\Users\Axel\AppData\Local\GitHubDesktop\bin;C:\Users\Axel\AppData\Local\Microsoft\WindowsApps;C:\Users\Axel\AppData\Roaming\Composer\vendor\bin;C:\Users\Axel\AppData\Local\Programs\Julia-1.6.0\bin;C:\Users\Axel\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\Axel\AppData\Roaming\npm
+# makefile
+.DEFAULT_GOAL := 
+# environment
+NVM_HOME = C:\Users\Axel\AppData\Roaming\nvm
+# default
+MAKE_VERSION := 4.3
+# environment
+PROGRAMFILES(X86) = C:\Program Files (x86)
+# environment
+USERDOMAIN_ROAMINGPROFILE = LAMBORGHINI
+# environment
+NUMBER_OF_PROCESSORS = 8
+# environment
+PUBLIC = C:\Users\Public
+# environment
+MOZ_PLUGIN_PATH = C:\PROGRAM FILES (X86)\FOXIT SOFTWARE\FOXIT READER\plugins\
+# environment
+APPDATA = C:\Users\Axel\AppData\Roaming
+# environment
+HOMEDRIVE = C:
+# environment
+ZEPHYR_TOOLCHAIN_VARIANT = gnuarmemb
+# environment
+NVM_SYMLINK = C:\Program Files\nodejs
+# environment
+PROCESSOR_ARCHITECTURE = x86
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/services/extensions/node/extensionHostProcess
+# environment
+PLATFORMIO_IDE = 2.4.0
+# environment
+COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# environment
+TEMP = C:\Users\Axel\AppData\Local\Temp
+# environment
+VSCODE_IPC_HOOK = \\.\pipe\3f78646c14dc5c3cae4a33224d6d205e-1.62.3-main-sock
+# default
+.RECIPEPREFIX := 
+# automatic
+<F = $(notdir $<)
+# default
+SUFFIXES := 
+# environment
+ALLUSERSPROFILE = C:\ProgramData
+# environment
+SESSIONNAME = Console
+# environment
+OPENNI2_INCLUDE64 = C:\Program Files\OpenNI2\Include\
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync load
+# environment
+PROCESSOR_REVISION = 3c03
+# environment
+PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 60 Stepping 3, GenuineIntel
+# variable set hash-table stats:
+# Load=120/1024=12%, Rehash=0, Collisions=14/143=10%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (key h:/Mi unidad/Proyectos/Arduino/Proyectos/Diorama, mtime 1639095851): 11 files, no impossibilities.
+
+# 11 files, no impossibilities in 1 directories.
+
+# Implicit Rules
+
+# No implicit rules.
+
+# Files
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+all:
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+
+# Not a target:
+makefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+
+# Not a target:
+makefile.mak:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+
+# Not a target:
+GNUmakefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+
+# files hash-table stats:
+# Load=7/1024=1%, Rehash=0, Collisions=0/16=0%
+# VPATH Search Paths
+
+# No 'vpath' search paths.
+
+# No general ('VPATH' variable) search path.
+
+# strcache buffers: 1 (0) / strings = 18 / storage = 137 B / avg = 7 B
+# current buf: size = 8174 B / used = 137 B / count = 18 / avg = 7 B
+
+# strcache performance: lookups = 21 / hit rate = 14%
+# hash-table stats:
+# Load=18/8192=0%, Rehash=0, Collisions=0/21=0%
+# Finished Make data base on Sat Dec 11 15:03:06 2021
+
+ 
