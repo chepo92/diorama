@@ -1,108 +1,81 @@
+# 1 "C:\\Users\\Axel\\AppData\\Local\\Temp\\tmpg58v78bt"
+#include <Arduino.h>
+# 1 "H:/Mi unidad/Proyectos/Arduino/Proyectos/Diorama/codigoBase/src/main.ino"
 #include <Stepper.h>
-
-/**
- * \file demo.ino
- *
- * \brief Example sketch of using the VS1053 Arduino driver, demonstrating all methods and functions.
- * \remarks comments are implemented with Doxygen Markdown format
- *
- * \author Bill Porter
- * \author Michael P. Flaga
- *
- * This sketch listens for commands from a serial terminal (like the Serial
- * Monitor in the Arduino IDE). If it sees 1-9 it will try to play an MP3 file
- * named track00x.mp3 where x is a number from 1 to 9. For eaxmple, pressing
- * 2 will play 'track002.mp3'. A lowe case 's' will stop playing the mp3.
- * 'f' will play an MP3 by calling it by it's filename as opposed to a track
- * number.
- *
- * Sketch assumes you have MP3 files with filenames like "track001.mp3",
- * "track002.mp3", etc on an SD card loaded into the shield.
- */
-
+# 23 "H:/Mi unidad/Proyectos/Arduino/Proyectos/Diorama/codigoBase/src/main.ino"
 #include <SPI.h>
 #include <FreeStack.h>
 
-// Add the SdFat Libraries
+
 #include <SdFat.h>
 
-// and the MP3 Shield Library
+
 #include <vs1053_SdFat.h>
 
-// Below is not needed if interrupt driven. Safe to remove if not using.
+
 #if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
 #include <TimerOne.h>
 #elif defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
 #include <SimpleTimer.h>
 #endif
 
-/**
- * \brief Object instancing the SdFat library.
- *
- * principal object for handling all SdCard functions.
- */
+
+
+
+
+
 SdFat sd;
 
-/**
- * \brief Object instancing the vs1053 library.
- *
- * principal object for handling all the attributes, members and functions for the library.
- */
+
+
+
+
+
 vs1053 MP3player;
+# 68 "H:/Mi unidad/Proyectos/Arduino/Proyectos/Diorama/codigoBase/src/main.ino"
+const int stepsPerRevolution = 200;
 
-//------------------------------------------------------------------------------
-/**
- * \brief Setup the Arduino Chip's feature for our use.
- *
- * After Arduino's kernel has booted initialize basic features for this
- * application, such as Serial port and MP3player objects with .begin.
- * Along with displaying the Help Menu.
- *
- * \note returned Error codes are typically passed up from MP3player.
- * Whicn in turns creates and initializes the SdCard objects.
- *
- * \see
- * \ref Error_Codes
- */
 
-const int stepsPerRevolution = 200;  // change this to fit the number of steps per revolutio for your motor
-
-// initialize the stepper library on pins 8 through 11:
 Stepper myStepper(stepsPerRevolution, A0, A1, A2, A3);
 
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-// called this way, it uses the default address 0x40
-Adafruit_PWMServoDriver PCA = Adafruit_PWMServoDriver();
-// you can also call it with a different address you want
-// Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x41);
-// you can also call it with a different address and I2C interface
-// Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40, Wire);
 
+Adafruit_PWMServoDriver PCA = Adafruit_PWMServoDriver();
+void setup();
+void set_servo_angle(uint8_t n_servo, int angulo);
+void servo_continuous(uint8_t n_servo, int dir);
+void one_step();
+void turn_on_led();
+void turn_off_led();
+void loop();
+void parse_menu(byte key_command);
+void help();
+#line 83 "H:/Mi unidad/Proyectos/Arduino/Proyectos/Diorama/codigoBase/src/main.ino"
 void setup()
 {
 
-  uint8_t result; // result code from some function as to be tested at later time.
+  uint8_t result;
 
   Serial.begin(115200);
 
   Serial.print(F("F_CPU = "));
   Serial.println(F_CPU);
-  Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
-  Serial.print(FreeStack(), DEC); // FreeStack() is provided by SdFat
+  Serial.print(F("Free RAM = "));
+  Serial.print(FreeStack(), DEC);
   Serial.println(F(" Should be a base line of 1028, on ATmega328 when using INTx"));
 
-  // Initialize the SdCard.
+
   if (!sd.begin(SD_SEL, SPI_FULL_SPEED))
     sd.initErrorHalt();
-  // depending upon your SdCard environment, SPI_HAVE_SPEED may work better.
+
   if (!sd.chdir("/"))
     sd.errorHalt("sd.chdir");
 
-  // Initialize the MP3 Player Shield
+
   result = MP3player.begin();
-  // check result, see readme for error codes.
+
   if (result != 0)
   {
     Serial.print(F("Error code: "));
@@ -110,13 +83,13 @@ void setup()
     Serial.println(F(" when trying to start MP3 player"));
     if (result == 6)
     {
-      Serial.println(F("Warning: patch file not found, skipping."));           // can be removed for space, if needed.
-      Serial.println(F("Use the \"d\" command to verify SdCard can be read")); // can be removed for space, if needed.
+      Serial.println(F("Warning: patch file not found, skipping."));
+      Serial.println(F("Use the \"d\" command to verify SdCard can be read"));
     }
   }
 
-#if defined(__BIOFEEDBACK_MEGA__) // or other reasons, of your choosing.
-  // Typically not used by most shields, hence commented out.
+#if defined(__BIOFEEDBACK_MEGA__)
+
   Serial.println(F("Applying ADMixer patch."));
   if (MP3player.ADMixerLoad("admxster.053") == 0)
   {
@@ -125,41 +98,41 @@ void setup()
   }
 #endif
 
-  // set the speed at 60 rpm:
+
   myStepper.setSpeed(60);
 
-  // do one turn
+
   Serial.println("clockwise");
   myStepper.step(stepsPerRevolution);
   delay(500);
 
   PCA.begin();
-  // In theory the internal oscillator is 25MHz but it really isn't
-  // that precise. You can 'calibrate' by tweaking this number till
-  // you get the frequency you're expecting!
-  PCA.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
-  PCA.setPWMFreq(500);                  // This is the maximum PWM frequency
 
-  // if you want to really speed stuff up, you can go into 'fast 400khz I2C' mode
-  // some i2c devices dont like this so much so if you're sharing the bus, watch
-  // out for this!
+
+
+  PCA.setOscillatorFrequency(27000000);
+  PCA.setPWMFreq(500);
+
+
+
+
   Wire.setClock(400000);
 
   help();
 }
 
-/* Servo Control */
+
 
 #define PCA_PIN_SERVO 12
 
-unsigned int pos0 = 172;   // position 0°
-unsigned int pos180 = 565; // position 180°
+unsigned int pos0 = 172;
+unsigned int pos180 = 565;
 
 int current_position = 0;
 
 int servo_step = 1;
 
-bool servo_angle_active; 
+bool servo_angle_active;
 
 void set_servo_angle(uint8_t n_servo, int angulo)
 {
@@ -168,15 +141,15 @@ void set_servo_angle(uint8_t n_servo, int angulo)
   PCA.setPWM(n_servo, 0, duty);
 }
 
-// Needs debug/calibration
+
 void servo_continuous(uint8_t n_servo, int dir)
 {
   if (dir > 0)
-  { // CW
+  {
     PCA.setPWM(n_servo, 0, 180);
   }
   else if (dir < 0)
-  { // CCW
+  {
     PCA.setPWM(n_servo, 0, 360);
   }
   else
@@ -185,7 +158,7 @@ void servo_continuous(uint8_t n_servo, int dir)
   }
 }
 
-/* Stepper Control */
+
 
 #define PCA_PIN_STEPPER1 4
 #define PCA_PIN_STEPPER2 5
@@ -198,15 +171,15 @@ void one_step()
   PCA.setPWM(PCA_PIN_STEPPER2, 1000, 2000);
   PCA.setPWM(PCA_PIN_STEPPER3, 2000, 3000);
   PCA.setPWM(PCA_PIN_STEPPER4, 3000, 4000);
-  // // Drive each PWM in a 'wave'
-  // for (uint16_t i=0; i<4096; i += 8) {
-  //   for (uint8_t pwmnum=0; pwmnum < 16; pwmnum++) {
-  //     pwm.setPWM(pwmnum, 0, (i + (4096/16)*pwmnum) % 4096 );
-  //   }
-  // }
+
+
+
+
+
+
 }
 
-/* LED control */
+
 
 boolean led_state = false;
 long led_timer;
@@ -226,26 +199,12 @@ void turn_off_led()
   PCA.setPWM(PCA_PIN_LEDS_E, 0, 0);
   PCA.setPWM(PCA_PIN_LEDS_E, 0, 0);
 }
-
-//------------------------------------------------------------------------------
-/**
- * \brief Main Loop the Arduino Chip
- *
- * This is called at the end of Arduino kernel's main loop before recycling.
- * And is where the user's serial input of bytes are read and analyzed by
- * parsed_menu.
- *
- * Additionally, if the means of refilling is not interrupt based then the
- * MP3player object is serviced with the availaible function.
- *
- * \note Actual examples of the libraries public functions are implemented in
- * the parse_menu() function.
- */
+# 244 "H:/Mi unidad/Proyectos/Arduino/Proyectos/Diorama/codigoBase/src/main.ino"
 void loop()
 {
 
   one_step();
-  // servo_continuous(PCA_PIN_SERVO, -1);
+
 
   if (servo_angle_active)
   {
@@ -261,15 +220,7 @@ void loop()
       servo_step = -abs(servo_step);
     }
   }
-
-  // // Drive each PWM in a 'wave'
-  // for (uint16_t i=0; i<4096; i += 8) {
-  //   for (uint8_t pwmnum=0; pwmnum < 16; pwmnum++) {
-  //     pwm.setPWM(pwmnum, 0, (i + (4096/16)*pwmnum) % 4096 );
-  //   }
-  // }
-
-// Below is only needed if not interrupt driven. Safe to remove if not using.
+# 273 "H:/Mi unidad/Proyectos/Arduino/Proyectos/Diorama/codigoBase/src/main.ino"
 #if defined(USE_MP3_REFILL_MEANS) && ((USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer) || (USE_MP3_REFILL_MEANS == USE_MP3_Polled))
 
   MP3player.available();
@@ -277,57 +228,49 @@ void loop()
 
   if (Serial.available())
   {
-    parse_menu(Serial.read()); // get command from serial input
+    parse_menu(Serial.read());
   }
 
   delay(100);
 }
 
 uint32_t millis_prv;
-
-//------------------------------------------------------------------------------
-/**
- * \brief Decode the Menu.
- *
- * Parses through the characters of the users input, executing corresponding
- * MP3player library functions and features then displaying a brief menu and
- * prompting for next input command.
- */
+# 296 "H:/Mi unidad/Proyectos/Arduino/Proyectos/Diorama/codigoBase/src/main.ino"
 void parse_menu(byte key_command)
 {
 
-  uint8_t result; // result code from some function as to be tested at later time.
+  uint8_t result;
 
-  // Note these buffer may be desired to exist globably.
-  // but do take much space if only needed temporarily, hence they are here.
-  char title[30];  // buffer to contain the extract the Title from the current filehandles
-  char artist[30]; // buffer to contain the extract the artist name from the current filehandles
-  char album[30];  // buffer to contain the extract the album name from the current filehandles
+
+
+  char title[30];
+  char artist[30];
+  char album[30];
 
   Serial.print(F("Received command: "));
   Serial.write(key_command);
   Serial.println(F(" "));
 
-  // if s, stop the current track
+
   if (key_command == 's')
   {
     Serial.println(F("Stopping"));
     MP3player.stopTrack();
 
-    // if 1-9, play corresponding track
+
   }
   else if (key_command >= '1' && key_command <= '9')
   {
-    // convert ascii numbers to real numbers
+
     key_command = key_command - 48;
 
 #if USE_MULTIPLE_CARDS
-    sd.chvol(); // assign desired sdcard's volume.
+    sd.chvol();
 #endif
-    // tell the MP3 Shield to play a track
+
     result = MP3player.playTrack(key_command);
 
-    // check result, see readme for error codes.
+
     if (result != 0)
     {
       Serial.print(F("Error code: "));
@@ -339,13 +282,13 @@ void parse_menu(byte key_command)
 
       Serial.println(F("Playing:"));
 
-      // we can get track info by using the following functions and arguments
-      // the functions will extract the requested information, and put it in the array we pass in
+
+
       MP3player.trackTitle((char *)&title);
       MP3player.trackArtist((char *)&artist);
       MP3player.trackAlbum((char *)&album);
 
-      // print out the arrays of track information
+
       Serial.write((byte *)&title, 30);
       Serial.println();
       Serial.print(F("by:  "));
@@ -356,29 +299,29 @@ void parse_menu(byte key_command)
       Serial.println();
     }
 
-    // if +/- to change volume
+
   }
   else if ((key_command == '-') || (key_command == '+'))
   {
-    union twobyte mp3_vol;                // create key_command existing variable that can be both word and double byte of left and right.
-    mp3_vol.word = MP3player.getVolume(); // returns a double uint8_t of Left and Right packed into int16_t
+    union twobyte mp3_vol;
+    mp3_vol.word = MP3player.getVolume();
 
     if (key_command == '-')
-    { // note dB is negative
-      // assume equal balance and use byte[1] for math
+    {
+
       if (mp3_vol.byte[1] >= 254)
-      { // range check
+      {
         mp3_vol.byte[1] = 254;
       }
       else
       {
-        mp3_vol.byte[1] += 2; // keep it simpler with whole dB's
+        mp3_vol.byte[1] += 2;
       }
     }
     else
     {
       if (mp3_vol.byte[1] <= 2)
-      { // range check
+      {
         mp3_vol.byte[1] = 2;
       }
       else
@@ -386,34 +329,34 @@ void parse_menu(byte key_command)
         mp3_vol.byte[1] -= 2;
       }
     }
-    // push byte[1] into both left and right assuming equal balance.
-    MP3player.setVolume(mp3_vol.byte[1], mp3_vol.byte[1]); // commit new volume
+
+    MP3player.setVolume(mp3_vol.byte[1], mp3_vol.byte[1]);
     Serial.print(F("Volume changed to -"));
     Serial.print(mp3_vol.byte[1] >> 1, 1);
     Serial.println(F("[dB]"));
 
-    // if < or > to change Play Speed
+
   }
   else if ((key_command == '>') || (key_command == '<'))
   {
-    uint16_t playspeed = MP3player.getPlaySpeed(); // create key_command existing variable
-    // note playspeed of Zero is equal to ONE, normal speed.
+    uint16_t playspeed = MP3player.getPlaySpeed();
+
     if (key_command == '>')
-    { // note dB is negative
-      // assume equal balance and use byte[1] for math
+    {
+
       if (playspeed >= 254)
-      { // range check
+      {
         playspeed = 5;
       }
       else
       {
-        playspeed += 1; // keep it simpler with whole dB's
+        playspeed += 1;
       }
     }
     else
     {
       if (playspeed == 0)
-      { // range check
+      {
         playspeed = 0;
       }
       else
@@ -421,12 +364,12 @@ void parse_menu(byte key_command)
         playspeed -= 1;
       }
     }
-    MP3player.setPlaySpeed(playspeed); // commit new playspeed
+    MP3player.setPlaySpeed(playspeed);
     Serial.print(F("playspeed to "));
     Serial.println(playspeed, DEC);
 
-    /* Alterativly, you could call a track by it's file name by using playMP3(filename);
-    But you must stick to 8.1 filenames, only 8 characters long, and 3 for the extension */
+
+
   }
   else if (key_command == 'f' || key_command == 'F')
   {
@@ -436,15 +379,15 @@ void parse_menu(byte key_command)
       offset = 2000;
     }
 
-    // create a string with the filename
+
     char trackName[] = "track001.mp3";
 
 #if USE_MULTIPLE_CARDS
-    sd.chvol(); // assign desired sdcard's volume.
+    sd.chvol();
 #endif
-    // tell the MP3 Shield to play that file
+
     result = MP3player.playMP3(trackName, offset);
-    // check result, see readme for error codes.
+
     if (result != 0)
     {
       Serial.print(F("Error code: "));
@@ -452,15 +395,15 @@ void parse_menu(byte key_command)
       Serial.println(F(" when trying to play track"));
     }
 
-    /* Display the file on the SdCard */
+
   }
   else if (key_command == 'd')
   {
     if (!MP3player.isPlaying())
     {
-      // prevent root.ls when playing, something locks the dump. but keeps playing.
-      // yes, I have tried another unique instance with same results.
-      // something about SdFat and its 500byte cache.
+
+
+
       Serial.println(F("Files found (name date time size):"));
       sd.ls(LS_R | LS_DATE | LS_SIZE);
     }
@@ -469,7 +412,7 @@ void parse_menu(byte key_command)
       Serial.println(F("Busy Playing Files, try again later."));
     }
 
-    /* Get and Display the Audio Information */
+
   }
   else if (key_command == 'i')
   {
@@ -587,7 +530,7 @@ void parse_menu(byte key_command)
     {
       earspeaker++;
     }
-    MP3player.setEarSpeaker(earspeaker); // commit new earspeaker
+    MP3player.setEarSpeaker(earspeaker);
     Serial.print(F("earspeaker to "));
     Serial.println(earspeaker, DEC);
   }
@@ -603,7 +546,7 @@ void parse_menu(byte key_command)
   }
   else if (key_command == 'g')
   {
-    int32_t offset_ms = 20000; // Note this is just an example, try your own number.
+    int32_t offset_ms = 20000;
     Serial.print(F("jumping to "));
     Serial.print(offset_ms, DEC);
     Serial.println(F("[milliseconds]"));
@@ -617,7 +560,7 @@ void parse_menu(byte key_command)
   }
   else if (key_command == 'k')
   {
-    int32_t offset_ms = -1000; // Note this is just an example, try your own number.
+    int32_t offset_ms = -1000;
     Serial.print(F("moving = "));
     Serial.print(offset_ms, DEC);
     Serial.println(F("[milliseconds]"));
@@ -685,7 +628,7 @@ void parse_menu(byte key_command)
     Serial.print(F("Former TrebleFrequency = "));
     Serial.println(TrebleFrequency, DEC);
     if (TrebleFrequency >= 15000)
-    { // Range is from 0 - 1500Hz
+    {
       TrebleFrequency = 0;
     }
     else
@@ -702,7 +645,7 @@ void parse_menu(byte key_command)
     Serial.print(F("Former TrebleAmplitude = "));
     Serial.println(TrebleAmplitude, DEC);
     if (TrebleAmplitude >= 7)
-    { // Range is from -8 - 7dB
+    {
       TrebleAmplitude = -8;
     }
     else
@@ -719,7 +662,7 @@ void parse_menu(byte key_command)
     Serial.print(F("Former BassFrequency = "));
     Serial.println(BassFrequency, DEC);
     if (BassFrequency >= 150)
-    { // Range is from 20hz - 150hz
+    {
       BassFrequency = 0;
     }
     else
@@ -736,7 +679,7 @@ void parse_menu(byte key_command)
     Serial.print(F("Former BassAmplitude = "));
     Serial.println(BassAmplitude, DEC);
     if (BassAmplitude >= 15)
-    { // Range is from 0 - 15dB
+    {
       BassAmplitude = 0;
     }
     else
@@ -773,12 +716,12 @@ void parse_menu(byte key_command)
     if (led_state)
     {
       turn_on_led();
-      //servo_continuous(PCA_PIN_SERVO, 1);
+
     }
     else
     {
       turn_off_led();
-      //servo_continuous(PCA_PIN_SERVO, -1);
+
     }
   }
   else if (key_command == 'w')
@@ -786,7 +729,7 @@ void parse_menu(byte key_command)
     servo_angle_active =!servo_angle_active;
   }
 
-  // print prompt after key stroke has been processed.
+
   Serial.print(F("Time since last command: "));
   Serial.println((float)(millis() - millis_prv) / 1000, 2);
   millis_prv = millis();
@@ -797,12 +740,12 @@ void parse_menu(byte key_command)
   Serial.println(F(",h :"));
 }
 
-//------------------------------------------------------------------------------
-/**
- * \brief Print Help Menu.
- *
- * Prints a full menu of the commands available along with descriptions.
- */
+
+
+
+
+
+
 void help()
 {
   Serial.println(F("Arduino vs1053 Library Example:"));
