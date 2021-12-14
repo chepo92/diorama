@@ -204,26 +204,9 @@ void servo_continuous(uint8_t n_servo, int dir)
   }
 }
 
-/* Stepper Control */
+/* PCA Stepper Control */
 
-#define PCA_PIN_STEPPER1 4
-#define PCA_PIN_STEPPER2 5
-#define PCA_PIN_STEPPER3 6
-#define PCA_PIN_STEPPER4 7
-
-void one_step()
-{
-  PCA.setPWM(PCA_PIN_STEPPER1, 0, 1000);
-  PCA.setPWM(PCA_PIN_STEPPER2, 1000, 2000);
-  PCA.setPWM(PCA_PIN_STEPPER3, 2000, 3000);
-  PCA.setPWM(PCA_PIN_STEPPER4, 3000, 4000);
-  // // Drive each PWM in a 'wave'
-  // for (uint16_t i=0; i<4096; i += 8) {
-  //   for (uint8_t pwmnum=0; pwmnum < 16; pwmnum++) {
-  //     pwm.setPWM(pwmnum, 0, (i + (4096/16)*pwmnum) % 4096 );
-  //   }
-  // }
-}
+// 
 
 /* LED control */
 
@@ -264,36 +247,36 @@ void loop()
 {
 
 // -------- Start Button
-  // read the state of the switch into a local variable:
-  int reading = digitalRead(buttonPin);
+  // // read the state of the switch into a local variable:
+  // int reading = digitalRead(buttonPin);
 
-  // check to see if you just pressed the button
-  // (i.e. the input went from LOW to HIGH), and you've waited long enough
-  // since the last press to ignore any noise:
+  // // check to see if you just pressed the button
+  // // (i.e. the input went from LOW to HIGH), and you've waited long enough
+  // // since the last press to ignore any noise:
 
-  // If the switch changed, due to noise or pressing:
-  if (reading != lastButtonState) {
-    // reset the debouncing timer
-    lastDebounceTime = millis();
-  }
+  // // If the switch changed, due to noise or pressing:
+  // if (reading != lastButtonState) {
+  //   // reset the debouncing timer
+  //   lastDebounceTime = millis();
+  // }
 
-  if ((millis() - lastDebounceTime) > debounceDelay) {
-    // whatever the reading is at, it's been there for longer than the debounce
-    // delay, so take it as the actual current state:
+  // if ((millis() - lastDebounceTime) > debounceDelay) {
+  //   // whatever the reading is at, it's been there for longer than the debounce
+  //   // delay, so take it as the actual current state:
 
-    // if the button state has changed:
-    if (reading != buttonState) {
-      buttonState = reading;
+  //   // if the button state has changed:
+  //   if (reading != buttonState) {
+  //     buttonState = reading;
 
-      // only play if the new button state is HIGH
-      if (buttonState == HIGH) {
-        run_state = true;
-      }
-    }
-  }
+  //     // only play if the new button state is HIGH
+  //     if (buttonState == HIGH) {
+  //       run_state = true;
+  //     }
+  //   }
+  // }
 
-  // save the reading. Next time through the loop, it'll be the lastButtonState:
-  lastButtonState = reading;
+  // // save the reading. Next time through the loop, it'll be the lastButtonState:
+  // lastButtonState = reading;
 
   // -------- End Button
 
@@ -317,40 +300,49 @@ void loop()
   if (run_state && ( elapsed > max_playtime) ) {
       run_state = false ; 
       prev_play_state = false ; 
-      Serial.println(F("Play timeout"));
+      Serial.println("Play timeout");
   }
 
   // start servo move  
   int servo_start_time = 10000; 
-  if (run_state && ( elapsed > servo_start_time) ) {
+  int servo_stop_time = 20000; 
+  bool servo_state = false; 
+  if (run_state && ( (elapsed > servo_start_time) && (elapsed < servo_stop_time)) && !servo_state ) {
  // Do move 
-    Serial.println(F("Servo On"));
+    Serial.println("Servo On");
+    servo_state =true ; 
   }
 
   // stop servo move  
-  int servo_stop_time = 20000; 
-  if (run_state && ( elapsed > servo_stop_time) ) {
- // Do stop 
- Serial.println(F("Servo Off"));
+  
+  if (run_state && servo_state && ( elapsed > servo_stop_time) ) {
+    // Do stop 
+    Serial.println("Servo Off");
+    servo_state = false ; 
   }  
 
   // start light
   int light_start_time = 5000; 
-  if (run_state && ( elapsed > servo_start_time) ) {
+  int light_stop_time = 8000; 
+  bool light_state = false; 
+  Serial.println(light_state);
+  if (run_state && !light_state  && ( (elapsed > light_start_time) && (elapsed < light_stop_time))  ) {
  // Do move 
     turn_on_led();
     Serial.println(F("Led On"));
+    light_state = true; 
   }
 
   // stop light
-  int light_stop_time = 8000; 
-  if (run_state && ( elapsed > servo_stop_time) ) {
+  
+  if (run_state && light_state && ( elapsed > light_stop_time) ) {
  // Do stop 
     turn_off_led(); 
     Serial.println(F("Led Off"));
+    light_state = false; 
   }  
 
-  one_step();
+  //one_step();
   // servo_continuous(PCA_PIN_SERVO, -1);
 
   if (servo_angle_active)
@@ -367,6 +359,25 @@ void loop()
       servo_step = -abs(servo_step);
     }
   }
+
+
+  // start stepper
+  int stepper_start_time = 5000; 
+  int stepper_stop_time = 8000; 
+  bool stepper_state = false; 
+  if (run_state && !stepper_state && ( (elapsed > stepper_start_time) && (elapsed < stepper_stop_time) )) {
+    stepper_state  = true ; 
+    myStepper.step(stepsPerRevolution);
+    Serial.println(F("Move Stepper CW"));
+  }
+
+  // stop stepper
+  
+  if (run_state && stepper_state && ( elapsed > stepper_stop_time) ) {
+    stepper_state  = false ; 
+    myStepper.step(-stepsPerRevolution);
+    Serial.println(F("Move Stepper CCW"));
+  }  
 
   // // Drive each PWM in a 'wave'
   // for (uint16_t i=0; i<4096; i += 8) {
@@ -891,6 +902,10 @@ void parse_menu(byte key_command)
   {
     servo_angle_active =!servo_angle_active;
   }
+  else if (key_command == 'u')
+  {
+    run_state = true ;
+  }  
 
   // print prompt after key stroke has been processed.
   Serial.print(F("Time since last command: "));
