@@ -29,10 +29,22 @@ vs1053 MP3player;
 
 // const int stepsPerRevolution = 200; // change this to fit the number of steps per revolutio for your motor
 
-#define stepperA A0
-#define stepperB A1
-#define stepperC A2
-#define stepperD A3
+// Pins
+
+#define STEPPER_PIN_A A0
+#define STEPPER_PIN_B A1
+#define STEPPER_PIN_C A2
+#define STEPPER_PIN_D A3
+
+const int buttonPin = 5; // the number of the pushbutton pin
+
+#define PCA_PIN_LEDS_E1 8
+#define PCA_PIN_LEDS_M1 9
+
+#define PCA_PIN_LEDS_E2 10
+#define PCA_PIN_LEDS_M2 11
+
+#define PCA_PIN_SERVO 12
 
 #define NUMBER_OF_STEPS_PER_REV 512
 // initialize the stepper library on pins 8 through 11:
@@ -46,7 +58,6 @@ Adafruit_PWMServoDriver PCA = Adafruit_PWMServoDriver();
 
 // Button debounce
 // constants won't change. They're used here to set pin numbers:
-const int buttonPin = 5; // the number of the pushbutton pin
 
 // Variables will change:
 int run_state = false; // the current state of the output
@@ -56,6 +67,8 @@ long start_play_time = 0;
 
 int buttonState;           // the current reading from the input pin
 int lastButtonState = LOW; // the previous reading from the input pin
+
+int servo_current_position = 0;
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
@@ -69,44 +82,56 @@ boolean light2_state = false;
 boolean stepper_state = false;
 boolean manual_led_state = false;
 
+boolean stepper_running = false;
+boolean stepper_direction = false;
+
+int stepper_time_index;
+int light1_time_index;
+int light2_time_index;
+int servo_move_index;
+
+// Individual Settings for each Diorama
+#if DIORAMA_NUMBER == 1
+
+#elif DIORAMA_NUMBER == 2
+
+#elif DIORAMA_NUMBER == 3
+
+#elif DIORAMA_NUMBER == 4
+
+#elif DIORAMA_NUMBER == 5
+
+#elif DIORAMA_NUMBER == 6
+
 long max_playtime = 160000; // 1:50 = 60+50
 
-// start stepper
-int stepper_time_index;
+// steppers
+int stepper_cycle_count = 1;
 int steper_start_array[] = {};
 int steper_stop_array[] = {};
 
-boolean stepperRunning = false;
+int steps_cw;
+int steps_ccw;
 
-long stepper_start_time = 0;
-long stepper_stop_time = 0;
+// long stepper_start_time = 0;
+// long stepper_stop_time = 0;
 
-// start light
-int light1_time_index;
-int light1_cycle_lenght = 1;
+// LED lights
+
+int light1_cycle_count = 1;
 long light1_start_array[] = {0};
 long light1_stop_array[] = {145000};
 
-int light2_time_index;
 int light2_cycle_lenght = 1;
 long light2_start_array[] = {55000};
 long light2_stop_array[] = {75000};
 
-long light_start_time = 0;
-long light_stop_time = 145000;
-
-// start servo move
-int servo_move_index;
-int servo_move_lenght = 1;
+// Servos
+int servo_move_count = 1;
 long servo_start_array[] = {105000};
 long servo_stop_array[] = {115000};
 
-long servo_start_time = 30000;
-long servo_stop_time = 40000;
-
 /* Servo Control */
-
-#define PCA_PIN_SERVO 12
 
 int min_servo_position = 0;
 int max_servo_position = 180;
@@ -117,11 +142,11 @@ unsigned int pos180 = 565; // pwm 180°
 long last_servo_update;
 long servo_update_period = 10;
 
-int current_position = 0;
-
 int servo_step = 1;
 
-bool servo_angle_active;
+
+
+#endif
 
 void set_servo_angle(uint8_t n_servo, int angulo)
 {
@@ -153,13 +178,13 @@ int stepCounter = 0;
 
 void writeStep(int a, int b, int c, int d)
 {
-  digitalWrite(stepperA, a);
-  digitalWrite(stepperB, b);
-  digitalWrite(stepperC, c);
-  digitalWrite(stepperD, d);
+  digitalWrite(STEPPER_PIN_A, a);
+  digitalWrite(STEPPER_PIN_B, b);
+  digitalWrite(STEPPER_PIN_C, c);
+  digitalWrite(STEPPER_PIN_D, d);
 }
 
-void oneStepCW()
+void oneCycleCW() // ~ 8 steps? 
 {
   writeStep(1, 0, 0, 0);
   delay(5);
@@ -179,7 +204,7 @@ void oneStepCW()
   delay(5);
 }
 
-void oneStepCCW()
+void oneCycleCCW() // ~ 8 steps? 
 {
   writeStep(1, 0, 0, 1);
   delay(5);
@@ -203,25 +228,22 @@ void oneStepCCW()
 boolean do_ramp_led;
 int pwm_ramp = 0;
 
-#define PCA_PIN_LEDS_E 8
-#define PCA_PIN_LEDS_M 9
-
 void ramp_led(int current_ramp)
 {
-  PCA.setPWM(PCA_PIN_LEDS_E, 0, current_ramp);
-  PCA.setPWM(PCA_PIN_LEDS_E, current_ramp, 4095);
+  PCA.setPWM(PCA_PIN_LEDS_E1, 0, current_ramp);
+  // PCA.setPWM(PCA_PIN_LEDS_M1, current_ramp, 4095);
 }
 
 void turn_on_led()
 {
-  PCA.setPWM(PCA_PIN_LEDS_E, 0, 2045);
-  PCA.setPWM(PCA_PIN_LEDS_E, 2045, 4090);
+  PCA.setPWM(PCA_PIN_LEDS_E1, 0, 2045);
+  // PCA.setPWM(PCA_PIN_LEDS_M1, 2045, 4090);
 }
 
 void turn_off_led()
 {
-  PCA.setPWM(PCA_PIN_LEDS_E, 0, 0);
-  PCA.setPWM(PCA_PIN_LEDS_E, 0, 0);
+  PCA.setPWM(PCA_PIN_LEDS_E1, 0, 0);
+  // PCA.setPWM(PCA_PIN_LEDS_M1, 0, 0);
 }
 
 void setup()
@@ -274,10 +296,10 @@ void setup()
   // set the speed at 60 rpm:
   // myStepper.setSpeed(10);
 
-  pinMode(stepperA, OUTPUT);
-  pinMode(stepperB, OUTPUT);
-  pinMode(stepperC, OUTPUT);
-  pinMode(stepperD, OUTPUT);
+  pinMode(STEPPER_PIN_A, OUTPUT);
+  pinMode(STEPPER_PIN_B, OUTPUT);
+  pinMode(STEPPER_PIN_C, OUTPUT);
+  pinMode(STEPPER_PIN_D, OUTPUT);
 
   // do one turn
   // Serial.println("clockwise");
@@ -383,10 +405,11 @@ void loop()
     servo_move_index = 0;
     light1_time_index = 0;
     light2_time_index = 0;
+    stepper_cycle_count = 0;
   }
 
   // Servo
-  if (run_state && !servo_state && servo_move_index < servo_move_lenght && ((elapsed > servo_start_array[servo_move_index]) && (elapsed < servo_stop_array[servo_move_index])))
+  if (run_state && !servo_state && servo_move_index < servo_move_count && ((elapsed > servo_start_array[servo_move_index]) && (elapsed < servo_stop_array[servo_move_index])))
   {
     // Do move
     Serial.println("Servo On");
@@ -402,8 +425,8 @@ void loop()
     servo_move_index++;
   }
 
-  // light 1 
-  if (run_state && !light1_state && light1_time_index < light1_cycle_lenght && ((elapsed > light1_start_array [light1_time_index]) && (elapsed < light1_stop_array [light1_time_index])))
+  // light 1
+  if (run_state && !light1_state && light1_time_index < light1_cycle_count && ((elapsed > light1_start_array[light1_time_index]) && (elapsed < light1_stop_array[light1_time_index])))
   {
     // led on
     // turn_on_led();
@@ -412,19 +435,19 @@ void loop()
     light1_state = true;
   }
 
-  // stop light 1 
-  if (run_state && light1_state && (elapsed > light1_stop_array [light1_time_index]) || (!run_state && light1_state))
+  // stop light 1
+  if (run_state && light1_state && (elapsed > light1_stop_array[light1_time_index]) || (!run_state && light1_state))
   {
     // Do stop
     turn_off_led();
     Serial.println(F("Led Off"));
-    light1_time_index ++ ; 
+    light1_time_index++;
     do_ramp_led = false;
     light1_state = false;
   }
 
-    // light 2
-  if (run_state && !light2_state && light2_time_index < light2_cycle_lenght && ((elapsed > light2_start_array [light2_time_index]) && (elapsed < light2_stop_array [light2_time_index])))
+  // light 2
+  if (run_state && !light2_state && light2_time_index < light2_cycle_lenght && ((elapsed > light2_start_array[light2_time_index]) && (elapsed < light2_stop_array[light2_time_index])))
   {
     // led on
     // turn_on_led();
@@ -433,13 +456,13 @@ void loop()
     light2_state = true;
   }
 
-  // stop light 2 
-  if (run_state && light2_state && (elapsed > light2_stop_array [light2_time_index]) || (!run_state && light2_state))
+  // stop light 2
+  if (run_state && light2_state && (elapsed > light2_stop_array[light2_time_index]) || (!run_state && light2_state))
   {
     // Do stop
     turn_off_led();
     Serial.println(F("Led Off"));
-    light2_time_index ++ ; 
+    light2_time_index++;
     do_ramp_led = false;
     light2_state = false;
   }
@@ -465,19 +488,19 @@ void loop()
   if (servo_angle_active || servo_state)
   {
     // Serial.print("Current pos servo: ");
-    // Serial.println((current_position)); last_servo_update servo_update_period
+    // Serial.println((servo_current_position)); last_servo_update servo_update_period
     long elapsed_servo_update = millis() - last_servo_update;
     if (elapsed_servo_update > servo_update_period)
     {
       last_servo_update = millis();
-      set_servo_angle(PCA_PIN_SERVO, current_position);
-      current_position = current_position + servo_step;
+      set_servo_angle(PCA_PIN_SERVO, servo_current_position);
+      servo_current_position = servo_current_position + servo_step;
 
-      if (current_position <= min_servo_position)
+      if (servo_current_position <= min_servo_position)
       {
         servo_step = abs(servo_step);
       }
-      if (current_position >= max_servo_position)
+      if (servo_current_position >= max_servo_position)
       {
         servo_step = -abs(servo_step);
       }
@@ -485,39 +508,48 @@ void loop()
   }
 
   // Control stepper
-  if (run_state && !stepper_state && ((elapsed > stepper_start_time) && (elapsed < stepper_stop_time)))
+  if (run_state && !stepper_state && stepper_time_index < stepper_cycle_count && ((elapsed > steper_start_array[stepper_time_index]) && (elapsed < steper_stop_array[stepper_time_index])))
   {
     stepper_state = true;
-    stepperRunning = true;
+    stepper_running = true;
     // myStepper.step(stepsPerRevolution);
     Serial.println(F("Move Stepper"));
   }
 
-  if (stepperRunning)
+
+  if (stepper_running)
   {
-    if (stepCounter > 500)
+    if (stepper_direction )
     {
-      oneStepCW();
-      stepCounter++;
+      if (stepCounter < steps_cw)
+      {
+        oneCycleCW();
+        stepCounter++;
+      } else {
+        stepCounter = 0 ;
+        stepper_direction = !stepper_direction; 
+      }
     }
-    else if (stepCounter < 1000)
+    else if (stepCounter < steps_ccw)
     {
-      oneStepCCW();
+      oneCycleCCW();
       stepCounter++;
     }
     else
     {
-      Serial.println("reset stepper");
       stepCounter = 0;
+      stepper_direction = !stepper_direction; 
+      Serial.println("reset stepper");
     }
   }
 
   // stop stepper
 
-  if (run_state && stepper_state && (elapsed > stepper_stop_time))
+  if (run_state && stepper_state && stepper_time_index < stepper_cycle_count && (elapsed > steper_stop_array[stepper_time_index]))
   {
     stepper_state = false;
-    stepperRunning = false;
+    stepper_running = false;
+    stepper_cycle_count++;
     // myStepper.step(-stepsPerRevolution);
     Serial.println(F("Stop stepper"));
     Serial.print("Counter: ");
@@ -684,7 +716,7 @@ void parse_menu(byte key_command)
   else if (key_command == 'c')
   {
     Serial.println("manual Step CCW");
-    stepperRunning = true;
+    stepper_running = true;
     // myStepper.step(stepsPerRevolution) ;
   }
   else if (key_command == 'v')
@@ -702,9 +734,9 @@ void parse_menu(byte key_command)
   Serial.println((float)(millis() - millis_prv) / 1000, 2);
   millis_prv = millis();
   Serial.print(F("Enter s,1-9,+,-,>,<,f,F,d,i,p,t,S,b"));
-#if !defined(__AVR_ATmega32U4__)
+
   Serial.print(F(",m,e,r,R,g,k,O,o,D,V,B,C,T,E,M:"));
-#endif
+
   Serial.println(F(",h :"));
 }
 
@@ -720,33 +752,10 @@ void help()
   // Serial.println(F(" courtesy of Bill Porter & Michael P. Flaga"));
   Serial.println(F("COMMANDS:"));
   Serial.println(F(" [1-9] to play a track"));
-  // Serial.println(F(" [f] play track001.mp3 by filename example"));
-  // Serial.println(F(" [F] same as [f] but with initial skip of 2 second"));
+
   Serial.println(F(" [s] to stop playing"));
   // Serial.println(F(" [d] display directory of SdCard"));
   Serial.println(F(" [+ or -] to change volume"));
-  // Serial.println(F(" [> or <] to increment or decrement play speed by 1 factor"));
-  // Serial.println(F(" [i] retrieve current audio information (partial list)"));
-  // Serial.println(F(" [p] to pause."));
-  // Serial.println(F(" [t] to toggle sine wave test"));
-  // Serial.println(F(" [S] Show State of Device."));
-  // Serial.println(F(" [b] Play a MIDI File Beep"));
-#if !defined(__AVR_ATmega32U4__)
-  // Serial.println(F(" [e] increment Spatial EarSpeaker, default is 0, wraps after 4"));
-  // Serial.println(F(" [m] perform memory test. reset is needed after to recover."));
-  //  Serial.println(F(" [M] Toggle between Mono and Stereo Output."));
-  //  Serial.println(F(" [g] Skip to a predetermined offset of ms in current track."));
-  //  Serial.println(F(" [k] Skip a predetermined number of ms in current track."));
-  //  Serial.println(F(" [r] resumes play from 2s from begin of file"));
-  //  Serial.println(F(" [R] Resets and initializes VS10xx chip."));
-  //  Serial.println(F(" [O] turns OFF the VS10xx into low power reset."));
-  //  Serial.println(F(" [o] turns ON the VS10xx out of low power reset."));
-  //  Serial.println(F(" [D] to toggle SM_DIFF between inphase and differential output"));
-  //  Serial.println(F(" [V] Enable VU meter Test."));
-  //  Serial.println(F(" [B] Increament bass frequency by 10Hz"));
-  //  Serial.println(F(" [C] Increament bass amplitude by 1dB"));
-  //  Serial.println(F(" [T] Increament treble frequency by 1000Hz"));
-  //  Serial.println(F(" [E] Increament treble amplitude by 1dB"));
-#endif
+
   Serial.println(F(" [h] this help"));
 }
