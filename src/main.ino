@@ -16,6 +16,8 @@
 #include <SimpleTimer.h>
 #endif
 
+#define DIORAMA_NUMBER 6
+
 /**
  * \brief Object instancing the SdFat library.
  *
@@ -44,7 +46,7 @@ Adafruit_PWMServoDriver PCA = Adafruit_PWMServoDriver();
 
 // Button debounce
 // constants won't change. They're used here to set pin numbers:
-const int buttonPin = 2; // the number of the pushbutton pin
+const int buttonPin = 5; // the number of the pushbutton pin
 
 // Variables will change:
 int run_state = false; // the current state of the output
@@ -60,89 +62,14 @@ int lastButtonState = LOW; // the previous reading from the input pin
 unsigned long lastDebounceTime = 0; // the last time the output pin was toggled
 unsigned long debounceDelay = 50;   // the debounce time; increase if the output flickers
 
-void setup()
-{
-
-  uint8_t result; // result code from some function as to be tested at later time.
-
-  Serial.begin(115200);
-
-  Serial.print(F("F_CPU = "));
-  Serial.println(F_CPU);
-  Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
-  Serial.print(FreeStack(), DEC); // FreeStack() is provided by SdFat
-  Serial.println(F(" Should be a base line of 1028, on ATmega328 when using INTx"));
-
-  // Initialize the SdCard.
-  if (!sd.begin(SD_SEL, SPI_FULL_SPEED))
-    sd.initErrorHalt();
-  // depending upon your SdCard environment, SPI_HAVE_SPEED may work better.
-  if (!sd.chdir("/"))
-    sd.errorHalt("sd.chdir");
-
-  // Initialize the MP3 Player Shield
-  result = MP3player.begin();
-  // check result, see readme for error codes.
-  if (result != 0)
-  {
-    Serial.print(F("Error code: "));
-    Serial.print(result);
-    Serial.println(F(" when trying to start MP3 player"));
-    if (result == 6)
-    {
-      Serial.println(F("Warning: patch file not found, skipping."));           // can be removed for space, if needed.
-      Serial.println(F("Use the \"d\" command to verify SdCard can be read")); // can be removed for space, if needed.
-    }
-  }
-
-#if defined(__BIOFEEDBACK_MEGA__) // or other reasons, of your choosing.
-  // Typically not used by most shields, hence commented out.
-  Serial.println(F("Applying ADMixer patch."));
-  if (MP3player.ADMixerLoad("admxster.053") == 0)
-  {
-    Serial.println(F("Setting ADMixer Volume."));
-    MP3player.ADMixerVol(-3);
-  }
-#endif
-
-  // set the speed at 60 rpm:
-  // myStepper.setSpeed(10);
-
-  pinMode(stepperA, OUTPUT);
-  pinMode(stepperB, OUTPUT);
-  pinMode(stepperC, OUTPUT);
-  pinMode(stepperD, OUTPUT);
-
-  // do one turn
-  // Serial.println("clockwise");
-  // myStepper.step(stepsPerRevolution);
-  // delay(500);
-
-  PCA.begin();
-  // In theory the internal oscillator is 25MHz but it really isn't
-  // that precise. You can 'calibrate' by tweaking this number till
-  // you get the frequency you're expecting!
-  PCA.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
-  PCA.setPWMFreq(60);                   // 60 for the servo                // This is the maximum PWM frequency
-
-  // if you want to really speed stuff up, you can go into 'fast 400khz I2C' mode
-  // some i2c devices dont like this so much so if you're sharing the bus, watch
-  // out for this!
-  Wire.setClock(400000);
-
-  turn_off_led(); 
-  help();
-
-  pinMode(buttonPin, INPUT);
-}
-
 /* State machine */
 boolean servo_state = false;
-boolean light_state = false;
+boolean light1_state = false;
+boolean light2_state = false;
 boolean stepper_state = false;
 boolean manual_led_state = false;
 
-long max_playtime = 110000; // 1:50 = 60+50
+long max_playtime = 160000; // 1:50 = 60+50
 
 // start stepper
 int stepper_time_index;
@@ -152,20 +79,27 @@ int steper_stop_array[] = {};
 boolean stepperRunning = false;
 
 long stepper_start_time = 0;
-long stepper_stop_time = 50000;
+long stepper_stop_time = 0;
 
 // start light
-int light_time_index;
-long light_start_array[] = {};
-long light_stop_array[] = {};
+int light1_time_index;
+int light1_cycle_lenght = 1;
+long light1_start_array[] = {0};
+long light1_stop_array[] = {145000};
+
+int light2_time_index;
+int light2_cycle_lenght = 1;
+long light2_start_array[] = {55000};
+long light2_stop_array[] = {75000};
 
 long light_start_time = 0;
-long light_stop_time = 110000;
+long light_stop_time = 145000;
 
 // start servo move
-int servo_time_index;
-long servo_start_array[] = {};
-long servo_stop_array[] = {};
+int servo_move_index;
+int servo_move_lenght = 1;
+long servo_start_array[] = {105000};
+long servo_stop_array[] = {115000};
 
 long servo_start_time = 30000;
 long servo_stop_time = 40000;
@@ -267,12 +201,13 @@ void oneStepCCW()
 
 /* LED control */
 boolean do_ramp_led;
-int pwm_ramp = 0;  
+int pwm_ramp = 0;
 
 #define PCA_PIN_LEDS_E 8
 #define PCA_PIN_LEDS_M 9
 
-void ramp_led(int current_ramp ) {
+void ramp_led(int current_ramp)
+{
   PCA.setPWM(PCA_PIN_LEDS_E, 0, current_ramp);
   PCA.setPWM(PCA_PIN_LEDS_E, current_ramp, 4095);
 }
@@ -287,6 +222,84 @@ void turn_off_led()
 {
   PCA.setPWM(PCA_PIN_LEDS_E, 0, 0);
   PCA.setPWM(PCA_PIN_LEDS_E, 0, 0);
+}
+
+void setup()
+{
+
+  uint8_t result; // result code from some function as to be tested at later time.
+
+  Serial.begin(115200);
+
+  Serial.print(F("F_CPU = "));
+  Serial.println(F_CPU);
+  Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
+  Serial.print(FreeStack(), DEC); // FreeStack() is provided by SdFat
+  Serial.println(F(" Should be a base line of 1028, on ATmega328 when using INTx"));
+
+  // Initialize the SdCard.
+  if (!sd.begin(SD_SEL, SPI_FULL_SPEED))
+    sd.initErrorHalt();
+  // depending upon your SdCard environment, SPI_HAVE_SPEED may work better.
+  if (!sd.chdir("/"))
+    sd.errorHalt("sd.chdir");
+
+  // Initialize the MP3 Player Shield
+  result = MP3player.begin();
+  // check result, see readme for error codes.
+  if (result != 0)
+  {
+    Serial.print(F("Error code: "));
+    Serial.print(result);
+    Serial.println(F(" when trying to start MP3 player"));
+    if (result == 6)
+    {
+      Serial.println(F("Warning: patch file not found, skipping."));           // can be removed for space, if needed.
+      Serial.println(F("Use the \"d\" command to verify SdCard can be read")); // can be removed for space, if needed.
+    }
+  }
+  // Set volume
+  MP3player.setVolume(2, 2); // commit new volume
+
+#if defined(__BIOFEEDBACK_MEGA__) // or other reasons, of your choosing.
+  // Typically not used by most shields, hence commented out.
+  Serial.println(F("Applying ADMixer patch."));
+  if (MP3player.ADMixerLoad("admxster.053") == 0)
+  {
+    Serial.println(F("Setting ADMixer Volume."));
+    MP3player.ADMixerVol(-3);
+  }
+#endif
+
+  // set the speed at 60 rpm:
+  // myStepper.setSpeed(10);
+
+  pinMode(stepperA, OUTPUT);
+  pinMode(stepperB, OUTPUT);
+  pinMode(stepperC, OUTPUT);
+  pinMode(stepperD, OUTPUT);
+
+  // do one turn
+  // Serial.println("clockwise");
+  // myStepper.step(stepsPerRevolution);
+  // delay(500);
+
+  PCA.begin();
+  // In theory the internal oscillator is 25MHz but it really isn't
+  // that precise. You can 'calibrate' by tweaking this number till
+  // you get the frequency you're expecting!
+  PCA.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
+  PCA.setPWMFreq(60);                   // 60 for the servo                // This is the maximum PWM frequency
+
+  // if you want to really speed stuff up, you can go into 'fast 400khz I2C' mode
+  // some i2c devices dont like this so much so if you're sharing the bus, watch
+  // out for this!
+  Wire.setClock(400000);
+
+  turn_off_led();
+  help();
+
+  pinMode(buttonPin, INPUT_PULLUP);
 }
 
 //------------------------------------------------------------------------------
@@ -307,36 +320,41 @@ void loop()
 {
 
   // -------- Start Button
-  // // read the state of the switch into a local variable:
-  // int reading = digitalRead(buttonPin);
+  // read the state of the switch into a local variable:
+  int reading = digitalRead(buttonPin);
 
-  // // check to see if you just pressed the button
-  // // (i.e. the input went from LOW to HIGH), and you've waited long enough
-  // // since the last press to ignore any noise:
+  // check to see if you just pressed the button
+  // (i.e. the input went from LOW to HIGH), and you've waited long enough
+  // since the last press to ignore any noise:
 
-  // // If the switch changed, due to noise or pressing:
-  // if (reading != lastButtonState) {
-  //   // reset the debouncing timer
-  //   lastDebounceTime = millis();
-  // }
+  // If the switch changed, due to noise or pressing:
+  if (reading != lastButtonState)
+  {
+    // reset the debouncing timer
+    lastDebounceTime = millis();
+  }
 
-  // if ((millis() - lastDebounceTime) > debounceDelay) {
-  //   // whatever the reading is at, it's been there for longer than the debounce
-  //   // delay, so take it as the actual current state:
+  if ((millis() - lastDebounceTime) > debounceDelay)
+  {
+    // whatever the reading is at, it's been there for longer than the debounce
+    // delay, so take it as the actual current state:
 
-  //   // if the button state has changed:
-  //   if (reading != buttonState) {
-  //     buttonState = reading;
+    // if the button state has changed:
+    if (reading != buttonState)
+    {
+      buttonState = reading;
 
-  //     // only play if the new button state is HIGH
-  //     if (buttonState == HIGH) {
-  //       run_state = true;
-  //     }
-  //   }
-  // }
+      // only play if the new button state is LOW (inverted logic, due to input_pullup)
+      if (buttonState == LOW)
+      {
+        run_state = true;
+        Serial.println("Button Start");
+      }
+    }
+  }
 
-  // // save the reading. Next time through the loop, it'll be the lastButtonState:
-  // lastButtonState = reading;
+  // save the reading. Next time through the loop, it'll be the lastButtonState:
+  lastButtonState = reading;
 
   // -------- End Button
 
@@ -360,10 +378,15 @@ void loop()
     run_state = false;
     prev_play_state = false;
     Serial.println("Play timeout");
+
+    // Reset indexes
+    servo_move_index = 0;
+    light1_time_index = 0;
+    light2_time_index = 0;
   }
 
   // Servo
-  if (run_state && !servo_state && ((elapsed > servo_start_time) && (elapsed < servo_stop_time)))
+  if (run_state && !servo_state && servo_move_index < servo_move_lenght && ((elapsed > servo_start_array[servo_move_index]) && (elapsed < servo_stop_array[servo_move_index])))
   {
     // Do move
     Serial.println("Servo On");
@@ -371,51 +394,73 @@ void loop()
   }
 
   // stop servo move
-
-  if (run_state && servo_state && (elapsed > servo_stop_time))
+  if (run_state && servo_state && (elapsed > servo_stop_array[servo_move_index]))
   {
     // Do stop
     Serial.println("Servo Off");
     servo_state = false;
+    servo_move_index++;
   }
 
-  // Serial.println(light_state);
-  if (run_state && !light_state && ((elapsed > light_start_time) && (elapsed < light_stop_time)))
+  // light 1 
+  if (run_state && !light1_state && light1_time_index < light1_cycle_lenght && ((elapsed > light1_start_array [light1_time_index]) && (elapsed < light1_stop_array [light1_time_index])))
   {
     // led on
     // turn_on_led();
-    do_ramp_led = true; 
+    do_ramp_led = true;
     Serial.println(F("Led Start"));
-    light_state = true;
+    light1_state = true;
   }
 
-  if(do_ramp_led) {
-    if (pwm_ramp > 2048) {
-      pwm_ramp = 0;
-      turn_on_led();
-      do_ramp_led = false ;
-      Serial.println(F("Led On"));
-    } else {
-      ramp_led(pwm_ramp); 
-      pwm_ramp += 10 ;
-      Serial.println("Ramp LED");
-      Serial.println(pwm_ramp);
-    }
-  }
-
-  // stop light
-
-  if (run_state && light_state && (elapsed > light_stop_time) || (!run_state && light_state))
+  // stop light 1 
+  if (run_state && light1_state && (elapsed > light1_stop_array [light1_time_index]) || (!run_state && light1_state))
   {
     // Do stop
     turn_off_led();
     Serial.println(F("Led Off"));
-    do_ramp_led = false; 
-    light_state = false;
+    light1_time_index ++ ; 
+    do_ramp_led = false;
+    light1_state = false;
   }
 
-  // one_step();
-  //  servo_continuous(PCA_PIN_SERVO, -1);
+    // light 2
+  if (run_state && !light2_state && light2_time_index < light2_cycle_lenght && ((elapsed > light2_start_array [light2_time_index]) && (elapsed < light2_stop_array [light2_time_index])))
+  {
+    // led on
+    // turn_on_led();
+    do_ramp_led = true;
+    Serial.println(F("Led Start"));
+    light2_state = true;
+  }
+
+  // stop light 2 
+  if (run_state && light2_state && (elapsed > light2_stop_array [light2_time_index]) || (!run_state && light2_state))
+  {
+    // Do stop
+    turn_off_led();
+    Serial.println(F("Led Off"));
+    light2_time_index ++ ; 
+    do_ramp_led = false;
+    light2_state = false;
+  }
+
+  if (do_ramp_led)
+  {
+    if (pwm_ramp > 2048)
+    {
+      pwm_ramp = 0;
+      turn_on_led();
+      do_ramp_led = false;
+      Serial.println(F("Led On"));
+    }
+    else
+    {
+      ramp_led(pwm_ramp);
+      pwm_ramp += 5;
+      Serial.println("Ramp LED");
+      Serial.println(pwm_ramp);
+    }
+  }
 
   if (servo_angle_active || servo_state)
   {
@@ -447,21 +492,24 @@ void loop()
     // myStepper.step(stepsPerRevolution);
     Serial.println(F("Move Stepper"));
   }
-  
+
   if (stepperRunning)
   {
     if (stepCounter > 500)
     {
-        oneStepCW();
-        stepCounter++;
-    } else if (stepCounter < 1000){
-        oneStepCCW();
-        stepCounter++;
-    } else {
-      Serial.println("reset stepper");
-      stepCounter = 0 ;
+      oneStepCW();
+      stepCounter++;
     }
-    
+    else if (stepCounter < 1000)
+    {
+      oneStepCCW();
+      stepCounter++;
+    }
+    else
+    {
+      Serial.println("reset stepper");
+      stepCounter = 0;
+    }
   }
 
   // stop stepper
@@ -474,7 +522,6 @@ void loop()
     Serial.println(F("Stop stepper"));
     Serial.print("Counter: ");
     Serial.println(stepCounter);
-    
   }
 
   // // Drive each PWM in a 'wave'
