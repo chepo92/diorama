@@ -16,6 +16,8 @@
 #include <SimpleTimer.h>
 #endif
 
+#define FW_VERSION 1
+
 #define DIORAMA_NUMBER 6
 
 /**
@@ -44,7 +46,8 @@ const int buttonPin = 5; // the number of the pushbutton pin
 #define PCA_PIN_LEDS_E2 10
 #define PCA_PIN_LEDS_M2 11
 
-#define PCA_PIN_SERVO 12
+#define PCA_PIN_SERVO_1 12
+#define PCA_PIN_SERVO_2 13
 
 #define NUMBER_OF_STEPS_PER_REV 512
 // initialize the stepper library on pins 8 through 11:
@@ -76,14 +79,15 @@ unsigned long lastDebounceTime = 0; // the last time the output pin was toggled
 unsigned long debounceDelay = 50;   // the debounce time; increase if the output flickers
 
 /* State machine */
-boolean servo_state = false;
-boolean light1_state = false;
-boolean light2_state = false;
-boolean stepper_state = false;
-boolean manual_led_state = false;
+boolean servo_state;
+boolean light1_state;
+boolean light2_state;
+boolean stepper_state;
+boolean manual_led_state;
 
-boolean stepper_running = false;
-boolean stepper_direction = false;
+boolean stepper_running;
+boolean stepper_direction;
+boolean servo_angle_active;
 
 int stepper_time_index;
 int light1_time_index;
@@ -103,10 +107,10 @@ int servo_move_index;
 
 #elif DIORAMA_NUMBER == 6
 
-long max_playtime = 160000; // 1:50 = 60+50
+long max_playtime = 150000; // 1:50 = 60+50
 
 // steppers
-int stepper_cycle_count = 1;
+int stepper_cycle_count = 0;
 int steper_start_array[] = {};
 int steper_stop_array[] = {};
 
@@ -123,15 +127,20 @@ long light1_start_array[] = {0};
 long light1_stop_array[] = {145000};
 
 int light2_cycle_lenght = 1;
-long light2_start_array[] = {55000};
-long light2_stop_array[] = {75000};
+long light2_start_array[] = {105000};
+long light2_stop_array[] = {145000};
 
 // Servos
 int servo_move_count = 1;
 long servo_start_array[] = {105000};
-long servo_stop_array[] = {115000};
+long servo_stop_array[] = {145000};
 
 /* Servo Control */
+int servo_move_type = 0; // 0 : initial, final; 1: move continuous.
+
+int servo_angles[] = {0};
+
+int servo_default_angle = 0;
 
 int min_servo_position = 0;
 int max_servo_position = 180;
@@ -143,8 +152,6 @@ long last_servo_update;
 long servo_update_period = 10;
 
 int servo_step = 1;
-
-
 
 #endif
 
@@ -184,7 +191,7 @@ void writeStep(int a, int b, int c, int d)
   digitalWrite(STEPPER_PIN_D, d);
 }
 
-void oneCycleCW() // ~ 8 steps? 
+void oneCycleCW() // ~ 8 steps?
 {
   writeStep(1, 0, 0, 0);
   delay(5);
@@ -204,7 +211,7 @@ void oneCycleCW() // ~ 8 steps?
   delay(5);
 }
 
-void oneCycleCCW() // ~ 8 steps? 
+void oneCycleCCW() // ~ 8 steps?
 {
   writeStep(1, 0, 0, 1);
   delay(5);
@@ -252,7 +259,8 @@ void setup()
   uint8_t result; // result code from some function as to be tested at later time.
 
   Serial.begin(115200);
-
+  Serial.print("Fw version: ");
+  Serial.println(FW_VERSION);
   Serial.print(F("F_CPU = "));
   Serial.println(F_CPU);
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
@@ -480,30 +488,50 @@ void loop()
     {
       ramp_led(pwm_ramp);
       pwm_ramp += 5;
-      Serial.println("Ramp LED");
-      Serial.println(pwm_ramp);
+      // Serial.println("Ramp LED");
+      // Serial.println(pwm_ramp);
     }
   }
 
   if (servo_angle_active || servo_state)
   {
-    // Serial.print("Current pos servo: ");
-    // Serial.println((servo_current_position)); last_servo_update servo_update_period
-    long elapsed_servo_update = millis() - last_servo_update;
-    if (elapsed_servo_update > servo_update_period)
+    switch (servo_move_type)
     {
-      last_servo_update = millis();
-      set_servo_angle(PCA_PIN_SERVO, servo_current_position);
-      servo_current_position = servo_current_position + servo_step;
+    case 0:
+      if (servo_move_index < servo_move_count && ((elapsed > servo_start_array[servo_move_index]) && (elapsed < servo_stop_array[servo_move_index])))
+      {
+        set_servo_angle(PCA_PIN_SERVO_1, min_servo_position);
+        Serial.println("Servo at min position");
+      }
+      else if (servo_move_index < servo_move_count && (elapsed > servo_stop_array[servo_move_index]))
+        {
+          set_servo_angle(PCA_PIN_SERVO_1, max_servo_position);
+          Serial.println("Servo at max position");
+        }
+      break;
+    case 1:
+      // Serial.print("Current pos servo: ");
+      // Serial.println((servo_current_position)); last_servo_update servo_update_period
+      long elapsed_servo_update = millis() - last_servo_update;
+      if (elapsed_servo_update > servo_update_period)
+      {
+        last_servo_update = millis();
+        set_servo_angle(PCA_PIN_SERVO_1, servo_current_position);
+        servo_current_position = servo_current_position + servo_step;
 
-      if (servo_current_position <= min_servo_position)
-      {
-        servo_step = abs(servo_step);
+        if (servo_current_position <= min_servo_position)
+        {
+          servo_step = abs(servo_step);
+        }
+        if (servo_current_position >= max_servo_position)
+        {
+          servo_step = -abs(servo_step);
+        }
       }
-      if (servo_current_position >= max_servo_position)
-      {
-        servo_step = -abs(servo_step);
-      }
+      break;
+
+    default:
+      break;
     }
   }
 
@@ -516,18 +544,19 @@ void loop()
     Serial.println(F("Move Stepper"));
   }
 
-
   if (stepper_running)
   {
-    if (stepper_direction )
+    if (stepper_direction)
     {
       if (stepCounter < steps_cw)
       {
         oneCycleCW();
         stepCounter++;
-      } else {
-        stepCounter = 0 ;
-        stepper_direction = !stepper_direction; 
+      }
+      else
+      {
+        stepCounter = 0;
+        stepper_direction = !stepper_direction;
       }
     }
     else if (stepCounter < steps_ccw)
@@ -538,7 +567,7 @@ void loop()
     else
     {
       stepCounter = 0;
-      stepper_direction = !stepper_direction; 
+      stepper_direction = !stepper_direction;
       Serial.println("reset stepper");
     }
   }
@@ -700,18 +729,28 @@ void parse_menu(byte key_command)
     {
       Serial.println("manual led on");
       turn_on_led();
-      // servo_continuous(PCA_PIN_SERVO, 1);
+      // servo_continuous(PCA_PIN_SERVO_1, 1);
     }
     else
     {
       Serial.println("manual led off");
       turn_off_led();
-      // servo_continuous(PCA_PIN_SERVO, -1);
+      // servo_continuous(PCA_PIN_SERVO_1, -1);
     }
   }
   else if (key_command == 'w')
   {
     servo_angle_active = !servo_angle_active;
+  }
+  else if (key_command == 'p')
+  {
+    set_servo_angle(PCA_PIN_SERVO_1, min_servo_position);
+    Serial.println("Servo at min position");
+  }
+  else if (key_command == 'P')
+  {
+    set_servo_angle(PCA_PIN_SERVO_1, max_servo_position);
+    Serial.println("Servo at max position");
   }
   else if (key_command == 'c')
   {
