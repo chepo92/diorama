@@ -125,30 +125,30 @@ int steps_ccw;
 
 // LED lights
 
-int ramp_time_divisor = 10; 
+int ramp_time_divisor = 5; 
 
 int light1_cycle_count = 1;
 long light1_start_array[] = {0};
-long light1_stop_array[] = {105000};
+long light1_stop_array[] = {100000};
 
 int light2_cycle_lenght = 1;
-long light2_start_array[] = {40000};
-long light2_stop_array[] = {110000};
+long light2_start_array[] = {23000};
+long light2_stop_array[] = {80000};
 
 // Servos
 int servo_move_count = 1;
 long servo_start_array[] = {28000};
-long servo_stop_array[] = {38000};
+long servo_stop_array[] = {85000};
 
 /* Servo Control */
-int servo_move_type = 0; // 0 : initial, final; 1: move continuous.
+int servo_move_type = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
 int servo_default_angle = 90;
 
-int min_servo_position = 90;
-int max_servo_position = 20;
+int min_servo_position = 20;
+int max_servo_position = 90;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 480; // pwm 180°
@@ -356,6 +356,7 @@ void reset_all()
   turn_off_led();
   turn_off_led_n(2);
   set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle);
+  servo_current_position = servo_default_angle ; 
 }
 
 void setup()
@@ -561,6 +562,7 @@ void loop()
     // led on
     // turn_on_led();
     do_ramp_led = true;
+    if (do_ramp_led) pwm_ramp = 0 ; 
     Serial.println(F("Led 1 Do ramp"));
     light1_state = true;
   }
@@ -570,11 +572,12 @@ void loop()
   {
     // Do stop
     // turn_off_led();
-    // Serial.println(F("Led 1 Off"));
+    Serial.println(F("Led 1 fade out"));
     light1_time_index++;
     do_ramp_led = false;
     fade_out_led_1 = true ; 
-    // light1_state = false;
+    if(fade_out_led_1) pwm_ramp = 2048 ; 
+    light1_state = false;
   }
 
   // On light 2
@@ -583,6 +586,7 @@ void loop()
     // led on
     // turn_on_led_n(2);
     do_ramp_led_2 = true;
+    if (do_ramp_led_2) pwm_ramp_2 = 0 ; 
     Serial.println(F("Led 2 Do Ramp"));
     light2_state = true;
   }
@@ -595,8 +599,10 @@ void loop()
     do_ramp_led_2 = false;
     Serial.println(F("Led 2 fade out"));
     light2_time_index++;
-    // light2_state = false;
-    fade_out_led_1 = true;
+    light2_state = false;
+    fade_out_led_2 = true;
+    if(fade_out_led_2) pwm_ramp_2 = 2048 ; 
+    
   }
 
   if (do_ramp_led)
@@ -615,8 +621,8 @@ void loop()
       if (ramp_time_counter > ramp_time_divisor ) {
         pwm_ramp ++;
         ramp_time_counter = 0 ; 
-        Serial.println(F("Ramp UP 1 "));
-        Serial.println(pwm_ramp);
+        // Serial.println(F("Ramp UP 1 "));
+        // Serial.println(pwm_ramp);
       }
       
     }
@@ -638,7 +644,7 @@ void loop()
       if (ramp_time_counter_2 > ramp_time_divisor ) {
         pwm_ramp_2 ++;
         ramp_time_counter_2 = 0 ; 
-        Serial.println(F("Ramp UP"));
+        // Serial.println(F("Ramp UP"));
       }
     }
   }
@@ -676,7 +682,7 @@ void loop()
     }
     else
     {
-      ramp_led(pwm_ramp_2);
+      ramp_led_2(pwm_ramp_2);
       ramp_time_counter_2 ++ ; 
       if (ramp_time_counter_2 > ramp_time_divisor ) {
         pwm_ramp_2 -- ;
@@ -703,11 +709,12 @@ void loop()
       }
       break;
     case 1:
-      // Serial.print("Current pos servo: ");
-      // Serial.println((servo_current_position)); last_servo_update servo_update_period
+      
       long elapsed_servo_update = millis() - last_servo_update;
       if (elapsed_servo_update > servo_update_period)
       {
+        // Serial.print("Current servo position: ");
+        // Serial.println((servo_current_position));         
         last_servo_update = millis();
         set_servo_angle(PCA_PIN_SERVO_1, servo_current_position);
         servo_current_position = servo_current_position + servo_step;
@@ -954,12 +961,26 @@ void parse_menu(byte key_command)
   }
   else if (key_command == 'r')
   {
+    Serial.println("manual ramp 1");
     do_ramp_led = !do_ramp_led;
   }  
   else if (key_command == 'R')
   {
+    Serial.println("manual ramp 2");
     do_ramp_led_2 = !do_ramp_led_2;
-  }    
+  }  
+  else if (key_command == 'f')
+  {
+    Serial.println("manual fade out 1");
+    fade_out_led_1 = !fade_out_led_1;
+    pwm_ramp = 2048 ;
+  }  
+  else if (key_command == 'F')
+  {
+    Serial.println("manual fade out 2");
+    fade_out_led_2 = !fade_out_led_2;
+    pwm_ramp_2 = 2048 ;
+  }      
   else if (key_command == 'p')
   {
     set_servo_angle(PCA_PIN_SERVO_1, min_servo_position);
