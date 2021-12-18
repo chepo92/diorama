@@ -18,7 +18,7 @@
 
 #define FW_VERSION 1
 
-#define DIORAMA_NUMBER 5
+#define DIORAMA_NUMBER 3
 
 /**
  * \brief Object instancing the SdFat library.
@@ -223,7 +223,7 @@ int servo_step = 1;
 
 #elif DIORAMA_NUMBER == 3 // Arrurru 
 
-long max_playtime = 128000; // 
+long max_playtime = 100000; // 
 
 // steppers
 int stepper_cycle_count = 0;
@@ -239,16 +239,16 @@ int ramp_time_divisor = 5;
 
 int light1_cycle_count = 1;
 long light1_start_array[] = {0};
-long light1_stop_array[] = {115000};
+long light1_stop_array[] = {90000};
 
 int light2_cycle_lenght = 1;
-long light2_start_array[] = {46000};
-long light2_stop_array[] = {115000};
+long light2_start_array[] = {45000};
+long light2_stop_array[] = {90000};
 
 // Servos
 int servo_move_count = 1;
-long servo_start_array[] = {46000};
-long servo_stop_array[] = {56000};
+long servo_start_array[] = {5000};
+long servo_stop_array[] = {80000};
 
 int servo_move_count_2 = 1;
 long servo_start_array_2[] = {33000};
