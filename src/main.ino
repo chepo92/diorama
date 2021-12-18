@@ -95,6 +95,13 @@ int light1_time_index;
 int light2_time_index;
 int servo_move_index;
 
+int ramp_time_counter;
+int ramp_time_counter_2;
+int ramp_time_divisor = 5; 
+
+long seconds_display ; 
+long last_timer_print ; 
+
 // Individual Settings for each Diorama
 #if DIORAMA_NUMBER == 1
 
@@ -124,11 +131,11 @@ int steps_ccw;
 // LED lights
 
 int light1_cycle_count = 1;
-long light1_start_array[] = {0};
+long light1_start_array[] = {100000};
 long light1_stop_array[] = {145000};
 
 int light2_cycle_lenght = 1;
-long light2_start_array[] = {105000};
+long light2_start_array[] = {0};
 long light2_stop_array[] = {145000};
 
 // Servos
@@ -234,24 +241,32 @@ void oneCycleCCW() // ~ 8 steps?
 
 /* LED control */
 boolean do_ramp_led;
+boolean do_ramp_led_2;
 int pwm_ramp = 0;
+int pwm_ramp_2 = 0;
 
 void ramp_led(int current_ramp)
 {
   PCA.setPWM(PCA_PIN_LEDS_E1, 0, current_ramp);
-  // PCA.setPWM(PCA_PIN_LEDS_M1, current_ramp, 4095);
+  PCA.setPWM(PCA_PIN_LEDS_M1, current_ramp, 4095);
+}
+
+void ramp_led_2(int current_ramp)
+{
+  PCA.setPWM(PCA_PIN_LEDS_E2, 0, current_ramp);
+  PCA.setPWM(PCA_PIN_LEDS_M2, current_ramp, 4095);
 }
 
 void turn_on_led()
 {
   PCA.setPWM(PCA_PIN_LEDS_E1, 0, 2045);
-  // PCA.setPWM(PCA_PIN_LEDS_M1, 2045, 4090);
+  PCA.setPWM(PCA_PIN_LEDS_M1, 2045, 4090);
 }
 
 void turn_off_led()
 {
   PCA.setPWM(PCA_PIN_LEDS_E1, 0, 0);
-  // PCA.setPWM(PCA_PIN_LEDS_M1, 0, 0);
+  PCA.setPWM(PCA_PIN_LEDS_M1, 0, 0);
 }
 
 void turn_on_led_n(int ledIndx) {
@@ -259,9 +274,11 @@ void turn_on_led_n(int ledIndx) {
   {
   case 1:
     PCA.setPWM(PCA_PIN_LEDS_E1, 0, 2045);
+    PCA.setPWM(PCA_PIN_LEDS_M1, 2045, 4095);
     break;
   case 2:
     PCA.setPWM(PCA_PIN_LEDS_E2, 0, 2045);
+    PCA.setPWM(PCA_PIN_LEDS_M2, 2045, 4095);
     break;  
   default:
     break;
@@ -270,7 +287,26 @@ void turn_on_led_n(int ledIndx) {
 }
 
 void turn_off_led_n(int ledIndx) {
-  PCA.setPWM(PCA_PIN_LEDS_E1 + ledIndx*2 - 2, 0, 0);
+  switch (ledIndx)
+  {
+  case 1:
+    PCA.setPWM(PCA_PIN_LEDS_E1, 0, 0);
+    PCA.setPWM(PCA_PIN_LEDS_M1, 0, 0);
+    break;
+  case 2:
+    PCA.setPWM(PCA_PIN_LEDS_E2, 0, 0);
+    PCA.setPWM(PCA_PIN_LEDS_M2, 0, 0);
+    break;  
+  default:
+    break;
+  }
+}
+
+void reset_all()
+{
+  turn_off_led();
+  turn_off_led_n(2);
+  set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle);
 }
 
 void setup()
@@ -351,9 +387,7 @@ void setup()
   pinMode(buttonPin, INPUT_PULLUP);
 
   // Initial state, everything off
-  turn_off_led();
-
-  set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle);
+  reset_all() ; 
 
 }
 
@@ -426,7 +460,15 @@ void loop()
   }
 
   /* Resets machine state after x millisseconds */
-  long elapsed = millis() - start_play_time;
+  long time_now = millis()  ; 
+  long elapsed = time_now - start_play_time;
+  long elapsed_timer_print = time_now - last_timer_print;
+
+  if (run_state && ( elapsed_timer_print >  1000))
+  {
+      Serial.println(elapsed/1000) ; 
+      last_timer_print = time_now; 
+  }
 
   if (run_state && (elapsed > max_playtime))
   {
@@ -439,6 +481,10 @@ void loop()
     light1_time_index = 0;
     light2_time_index = 0;
     stepper_cycle_count = 0;
+    
+    // Reset positions 
+    reset_all(); 
+
   }
 
   // Servo
@@ -455,37 +501,39 @@ void loop()
     // Do stop
     Serial.println("Servo Off");
     servo_state = false;
+    set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle);
+    
     servo_move_index++;
   }
 
   // light 1
-  if (run_state && !light1_state && light1_time_index < light1_cycle_count && ((elapsed > light1_start_array[light1_time_index]) && (elapsed < light1_stop_array[light1_time_index])))
+  if (run_state && !light1_state && (light1_time_index < light1_cycle_count) && ((elapsed > light1_start_array[light1_time_index]) && (elapsed < light1_stop_array[light1_time_index])))
   {
     // led on
     // turn_on_led();
     do_ramp_led = true;
-    Serial.println(F("Led ON"));
+    Serial.println(F("Led 1 Do ramp"));
     light1_state = true;
   }
 
   // stop light 1
-  if (run_state && light1_state && (elapsed > light1_stop_array[light1_time_index]) || (!run_state && light1_state))
+  if ( (run_state) && light1_state && (elapsed > light1_stop_array[light1_time_index]) || (!run_state && light1_state))
   {
     // Do stop
     turn_off_led();
-    Serial.println(F("Led Off"));
+    Serial.println(F("Led 1 Off"));
     light1_time_index++;
     do_ramp_led = false;
     light1_state = false;
   }
 
-  // light 2
+  // On light 2
   if (run_state && !light2_state && light2_time_index < light2_cycle_lenght && ((elapsed > light2_start_array[light2_time_index]) && (elapsed < light2_stop_array[light2_time_index])))
   {
     // led on
-    turn_on_led_n(2);
-    do_ramp_led = true;
-    Serial.println(F("Led 2 ON"));
+    // turn_on_led_n(2);
+    do_ramp_led_2 = true;
+    Serial.println(F("Led 2 Do Ramp"));
     light2_state = true;
   }
 
@@ -494,9 +542,9 @@ void loop()
   {
     // Do stop
     turn_off_led_n(2);
+    do_ramp_led_2 = false;
     Serial.println(F("Led 2 Off"));
     light2_time_index++;
-    do_ramp_led = false;
     light2_state = false;
   }
 
@@ -507,12 +555,40 @@ void loop()
       pwm_ramp = 0;
       turn_on_led();
       do_ramp_led = false;
-      Serial.println(F("Led On"));
+      Serial.println(F("Led Full ON after ramp"));
     }
     else
     {
       ramp_led(pwm_ramp);
-      pwm_ramp += 5;
+      ramp_time_counter ++ ; 
+      if (ramp_time_counter > ramp_time_divisor ) {
+        pwm_ramp ++;
+        ramp_time_counter = 0 ; 
+      }
+      
+      // Serial.println("Ramp LED");
+      // Serial.println(pwm_ramp);
+    }
+  }
+
+  if (do_ramp_led_2)
+  {
+    if (pwm_ramp_2 > 2048)
+    {
+      pwm_ramp_2 = 0;
+      turn_on_led_n(2);
+      do_ramp_led_2 = false;
+      Serial.println(F("Led 2 Full ON after ramp"));
+    }
+    else
+    {
+      ramp_led_2(pwm_ramp_2);
+      ramp_time_counter_2 ++ ; 
+      if (ramp_time_counter_2 > ramp_time_divisor ) {
+        pwm_ramp_2 ++;
+        ramp_time_counter_2 = 0 ; 
+      }
+      
       // Serial.println("Ramp LED");
       // Serial.println(pwm_ramp);
     }
@@ -526,12 +602,12 @@ void loop()
       if (servo_move_index < servo_move_count && ((elapsed > servo_start_array[servo_move_index]) && (elapsed < servo_stop_array[servo_move_index])))
       {
         set_servo_angle(PCA_PIN_SERVO_1, max_servo_position);
-        Serial.println("Servo at max position");
+        //Serial.println("Servo at max position");
       }
       else if (servo_move_index < servo_move_count && (elapsed > servo_stop_array[servo_move_index]))
       {
         set_servo_angle(PCA_PIN_SERVO_1, min_servo_position);
-        Serial.println("Servo at min position");
+        //Serial.println("Servo at min position");
       }
       break;
     case 1:
@@ -754,6 +830,7 @@ void parse_menu(byte key_command)
     {
       Serial.println("manual led on");
       turn_on_led();
+      // delay(5000) ; 
       // servo_continuous(PCA_PIN_SERVO_1, 1);
     }
     else
@@ -783,6 +860,10 @@ void parse_menu(byte key_command)
   {
     servo_angle_active = !servo_angle_active;
   }
+  else if (key_command == 'r')
+  {
+    do_ramp_led = !do_ramp_led;
+  }  
   else if (key_command == 'p')
   {
     set_servo_angle(PCA_PIN_SERVO_1, min_servo_position);
