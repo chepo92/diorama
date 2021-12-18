@@ -91,6 +91,7 @@ boolean manual_led_state_2;
 boolean stepper_state;
 boolean stepper_running;
 boolean stepper_direction;
+boolean stepper_stop_flag ; 
 
 boolean servo_state;
 boolean servo_state_2;
@@ -113,21 +114,14 @@ long seconds_display ;
 long last_timer_print ; 
 
 // Individual Settings for each Diorama
-#if DIORAMA_NUMBER == 1
-
-#elif DIORAMA_NUMBER == 2
-
-#elif DIORAMA_NUMBER == 3
-
-#elif DIORAMA_NUMBER == 4
-
+#if DIORAMA_NUMBER == 1 // el establo
 
 long max_playtime = 128000; // 
 
 // steppers
 int stepper_cycle_count = 0;
-int steper_start_array[] = {0};
-int steper_stop_array[] = {0};
+long stepper_start_array[] = {0};
+long stepper_stop_array[] = {0};
 
 int steps_cw;
 int steps_ccw;
@@ -179,15 +173,15 @@ long servo_update_period_2 = 20;
 int servo_step = 1;
 int servo_step_2 = 1;
 
+#elif DIORAMA_NUMBER == 2 // Se va la lancha
 
-#elif DIORAMA_NUMBER == 5
 
 long max_playtime = 120000; // 1:50 = 60+50
 
 // steppers
 int stepper_cycle_count = 0;
-int steper_start_array[] = {0};
-int steper_stop_array[] = {0};
+long stepper_start_array[] = {0};
+long stepper_stop_array[] = {0};
 
 int steps_cw;
 int steps_ccw;
@@ -227,14 +221,136 @@ long servo_update_period = 10;
 
 int servo_step = 1;
 
+#elif DIORAMA_NUMBER == 3 // Arrurru 
+
+long max_playtime = 128000; // 
+
+// steppers
+int stepper_cycle_count = 0;
+long stepper_start_array[] = {0};
+long stepper_stop_array[] = {0};
+
+int steps_cw;
+int steps_ccw;
+
+// LED lights
+
+int ramp_time_divisor = 5; 
+
+int light1_cycle_count = 1;
+long light1_start_array[] = {0};
+long light1_stop_array[] = {115000};
+
+int light2_cycle_lenght = 1;
+long light2_start_array[] = {46000};
+long light2_stop_array[] = {115000};
+
+// Servos
+int servo_move_count = 1;
+long servo_start_array[] = {46000};
+long servo_stop_array[] = {56000};
+
+int servo_move_count_2 = 1;
+long servo_start_array_2[] = {33000};
+long servo_stop_array_2[] = {37000};
+
+/* Servo Control */
+int servo_move_type = 1; // 0 : initial, final; 1: move continuous.
+int servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
+
+int servo_angles[] = {0};
+
+int servo_default_angle = 55;
+int servo_default_angle_2 = 90;
+
+int min_servo_position = 40;
+int max_servo_position = 70;
+
+int min_servo_position_2 = 40;
+int max_servo_position_2 = 90;
+
+unsigned int pos0_pwm = 100;   // pwm at 0°
+unsigned int pos180_pwm = 480; // pwm 180°
+
+long last_servo_update;
+long last_servo_update_2;
+long servo_update_period = 40;
+long servo_update_period_2 = 20;
+
+int servo_step = 1;
+int servo_step_2 = 1;
+
+#elif DIORAMA_NUMBER == 4 // Cucu
+
+
+long max_playtime = 90000; // 
+
+// steppers
+int stepper_cycle_count = 1;
+long stepper_start_array[] = {20000};
+long stepper_stop_array[] =  {40000};
+
+int steps_cw;
+int steps_ccw;
+
+// LED lights
+
+int ramp_time_divisor = 5; 
+
+int light1_cycle_count = 1;
+long light1_start_array[] = {0};
+long light1_stop_array[] = {73000};
+
+int light2_cycle_lenght = 1;
+long light2_start_array[] = {11000};
+long light2_stop_array[] = {72000};
+
+// Servos
+int servo_move_count = 1;
+long servo_start_array[] = {35000};
+long servo_stop_array[] = {45000};
+
+int servo_move_count_2 = 1;
+long servo_start_array_2[] = {40000};
+long servo_stop_array_2[] = {50000};
+
+/* Servo Control */
+int servo_move_type = 1; // 0 : initial, final; 1: move continuous.
+int servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
+
+int servo_angles[] = {0};
+
+int servo_default_angle = 80;
+int servo_default_angle_2 = 90;
+
+int min_servo_position = 20;
+int max_servo_position = 80;
+
+int min_servo_position_2 = 20;
+int max_servo_position_2 = 90;
+
+unsigned int pos0_pwm = 100;   // pwm at 0°
+unsigned int pos180_pwm = 480; // pwm 180°
+
+long last_servo_update;
+long last_servo_update_2;
+long servo_update_period = 40;
+long servo_update_period_2 = 20;
+
+int servo_step = 1;
+int servo_step_2 = 1;
+
+#elif DIORAMA_NUMBER == 5
+
+
 #elif DIORAMA_NUMBER == 6
 
 long max_playtime = 150000; // 1:50 = 60+50
 
 // steppers
 int stepper_cycle_count = 0;
-int steper_start_array[] = {};
-int steper_stop_array[] = {};
+long stepper_start_array[] = {};
+long stepper_stop_array[] = {};
 
 int steps_cw;
 int steps_ccw;
@@ -301,6 +417,11 @@ void servo_continuous(uint8_t n_servo, int dir)
 /* Stepper Control */
 
 int stepCounter = 0;
+
+void stepperOff()
+{
+  writeStep(0, 0, 0, 0);
+}
 
 void writeStep(int a, int b, int c, int d)
 {
@@ -438,6 +559,9 @@ void setup()
   Serial.begin(115200);
   Serial.print("Fw version: ");
   Serial.println(FW_VERSION);
+  Serial.print("Diorama: ");
+  Serial.println(DIORAMA_NUMBER);
+  
   Serial.print(F("F_CPU = "));
   Serial.println(F_CPU);
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
@@ -602,8 +726,9 @@ void loop()
     servo_move_index_2 = 0;
     light1_time_index = 0;
     light2_time_index = 0;
-    stepper_cycle_count = 0;
-    
+    stepper_time_index = 0 ; 
+
+    stepper_stop_flag = false ; 
     // Reset positions 
     reset_all(); 
 
@@ -870,10 +995,13 @@ void loop()
   }  
 
   // Control stepper
-  if (run_state && !stepper_state && stepper_time_index < stepper_cycle_count && ((elapsed > steper_start_array[stepper_time_index]) && (elapsed < steper_stop_array[stepper_time_index])))
+  if (run_state && !stepper_state && stepper_time_index < stepper_cycle_count && ((elapsed > stepper_start_array[stepper_time_index]) && (elapsed < stepper_stop_array[stepper_time_index])))
   {
     stepper_state = true;
     stepper_running = true;
+
+    steps_cw = 100 ; 
+    steps_ccw = 100 ; 
     // myStepper.step(stepsPerRevolution);
     Serial.println(F("Move Stepper"));
   }
@@ -886,11 +1014,13 @@ void loop()
       {
         oneCycleCW();
         stepCounter++;
-      }
+      } 
       else
       {
         stepCounter = 0;
         stepper_direction = !stepper_direction;
+        Serial.print("Change stepper Direction ");
+        Serial.println(stepper_direction);        
       }
     }
     else if (stepCounter < steps_ccw)
@@ -898,25 +1028,36 @@ void loop()
       oneCycleCCW();
       stepCounter++;
     }
+    else if (stepper_stop_flag) {
+      
+      stepper_state = false;
+      stepper_running = false;      
+      stepperOff(); 
+      // myStepper.step(-stepsPerRevolution);
+      Serial.println(F("Stop stepper"));
+      Serial.print("Counter: ");
+      Serial.println(stepCounter);   
+      stepCounter = 0;     
+    }    
     else
     {
       stepCounter = 0;
       stepper_direction = !stepper_direction;
-      Serial.println("reset stepper");
+      // Serial.println("reset stepper");
+      Serial.print("Change stepper Direction ");
+      Serial.println(stepper_direction);
     }
   }
 
-  // stop stepper
+  // flag stop stepper
 
-  if (run_state && stepper_state && stepper_time_index < stepper_cycle_count && (elapsed > steper_stop_array[stepper_time_index]))
+  if (run_state && stepper_state && (stepper_time_index < stepper_cycle_count) && (elapsed > stepper_stop_array[stepper_time_index]))
   {
-    stepper_state = false;
-    stepper_running = false;
-    stepper_cycle_count++;
-    // myStepper.step(-stepsPerRevolution);
-    Serial.println(F("Stop stepper"));
-    Serial.print("Counter: ");
-    Serial.println(stepCounter);
+    //stepper_state = false ;
+    stepper_stop_flag = true ; 
+    stepper_time_index++;
+    Serial.println("Stop stepper flag");
+
   }
 
   // // Drive each PWM in a 'wave'
@@ -1139,15 +1280,18 @@ void parse_menu(byte key_command)
     set_servo_angle(PCA_PIN_SERVO_2, max_servo_position_2);
     Serial.println("Servo 2 at max position");
   }  
-  else if (key_command == 'c')
+  else if (key_command == 'C')
   {
     Serial.println("manual Step CCW");
-    stepper_running = true;
+    stepper_running = !stepper_running;
+    steps_ccw = 100;
     // myStepper.step(stepsPerRevolution) ;
   }
-  else if (key_command == 'v')
+  else if (key_command == 'c')
   {
     Serial.println("manual Step CW");
+    stepper_running = !stepper_running;
+    steps_cw = 100;    
     // myStepper.step(-stepsPerRevolution) ;
   }
   else if (key_command == 'u')
