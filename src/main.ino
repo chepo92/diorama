@@ -84,6 +84,7 @@ boolean light1_state;
 boolean light2_state;
 boolean stepper_state;
 boolean manual_led_state;
+boolean manual_led_state_2;
 
 boolean stepper_running;
 boolean stepper_direction;
@@ -140,13 +141,13 @@ int servo_move_type = 0; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle = 0;
+int servo_default_angle = 90;
 
-int min_servo_position = 0;
-int max_servo_position = 180;
+int min_servo_position = 90;
+int max_servo_position = 20;
 
-unsigned int pos0 = 172;   // pwm at 0°
-unsigned int pos180 = 565; // pwm 180°
+unsigned int pos0_pwm = 100;   // pwm at 0°
+unsigned int pos180_pwm = 480; // pwm 180°
 
 long last_servo_update;
 long servo_update_period = 10;
@@ -158,7 +159,7 @@ int servo_step = 1;
 void set_servo_angle(uint8_t n_servo, int angulo)
 {
   int duty;
-  duty = map(angulo, 0, 180, pos0, pos180);
+  duty = map(angulo, 0, 180, pos0_pwm, pos180_pwm);
   PCA.setPWM(n_servo, 0, duty);
 }
 
@@ -167,15 +168,15 @@ void servo_continuous(uint8_t n_servo, int dir)
 {
   if (dir > 0)
   { // CW
-    PCA.setPWM(n_servo, 0, 180);
+    set_servo_angle(n_servo, 10);
   }
   else if (dir < 0)
   { // CCW
-    PCA.setPWM(n_servo, 0, 360);
+    set_servo_angle(n_servo, 45);
   }
   else
   {
-    PCA.setPWM(n_servo, 0, 300);
+    set_servo_angle(n_servo, 90);
   }
 }
 
@@ -253,6 +254,25 @@ void turn_off_led()
   // PCA.setPWM(PCA_PIN_LEDS_M1, 0, 0);
 }
 
+void turn_on_led_n(int ledIndx) {
+  switch (ledIndx)
+  {
+  case 1:
+    PCA.setPWM(PCA_PIN_LEDS_E1, 0, 2045);
+    break;
+  case 2:
+    PCA.setPWM(PCA_PIN_LEDS_E2, 0, 2045);
+    break;  
+  default:
+    break;
+  }
+  
+}
+
+void turn_off_led_n(int ledIndx) {
+  PCA.setPWM(PCA_PIN_LEDS_E1 + ledIndx*2 - 2, 0, 0);
+}
+
 void setup()
 {
 
@@ -319,17 +339,22 @@ void setup()
   // that precise. You can 'calibrate' by tweaking this number till
   // you get the frequency you're expecting!
   PCA.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
-  PCA.setPWMFreq(60);                   // 60 for the servo                // This is the maximum PWM frequency
+  PCA.setPWMFreq(50);                   // 60 for the servo                // This is the maximum PWM frequency
 
   // if you want to really speed stuff up, you can go into 'fast 400khz I2C' mode
   // some i2c devices dont like this so much so if you're sharing the bus, watch
   // out for this!
   Wire.setClock(400000);
 
-  turn_off_led();
   help();
 
   pinMode(buttonPin, INPUT_PULLUP);
+
+  // Initial state, everything off
+  turn_off_led();
+
+  set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle);
+
 }
 
 //------------------------------------------------------------------------------
@@ -439,7 +464,7 @@ void loop()
     // led on
     // turn_on_led();
     do_ramp_led = true;
-    Serial.println(F("Led Start"));
+    Serial.println(F("Led ON"));
     light1_state = true;
   }
 
@@ -458,9 +483,9 @@ void loop()
   if (run_state && !light2_state && light2_time_index < light2_cycle_lenght && ((elapsed > light2_start_array[light2_time_index]) && (elapsed < light2_stop_array[light2_time_index])))
   {
     // led on
-    // turn_on_led();
+    turn_on_led_n(2);
     do_ramp_led = true;
-    Serial.println(F("Led Start"));
+    Serial.println(F("Led 2 ON"));
     light2_state = true;
   }
 
@@ -468,8 +493,8 @@ void loop()
   if (run_state && light2_state && (elapsed > light2_stop_array[light2_time_index]) || (!run_state && light2_state))
   {
     // Do stop
-    turn_off_led();
-    Serial.println(F("Led Off"));
+    turn_off_led_n(2);
+    Serial.println(F("Led 2 Off"));
     light2_time_index++;
     do_ramp_led = false;
     light2_state = false;
@@ -500,14 +525,14 @@ void loop()
     case 0:
       if (servo_move_index < servo_move_count && ((elapsed > servo_start_array[servo_move_index]) && (elapsed < servo_stop_array[servo_move_index])))
       {
+        set_servo_angle(PCA_PIN_SERVO_1, max_servo_position);
+        Serial.println("Servo at max position");
+      }
+      else if (servo_move_index < servo_move_count && (elapsed > servo_stop_array[servo_move_index]))
+      {
         set_servo_angle(PCA_PIN_SERVO_1, min_servo_position);
         Serial.println("Servo at min position");
       }
-      else if (servo_move_index < servo_move_count && (elapsed > servo_stop_array[servo_move_index]))
-        {
-          set_servo_angle(PCA_PIN_SERVO_1, max_servo_position);
-          Serial.println("Servo at max position");
-        }
       break;
     case 1:
       // Serial.print("Current pos servo: ");
@@ -738,6 +763,22 @@ void parse_menu(byte key_command)
       // servo_continuous(PCA_PIN_SERVO_1, -1);
     }
   }
+  else if (key_command == 'L')
+  {
+    manual_led_state_2 = !manual_led_state_2;
+    if (manual_led_state_2)
+    {
+      Serial.println("manual led2 on");
+      turn_on_led_n(2);
+      // servo_continuous(PCA_PIN_SERVO_1, 1);
+    }
+    else
+    {
+      Serial.println("manual led2 off");
+      turn_off_led_n(2);
+      // servo_continuous(PCA_PIN_SERVO_1, -1);
+    }
+  }  
   else if (key_command == 'w')
   {
     servo_angle_active = !servo_angle_active;
