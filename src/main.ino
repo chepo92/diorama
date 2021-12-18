@@ -18,7 +18,7 @@
 
 #define FW_VERSION 1
 
-#define DIORAMA_NUMBER 4
+#define DIORAMA_NUMBER 5
 
 /**
  * \brief Object instancing the SdFat library.
@@ -340,10 +340,67 @@ long servo_update_period_2 = 20;
 int servo_step = 1;
 int servo_step_2 = 1;
 
-#elif DIORAMA_NUMBER == 5
+#elif DIORAMA_NUMBER == 5  
 
 
-#elif DIORAMA_NUMBER == 6
+long max_playtime = 100000; // 
+
+// steppers
+int stepper_cycle_count = 1;
+long stepper_start_array[] = {20000};
+long stepper_stop_array[] =  {40000};
+
+int steps_cw;
+int steps_ccw;
+
+// LED lights
+
+int ramp_time_divisor = 5; 
+
+int light1_cycle_count = 1;
+long light1_start_array[] = {60000};
+long light1_stop_array[] = {85000};
+
+int light2_cycle_lenght = 1;
+long light2_start_array[] = {0};
+long light2_stop_array[] = {75000};
+
+// Servos
+int servo_move_count = 2;
+long servo_start_array[] = {3000, 63000};
+long servo_stop_array[] = {15000, 73000};
+
+int servo_move_count_2 = 3;
+long servo_start_array_2[] = {17000, 47000, 77000};
+long servo_stop_array_2[] = {22000, 59000, 82000};
+
+/* Servo Control */
+int servo_move_type = 1; // 0 : initial, final; 1: move continuous.
+int servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
+
+int servo_angles[] = {0};
+
+int servo_default_angle = 60;
+int servo_default_angle_2 = 40;
+
+int min_servo_position = 40;
+int max_servo_position = 80;
+
+int min_servo_position_2 = 30;
+int max_servo_position_2 = 50;
+
+unsigned int pos0_pwm = 100;   // pwm at 0°
+unsigned int pos180_pwm = 480; // pwm 180°
+
+long last_servo_update;
+long last_servo_update_2;
+long servo_update_period = 40;
+long servo_update_period_2 = 40;
+
+int servo_step = 1;
+int servo_step_2 = 1;
+
+#elif DIORAMA_NUMBER == 6  // Se va la lancha 
 
 long max_playtime = 150000; // 1:50 = 60+50
 
@@ -739,6 +796,8 @@ void loop()
   {
     // Do move
     Serial.println("Servo 2 On");
+    Serial.print("Move index: ");
+    Serial.println(servo_move_index);    
     servo_state = true;
   }
 
@@ -758,6 +817,8 @@ void loop()
   {
     // Do move
     Serial.println("Servo 2 On");
+    Serial.print("Move index: ");
+    Serial.println(servo_move_index_2);
     servo_state_2 = true;
   }
 
