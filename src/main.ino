@@ -89,8 +89,13 @@ unsigned long lastDebounceTime = 0; // the last time the output pin was toggled
 unsigned long debounceDelay = 50;   // the debounce time; increase if the output flickers
 
 /* State machine */
+boolean led1_state;
+boolean led2_state;
+
 boolean light1_state;
 boolean light2_state;
+boolean light3_state;
+boolean light4_state;
 
 boolean manual_led_state;
 boolean manual_led_state_2;
@@ -106,12 +111,17 @@ boolean servo_state_2;
 boolean servo_angle_active;
 boolean servo_angle_active_2;
 
-int stepper_time_index;
-int light1_time_index;
-int light2_time_index;
+byte stepper_time_index;
+byte led1_time_index;
+byte led2_time_index;
 
-int servo_move_index;
-int servo_move_index_2;
+byte light1_time_index;
+byte light2_time_index;
+byte light3_time_index;
+byte light4_time_index;
+
+byte servo_move_index;
+byte servo_move_index_2;
 
 int ramp_time_counter;
 int ramp_time_counter_2;
@@ -168,6 +178,12 @@ int max_servo_position = 90;
 
 int min_servo_position_2 = 40;
 int max_servo_position_2 = 90;
+
+int min_servo_position_3 = 40;
+int max_servo_position_3 = 90;
+
+int min_servo_position_4 = 40;
+int max_servo_position_4 = 90;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 480; // pwm 180°
@@ -278,6 +294,12 @@ int max_servo_position = 70;
 int min_servo_position_2 = 40;
 int max_servo_position_2 = 90;
 
+int min_servo_position_3 = 40;
+int max_servo_position_3 = 90;
+
+int min_servo_position_4 = 40;
+int max_servo_position_4 = 90;
+
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 480; // pwm 180°
 
@@ -355,59 +377,94 @@ int servo_step_2 = 1;
 long max_playtime = 100000; 
 
 // steppers
-int stepper_cycle_count = 1;
+byte stepper_cycle_count = 1;
 long stepper_start_array[] = {20000};
 long stepper_stop_array[] =  {40000};
 
 int steps_cw;
 int steps_ccw;
 
+// Focus Lights
+byte light1_cycle_count = 1;
+long light1_start_array[] = {00};
+long light1_stop_array[] = {5000};
+
+byte light2_cycle_count = 1;
+long light2_start_array[] = {00};
+long light2_stop_array[] = {5000};
+
+byte light3_cycle_count = 1;
+long light3_start_array[] = {00};
+long light3_stop_array[] = {5000};
+
+byte light4_cycle_count = 1;
+long light4_start_array[] = {00};
+long light4_stop_array[] = {5000};
+
 // LED lights
 
-int ramp_time_divisor = 5; 
+byte ramp_time_divisor = 5; 
 
-int light1_cycle_count = 1;
-long light1_start_array[] = {60000};
-long light1_stop_array[] = {85000};
+byte led1_cycle_count = 1;
+long led1_start_array[] = {0};
+long led1_stop_array[] = {max_playtime};
 
-int light2_cycle_lenght = 1;
-long light2_start_array[] = {0};
-long light2_stop_array[] = {75000};
+byte led2_cycle_lenght = 0;
+long led2_start_array[] = {};
+long led2_stop_array[] = {};
 
 // Servos
-int servo_move_count = 2;
+byte servo_move_count = 2;
 long servo_start_array[] = {3000, 63000};
 long servo_stop_array[] = {15000, 73000};
 
-int servo_move_count_2 = 3;
+byte servo_move_count_2 = 3;
 long servo_start_array_2[] = {17000, 47000, 77000};
 long servo_stop_array_2[] = {22000, 59000, 82000};
 
+byte servo_move_count_3 = 3;
+long servo_start_array_3[] = {17000, 47000, 77000};
+long servo_stop_array_3[] = {22000, 59000, 82000};
+
+byte servo_move_count_4 = 3;
+long servo_start_array_4[] = {17000, 47000, 77000};
+long servo_stop_array_4[] = {22000, 59000, 82000};
+
+
 /* Servo Control */
-int servo_move_type = 1; // 0 : initial, final; 1: move continuous.
-int servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
+boolean servo_move_type = 1; // 0 : initial, final; 1: move continuous.
+boolean servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
+boolean servo_move_type_3 = 1; // 0 : initial, final; 1: move continuous.
+boolean servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
 
-int servo_angles[] = {0};
 
-int servo_default_angle = 60;
-int servo_default_angle_2 = 40;
+byte servo_angles[] = {0};
 
-int min_servo_position = 40;
-int max_servo_position = 80;
+byte servo_default_angle = 60;
+byte servo_default_angle_2 = 40;
 
-int min_servo_position_2 = 30;
-int max_servo_position_2 = 50;
+byte min_servo_position = 40;
+byte max_servo_position = 80;
+
+byte min_servo_position_2 = 30;
+byte max_servo_position_2 = 50;
+
+byte min_servo_position_3 = 40;
+byte max_servo_position_3 = 90;
+
+byte min_servo_position_4 = 40;
+byte max_servo_position_4 = 90;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 480; // pwm 180°
 
 long last_servo_update;
 long last_servo_update_2;
-long servo_update_period = 40;
-long servo_update_period_2 = 40;
+long servo_update_period = 100;
+long servo_update_period_2 = 100;
 
-int servo_step = 1;
-int servo_step_2 = 1;
+byte servo_step = 1;
+byte servo_step_2 = 1;
 
 #elif DIORAMA_NUMBER == 6  // Se va la lancha 
 
@@ -460,7 +517,7 @@ void set_servo_angle(uint8_t n_servo, int angulo)
 {
   int duty;
   duty = map(angulo, 0, 180, pos0_pwm, pos180_pwm);
-  PCA1.setPWM(n_servo, 0, duty);
+  PCA2.setPWM(n_servo, 0, duty);
 }
 
 // Needs debug/calibration
@@ -839,7 +896,7 @@ void loop()
     // Reset indexes
     servo_move_index = 0;
     servo_move_index_2 = 0;
-    light1_time_index = 0;
+    led1_time_index = 0;
     light2_time_index = 0;
     stepper_time_index = 0 ; 
 
@@ -891,32 +948,60 @@ void loop()
     servo_move_index_2++;
   }  
 
+
   // light 1
   if (run_state && !light1_state && (light1_time_index < light1_cycle_count) && ((elapsed > light1_start_array[light1_time_index]) && (elapsed < light1_stop_array[light1_time_index])))
+  {
+    // led on
+    // turn_on_led();
+    // do_ramp_led = true;
+    // if (do_ramp_led) pwm_ramp = 0 ; 
+    // Serial.println(F("Led 1 Do ramp"));
+    light1_state = true;
+  }
+
+  // stop led 1
+  if ( (run_state) && light1_state && (elapsed > light1_stop_array[light1_time_index]) || (!run_state && light1_state))
+  {
+    // Do stop
+    // turn_off_led();
+    Serial.println(F("light1 fade out"));
+    light1_time_index++;
+    // do_ramp_led = false;
+    // fade_out_led_1 = true ; 
+    // if(fade_out_led_1) pwm_ramp = 2048 ; 
+    light1_state = false;
+  }
+
+
+
+
+  // led 1
+  if (run_state && !led1_state && (led1_time_index < led1_cycle_count) && ((elapsed > led1_start_array[led1_time_index]) && (elapsed < led1_stop_array[led1_time_index])))
   {
     // led on
     // turn_on_led();
     do_ramp_led = true;
     if (do_ramp_led) pwm_ramp = 0 ; 
     Serial.println(F("Led 1 Do ramp"));
-    light1_state = true;
+    led1_state = true;
   }
 
-  // stop light 1
-  if ( (run_state) && light1_state && (elapsed > light1_stop_array[light1_time_index]) || (!run_state && light1_state))
+  // stop led 1
+  if ( (run_state) && led1_state && (elapsed > led1_stop_array[led1_time_index]) || (!run_state && led1_state))
   {
     // Do stop
     // turn_off_led();
     Serial.println(F("Led 1 fade out"));
-    light1_time_index++;
+    led1_time_index++;
     do_ramp_led = false;
     fade_out_led_1 = true ; 
     if(fade_out_led_1) pwm_ramp = 2048 ; 
-    light1_state = false;
+    led1_state = false;
   }
 
-  // On light 2
-  if (run_state && !light2_state && light2_time_index < light2_cycle_lenght && ((elapsed > light2_start_array[light2_time_index]) && (elapsed < light2_stop_array[light2_time_index])))
+  // On light 2 or ramp 2
+  if (run_state && !light2_state && light2_time_index < led2_cycle_lenght && ((elapsed > led2_start_array[light2_time_index]) && (elapsed < led2_stop_array[light2_time_index])))
   {
     // led on
     // turn_on_led_n(2);
@@ -927,7 +1012,7 @@ void loop()
   }
 
   // stop light 2
-  if (run_state && light2_state && (elapsed > light2_stop_array[light2_time_index]) || (!run_state && light2_state))
+  if (run_state && light2_state && (elapsed > led2_stop_array[light2_time_index]) || (!run_state && light2_state))
   {
     // Do stop
     // turn_off_led_n(2);
@@ -990,7 +1075,7 @@ void loop()
     {
       pwm_ramp = 2048;
       turn_off_led();
-      light1_state = false ; 
+      led1_state = false ; 
       fade_out_led_1 = false;
       Serial.println(F("Led 1 Full Off after fade out"));
     }
@@ -1258,21 +1343,21 @@ void parse_menu(byte key_command)
 
       Serial.println(F("Playing:"));
 
-      // we can get track info by using the following functions and arguments
-      // the functions will extract the requested information, and put it in the array we pass in
-      MP3player.trackTitle((char *)&title);
-      MP3player.trackArtist((char *)&artist);
-      MP3player.trackAlbum((char *)&album);
+      // // we can get track info by using the following functions and arguments
+      // // the functions will extract the requested information, and put it in the array we pass in
+      // MP3player.trackTitle((char *)&title);
+      // MP3player.trackArtist((char *)&artist);
+      // MP3player.trackAlbum((char *)&album);
 
-      // print out the arrays of track information
-      Serial.write((byte *)&title, 30);
-      Serial.println();
-      Serial.print(F("by:  "));
-      Serial.write((byte *)&artist, 30);
-      Serial.println();
-      Serial.print(F("Album:  "));
-      Serial.write((byte *)&album, 30);
-      Serial.println();
+      // // print out the arrays of track information
+      // Serial.write((byte *)&title, 30);
+      // Serial.println();
+      // Serial.print(F("by:  "));
+      // Serial.write((byte *)&artist, 30);
+      // Serial.println();
+      // Serial.print(F("Album:  "));
+      // Serial.write((byte *)&album, 30);
+      // Serial.println();
     }
 
     // if +/- to change volume
@@ -1421,18 +1506,18 @@ void parse_menu(byte key_command)
     set_servo_angle(PCA2_PIN_SERVO_4, max_servo_position_4);
     Serial.println("Servo 4 at max position");
   }       
-  else if (key_command == 'C')
+  else if (key_command == 'Q')
   {
     Serial.println("manual Step CCW");
     stepper_running = !stepper_running;
-    steps_ccw = 100;
+    steps_ccw = 50;
     // myStepper.step(stepsPerRevolution) ;
   }
-  else if (key_command == 'c')
+  else if (key_command == 'q')
   {
     Serial.println("manual Step CW");
     stepper_running = !stepper_running;
-    steps_cw = 100;    
+    steps_cw = 50;    
     // myStepper.step(-stepsPerRevolution) ;
   }
   else if (key_command == 'u')
@@ -1464,11 +1549,11 @@ void parse_menu(byte key_command)
   Serial.print(F("Time since last command: "));
   Serial.println((float)(millis() - millis_prv) / 1000, 2);
   millis_prv = millis();
-  Serial.print(F("Enter s,1-9,+,-,>,<,f,F,d,i,p,t,S,b"));
+  // Serial.print(F("Enter s,1-9,+,-,>,<,f,F,d,i,p,t,S,b"));
 
-  Serial.print(F(",m,e,r,R,g,k,O,o,D,V,B,C,T,E,M:"));
+  // Serial.print(F(",m,e,r,R,g,k,O,o,D,V,B,C,T,E,M:"));
 
-  Serial.println(F(",h :"));
+  // Serial.println(F(",h :"));
 }
 
 //------------------------------------------------------------------------------
@@ -1481,12 +1566,12 @@ void help()
 {
   Serial.println(F("Arduino vs1053 Library Example:"));
   // Serial.println(F(" courtesy of Bill Porter & Michael P. Flaga"));
-  Serial.println(F("COMMANDS:"));
-  Serial.println(F(" [1-9] to play a track"));
+  // Serial.println(F("COMMANDS:"));
+  // Serial.println(F(" [1-9] to play a track"));
 
-  Serial.println(F(" [s] to stop playing"));
-  // Serial.println(F(" [d] display directory of SdCard"));
-  Serial.println(F(" [+ or -] to change volume"));
+  // Serial.println(F(" [s] to stop playing"));
+  // // Serial.println(F(" [d] display directory of SdCard"));
+  // Serial.println(F(" [+ or -] to change volume"));
 
   Serial.println(F(" [h] this help"));
 }
