@@ -16,9 +16,9 @@
 #include <SimpleTimer.h>
 #endif
 
-#define FW_VERSION 1
+#define FW_VERSION 1.1
 
-#define DIORAMA_NUMBER 3
+#define DIORAMA_NUMBER 5
 
 /**
  * \brief Object instancing the SdFat library.
@@ -29,10 +29,9 @@ SdFat sd;
 
 vs1053 MP3player;
 
-// const int stepsPerRevolution = 200; // change this to fit the number of steps per revolutio for your motor
+const int stepsPerRevolution = 200; // change this to fit the number of steps per revolutio for your motor
 
-// Pins
-
+// Stepper Pins
 #define STEPPER_PIN_A A0
 #define STEPPER_PIN_B A1
 #define STEPPER_PIN_C A2
@@ -40,14 +39,21 @@ vs1053 MP3player;
 
 const int buttonPin = 5; // the number of the pushbutton pin
 
-#define PCA_PIN_LEDS_E1 8
-#define PCA_PIN_LEDS_M1 9
+#define PCA1_PIN_LIGHT_1 4
+#define PCA1_PIN_LIGHT_2 5
+#define PCA1_PIN_LIGHT_3 6
+#define PCA1_PIN_LIGHT_4 7
 
-#define PCA_PIN_LEDS_E2 10
-#define PCA_PIN_LEDS_M2 11
+#define PCA1_PIN_LEDS_E1 8
+#define PCA1_PIN_LEDS_M1 9
 
-#define PCA_PIN_SERVO_1 12
-#define PCA_PIN_SERVO_2 13
+#define PCA1_PIN_LEDS_E2 10
+#define PCA1_PIN_LEDS_M2 11
+
+#define PCA2_PIN_SERVO_1 8
+#define PCA2_PIN_SERVO_2 9
+#define PCA2_PIN_SERVO_3 10
+#define PCA2_PIN_SERVO_4 11
 
 #define NUMBER_OF_STEPS_PER_REV 512
 // initialize the stepper library on pins 8 through 11:
@@ -56,8 +62,11 @@ const int buttonPin = 5; // the number of the pushbutton pin
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-// called this way, it uses the default address 0x40
-Adafruit_PWMServoDriver PCA = Adafruit_PWMServoDriver();
+// PCA 1 controls LEDS
+Adafruit_PWMServoDriver PCA1 = Adafruit_PWMServoDriver(0x40);
+
+// PCA 2 Controls servos
+Adafruit_PWMServoDriver PCA2 = Adafruit_PWMServoDriver(0x41);
 
 // Button debounce
 // constants won't change. They're used here to set pin numbers:
@@ -80,8 +89,6 @@ unsigned long lastDebounceTime = 0; // the last time the output pin was toggled
 unsigned long debounceDelay = 50;   // the debounce time; increase if the output flickers
 
 /* State machine */
-
-
 boolean light1_state;
 boolean light2_state;
 
@@ -238,12 +245,14 @@ int steps_ccw;
 int ramp_time_divisor = 5; 
 
 int light1_cycle_count = 1;
-long light1_start_array[] = {0};
-long light1_stop_array[] = {90000};
+long light1_start_array[] = {3000};
+long light1_stop_array[] = {max_playtime};
 
 int light2_cycle_lenght = 1;
-long light2_start_array[] = {45000};
-long light2_stop_array[] = {90000};
+long light2_start_array[] = {8000};
+long light2_stop_array[] = {max_playtime};
+
+// Falta s12  y s29
 
 // Servos
 int servo_move_count = 1;
@@ -340,10 +349,10 @@ long servo_update_period_2 = 20;
 int servo_step = 1;
 int servo_step_2 = 1;
 
-#elif DIORAMA_NUMBER == 5  
+#elif DIORAMA_NUMBER == 5  // pajarito 
 
-
-long max_playtime = 100000; // 
+// Duration of the song 
+long max_playtime = 100000; 
 
 // steppers
 int stepper_cycle_count = 1;
@@ -451,7 +460,7 @@ void set_servo_angle(uint8_t n_servo, int angulo)
 {
   int duty;
   duty = map(angulo, 0, 180, pos0_pwm, pos180_pwm);
-  PCA.setPWM(n_servo, 0, duty);
+  PCA1.setPWM(n_servo, 0, duty);
 }
 
 // Needs debug/calibration
@@ -543,56 +552,96 @@ int pwm_ramp_2 = 0;
 
 void ramp_led(int current_ramp)
 {
-  PCA.setPWM(PCA_PIN_LEDS_E1, 0, current_ramp);
-  PCA.setPWM(PCA_PIN_LEDS_M1, current_ramp, 4095);
+  PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, current_ramp);
+  PCA1.setPWM(PCA1_PIN_LEDS_M1, current_ramp, 4095);
 }
 
 void ramp_led_2(int current_ramp)
 {
-  PCA.setPWM(PCA_PIN_LEDS_E2, 0, current_ramp);
-  PCA.setPWM(PCA_PIN_LEDS_M2, current_ramp, 4095);
+  PCA1.setPWM(PCA1_PIN_LEDS_E2, 0, current_ramp);
+  PCA1.setPWM(PCA1_PIN_LEDS_M2, current_ramp, 4095);
 }
 
 void turn_on_led()
 {
-  PCA.setPWM(PCA_PIN_LEDS_E1, 0, 2045);
-  PCA.setPWM(PCA_PIN_LEDS_M1, 2045, 4090);
+  PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, 2045);
+  PCA1.setPWM(PCA1_PIN_LEDS_M1, 2045, 4090);
 }
 
 void turn_off_led()
 {
-  PCA.setPWM(PCA_PIN_LEDS_E1, 0, 0);
-  PCA.setPWM(PCA_PIN_LEDS_M1, 0, 0);
+  PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, 0);
+  PCA1.setPWM(PCA1_PIN_LEDS_M1, 0, 0);
 }
 
 void turn_on_led_n(int ledIndx) {
   switch (ledIndx)
   {
   case 1:
-    PCA.setPWM(PCA_PIN_LEDS_E1, 0, 2045);
-    PCA.setPWM(PCA_PIN_LEDS_M1, 2045, 4095);
+    PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, 2045);
+    PCA1.setPWM(PCA1_PIN_LEDS_M1, 2045, 4095);
     break;
   case 2:
-    PCA.setPWM(PCA_PIN_LEDS_E2, 0, 2045);
-    PCA.setPWM(PCA_PIN_LEDS_M2, 2045, 4095);
+    PCA1.setPWM(PCA1_PIN_LEDS_E2, 0, 2045);
+    PCA1.setPWM(PCA1_PIN_LEDS_M2, 2045, 4095);
     break;  
   default:
     break;
   }
-  
 }
 
 void turn_off_led_n(int ledIndx) {
   switch (ledIndx)
   {
   case 1:
-    PCA.setPWM(PCA_PIN_LEDS_E1, 0, 0);
-    PCA.setPWM(PCA_PIN_LEDS_M1, 0, 0);
+    PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, 0);
+    PCA1.setPWM(PCA1_PIN_LEDS_M1, 0, 0);
     break;
   case 2:
-    PCA.setPWM(PCA_PIN_LEDS_E2, 0, 0);
-    PCA.setPWM(PCA_PIN_LEDS_M2, 0, 0);
+    PCA1.setPWM(PCA1_PIN_LEDS_E2, 0, 0);
+    PCA1.setPWM(PCA1_PIN_LEDS_M2, 0, 0);
     break;  
+  default:
+    break;
+  }
+}
+
+
+void turn_on_light_n(int lightIndx) {
+  switch (lightIndx)
+  {
+  case 1:
+    PCA1.setPWM(PCA1_PIN_LIGHT_1, 0, 4095);
+    break;
+  case 2:
+    PCA1.setPWM(PCA1_PIN_LIGHT_2, 0, 4095);
+    break;
+  case 3:
+    PCA1.setPWM(PCA1_PIN_LIGHT_3, 0, 4095);
+    break;     
+  case 4:
+    PCA1.setPWM(PCA1_PIN_LIGHT_4, 0, 4095);
+    break;     
+  default:
+    break;
+  }
+}
+
+void turn_off_light_n(int lightIndx) {
+  switch (lightIndx)
+  {
+  case 1:
+    PCA1.setPWM(PCA1_PIN_LIGHT_1, 4095, 4095);
+    break;
+  case 2:
+    PCA1.setPWM(PCA1_PIN_LIGHT_2, 4095, 4095);
+    break;
+  case 3:
+    PCA1.setPWM(PCA1_PIN_LIGHT_3, 4095, 4095);
+    break;     
+  case 4:
+    PCA1.setPWM(PCA1_PIN_LIGHT_4, 4095, 4095);
+    break;     
   default:
     break;
   }
@@ -602,8 +651,14 @@ void reset_all()
 {
   turn_off_led();
   turn_off_led_n(2);
-  set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle);
-  set_servo_angle(PCA_PIN_SERVO_2, servo_default_angle_2);
+  
+  turn_off_light_n(1); 
+  turn_off_light_n(2); 
+  turn_off_light_n(3); 
+  turn_off_light_n(4);
+
+  set_servo_angle(PCA2_PIN_SERVO_1, servo_default_angle);
+  set_servo_angle(PCA2_PIN_SERVO_2, servo_default_angle_2);
   servo_current_position = servo_default_angle ; 
   servo_current_position_2 = servo_default_angle_2 ; 
 }
@@ -672,13 +727,16 @@ void setup()
   // myStepper.step(stepsPerRevolution);
   // delay(500);
 
-  PCA.begin();
+  PCA1.begin();
+  PCA2.begin();
   // In theory the internal oscillator is 25MHz but it really isn't
   // that precise. You can 'calibrate' by tweaking this number till
   // you get the frequency you're expecting!
-  PCA.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
-  PCA.setPWMFreq(50);                   // 60 for the servo                // This is the maximum PWM frequency
+  PCA1.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
+  PCA2.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
 
+  PCA1.setPWMFreq(1500);                                 
+  PCA2.setPWMFreq(50);  // 50 for the servos
   // if you want to really speed stuff up, you can go into 'fast 400khz I2C' mode
   // some i2c devices dont like this so much so if you're sharing the bus, watch
   // out for this!
@@ -807,7 +865,7 @@ void loop()
     // Do stop
     Serial.println("Servo 2 Off");
     servo_state = false;
-    set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle);
+    set_servo_angle(PCA2_PIN_SERVO_1, servo_default_angle);
 
     servo_move_index++;
   }
@@ -828,7 +886,7 @@ void loop()
     // Do stop
     Serial.println("Servo 2 Off");
     servo_state_2 = false;
-    set_servo_angle(PCA_PIN_SERVO_2, servo_default_angle_2);
+    set_servo_angle(PCA2_PIN_SERVO_2, servo_default_angle_2);
 
     servo_move_index_2++;
   }  
@@ -976,12 +1034,12 @@ void loop()
     case 0:
       if (servo_move_index < servo_move_count && ((elapsed > servo_start_array[servo_move_index]) && (elapsed < servo_stop_array[servo_move_index])))
       {
-        set_servo_angle(PCA_PIN_SERVO_1, max_servo_position);
+        set_servo_angle(PCA2_PIN_SERVO_1, max_servo_position);
         //Serial.println("Servo at max position");
       }
       else if (servo_move_index < servo_move_count && (elapsed > servo_stop_array[servo_move_index]))
       {
-        set_servo_angle(PCA_PIN_SERVO_1, min_servo_position);
+        set_servo_angle(PCA2_PIN_SERVO_1, min_servo_position);
         //Serial.println("Servo at min position");
       }
       break;
@@ -993,7 +1051,7 @@ void loop()
         // Serial.print("Current servo position: ");
         // Serial.println((servo_current_position));         
         last_servo_update = millis();
-        set_servo_angle(PCA_PIN_SERVO_1, servo_current_position);
+        set_servo_angle(PCA2_PIN_SERVO_1, servo_current_position);
         servo_current_position = servo_current_position + servo_step;
 
         if (servo_current_position <= min_servo_position)
@@ -1019,12 +1077,12 @@ void loop()
     case 0:
       if (servo_move_index_2 < servo_move_count_2 && ((elapsed > servo_start_array_2[servo_move_index_2]) && (elapsed < servo_stop_array_2[servo_move_index_2])))
       {
-        set_servo_angle(PCA_PIN_SERVO_2, max_servo_position_2);
+        set_servo_angle(PCA2_PIN_SERVO_2, max_servo_position_2);
         //Serial.println("Servo at max position");
       }
       else if (servo_move_index < servo_move_count && (elapsed > servo_stop_array_2[servo_move_index_2]))
       {
-        set_servo_angle(PCA_PIN_SERVO_2, min_servo_position_2);
+        set_servo_angle(PCA2_PIN_SERVO_2, min_servo_position_2);
         //Serial.println("Servo at min position");
       }
       break;
@@ -1036,7 +1094,7 @@ void loop()
         // Serial.print("Current servo position: ");
         // Serial.println((servo_current_position));         
         last_servo_update_2 = millis();
-        set_servo_angle(PCA_PIN_SERVO_2, servo_current_position_2);
+        set_servo_angle(PCA2_PIN_SERVO_2, servo_current_position_2);
         servo_current_position_2 = servo_current_position_2 + servo_step_2;
 
         if (servo_current_position_2 <= min_servo_position_2)
@@ -1168,17 +1226,19 @@ void parse_menu(byte key_command)
   Serial.println(F(" "));
 
   // if s, stop the current track
-  if (key_command == 's')
+  if (key_command == 'P')
   {
     Serial.println(F("Stopping"));
     MP3player.stopTrack();
 
     // if 1-9, play corresponding track
   }
-  else if (key_command >= '1' && key_command <= '9')
+  //else if (key_command >= '1' && key_command <= '9')
+  else if (key_command  == 'p')
   {
     // convert ascii numbers to real numbers
-    key_command = key_command - 48;
+    //key_command = key_command - 48;
+    key_command = 1;
 
 #if USE_MULTIPLE_CARDS
     sd.chvol(); // assign desired sdcard's volume.
@@ -1266,13 +1326,13 @@ void parse_menu(byte key_command)
       Serial.println("manual led on");
       turn_on_led();
       // delay(5000) ; 
-      // servo_continuous(PCA_PIN_SERVO_1, 1);
+      // servo_continuous(PCA2_PIN_SERVO_1, 1);
     }
     else
     {
       Serial.println("manual led off");
       turn_off_led();
-      // servo_continuous(PCA_PIN_SERVO_1, -1);
+      // servo_continuous(PCA2_PIN_SERVO_1, -1);
     }
   }
   else if (key_command == 'L')
@@ -1282,13 +1342,13 @@ void parse_menu(byte key_command)
     {
       Serial.println("manual led2 on");
       turn_on_led_n(2);
-      // servo_continuous(PCA_PIN_SERVO_1, 1);
+      // servo_continuous(PCA2_PIN_SERVO_1, 1);
     }
     else
     {
       Serial.println("manual led2 off");
       turn_off_led_n(2);
-      // servo_continuous(PCA_PIN_SERVO_1, -1);
+      // servo_continuous(PCA2_PIN_SERVO_1, -1);
     }
   }  
   else if (key_command == 'w')
@@ -1309,38 +1369,58 @@ void parse_menu(byte key_command)
     Serial.println("manual ramp 2");
     do_ramp_led_2 = !do_ramp_led_2;
   }  
-  else if (key_command == 'f')
+  else if (key_command == 'k')
   {
     Serial.println("manual fade out 1");
     fade_out_led_1 = !fade_out_led_1;
     pwm_ramp = 2048 ;
   }  
-  else if (key_command == 'F')
+  else if (key_command == 'K')
   {
     Serial.println("manual fade out 2");
     fade_out_led_2 = !fade_out_led_2;
     pwm_ramp_2 = 2048 ;
   }      
-  else if (key_command == 'p')
+  else if (key_command == 'a')
   {
-    set_servo_angle(PCA_PIN_SERVO_1, min_servo_position);
+    set_servo_angle(PCA2_PIN_SERVO_1, min_servo_position);
     Serial.println("Servo at min position");
   }
-  else if (key_command == 'P')
+  else if (key_command == 'A')
   {
-    set_servo_angle(PCA_PIN_SERVO_1, max_servo_position);
+    set_servo_angle(PCA2_PIN_SERVO_1, max_servo_position);
     Serial.println("Servo at max position");
   }
-  else if (key_command == 'o')
+  else if (key_command == 's')
   {
-    set_servo_angle(PCA_PIN_SERVO_2, min_servo_position_2);
+    set_servo_angle(PCA2_PIN_SERVO_2, min_servo_position_2);
     Serial.println("Servo 2 at min position");
   }
-  else if (key_command == 'O')
+  else if (key_command == 'S')
   {
-    set_servo_angle(PCA_PIN_SERVO_2, max_servo_position_2);
+    set_servo_angle(PCA2_PIN_SERVO_2, max_servo_position_2);
     Serial.println("Servo 2 at max position");
+  } 
+  else if (key_command == 'd')
+  {
+    set_servo_angle(PCA2_PIN_SERVO_3, min_servo_position_3);
+    Serial.println("Servo 3 at min position");
+  }
+  else if (key_command == 'D')
+  {
+    set_servo_angle(PCA2_PIN_SERVO_3, max_servo_position_3);
+    Serial.println("Servo 3 at max position");
   }  
+  else if (key_command == 'f')
+  {
+    set_servo_angle(PCA2_PIN_SERVO_4, min_servo_position_4);
+    Serial.println("Servo 4 at min position");
+  }
+  else if (key_command == 'F')
+  {
+    set_servo_angle(PCA2_PIN_SERVO_4, max_servo_position_4);
+    Serial.println("Servo 4 at max position");
+  }       
   else if (key_command == 'C')
   {
     Serial.println("manual Step CCW");
@@ -1359,6 +1439,26 @@ void parse_menu(byte key_command)
   {
     run_state = true;
   }
+  else if (key_command == '1')
+  {
+    turn_on_light_n(1);
+  }
+  else if (key_command == '2')
+  {
+    turn_on_light_n(2);
+  }  
+  else if (key_command == '3')
+  {
+    turn_on_light_n(3);
+  }  
+  else if (key_command == '4')
+  {
+    turn_on_light_n(4);
+  }        
+  else if (key_command == 'z')
+  {
+    reset_all();
+  }     
 
   // print prompt after key stroke has been processed.
   Serial.print(F("Time since last command: "));
