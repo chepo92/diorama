@@ -18,7 +18,7 @@
 
 #define FW_VERSION 1
 
-#define DIORAMA_NUMBER 3
+#define DIORAMA_NUMBER 5
 
 /**
  * \brief Object instancing the SdFat library.
