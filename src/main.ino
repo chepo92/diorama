@@ -377,9 +377,9 @@ int servo_step_2 = 1;
 long max_playtime = 100000; 
 
 // steppers
-byte stepper_cycle_count = 1;
-long stepper_start_array[] = {20000};
-long stepper_stop_array[] =  {40000};
+byte stepper_cycle_count = 0;
+long stepper_start_array[] = {0};
+long stepper_stop_array[] =  {0};
 
 int steps_cw;
 int steps_ccw;
@@ -390,8 +390,8 @@ long light1_start_array[] = {00};
 long light1_stop_array[] = {5000};
 
 byte light2_cycle_count = 1;
-long light2_start_array[] = {00};
-long light2_stop_array[] = {5000};
+long light2_start_array[] = {10000};
+long light2_stop_array[] = {15000};
 
 byte light3_cycle_count = 1;
 long light3_start_array[] = {00};
@@ -828,7 +828,7 @@ void loop()
   // -------- Start Button
   // read the state of the switch into a local variable:
   int reading = digitalRead(buttonPin);
-
+  // Serial.println(reading);
   // check to see if you just pressed the button
   // (i.e. the input went from LOW to HIGH), and you've waited long enough
   // since the last press to ignore any noise:
@@ -960,12 +960,12 @@ void loop()
     light1_state = true;
   }
 
-  // stop led 1
+  // stop light 1
   if ( (run_state) && light1_state && (elapsed > light1_stop_array[light1_time_index]) || (!run_state && light1_state))
   {
     // Do stop
     // turn_off_led();
-    Serial.println(F("light1 fade out"));
+    Serial.println(F("light1 off"));
     light1_time_index++;
     // do_ramp_led = false;
     // fade_out_led_1 = true ; 
@@ -974,6 +974,44 @@ void loop()
   }
 
 
+  // light 2
+  if (run_state && !light2_state && (light2_time_index < light2_cycle_count) && ((elapsed > light2_start_array[light2_time_index]) && (elapsed < light2_stop_array[light2_time_index])))
+  {
+    // led on
+    // turn_on_led();
+    // do_ramp_led = true;
+    // if (do_ramp_led) pwm_ramp = 0 ; 
+    // Serial.println(F("Led 1 Do ramp"));
+    light2_state = true;
+  }
+
+  // stop light 2
+  if ( (run_state) && light2_state && (elapsed > light2_stop_array[light2_time_index]) || (!run_state && light2_state))
+  {
+    // Do stop
+    // turn_off_led();
+    Serial.println(F("light2 off"));
+    light2_time_index++;
+    // do_ramp_led = false;
+    // fade_out_led_1 = true ; 
+    // if(fade_out_led_1) pwm_ramp = 2048 ; 
+    light2_state = false;
+  }
+
+
+  if (light1_state)
+  {
+    turn_on_light_n(1); 
+  } else {
+    turn_off_light_n(1); 
+  }
+  
+  if (light2_state)
+  {
+    turn_on_light_n(2); 
+  } else {
+    turn_off_light_n(2); 
+  }  
 
 
   // led 1
@@ -1176,8 +1214,9 @@ void loop()
       long elapsed_servo_update = millis() - last_servo_update_2;
       if (elapsed_servo_update > servo_update_period_2)
       {
-        // Serial.print("Current servo position: ");
-        // Serial.println((servo_current_position));         
+        Serial.print("Current servo position: ");
+        Serial.println((servo_current_position));   
+              
         last_servo_update_2 = millis();
         set_servo_angle(PCA2_PIN_SERVO_2, servo_current_position_2);
         servo_current_position_2 = servo_current_position_2 + servo_step_2;
