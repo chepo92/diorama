@@ -57,7 +57,7 @@ const int buttonPin = 5; // the number of the pushbutton pin
 #include <Adafruit_PWMServoDriver.h>
 
 // called this way, it uses the default address 0x40
-Adafruit_PWMServoDriver PCA = Adafruit_PWMServoDriver();
+Adafruit_PWMServoDriver PCA1 = Adafruit_PWMServoDriver();
 
 // Button debounce
 // constants won't change. They're used here to set pin numbers:
@@ -84,6 +84,11 @@ unsigned long debounceDelay = 50;   // the debounce time; increase if the output
 
 boolean light1_state;
 boolean light2_state;
+
+boolean focus1_state;
+boolean focus2_state;
+boolean focus3_state;
+boolean focus4_state;
 
 boolean manual_led_state;
 boolean manual_led_state_2;
@@ -361,9 +366,9 @@ int light1_cycle_count = 1;
 long light1_start_array[] = {0};
 long light1_stop_array[] = {9900};
 
-int light2_cycle_lenght = 1;
-long light2_start_array[] = {60000};
-long light2_stop_array[] = {85000};
+int light2_cycle_lenght = 0;
+long light2_start_array[] = {0};
+long light2_stop_array[] = {0};
 
 // Servos
 int servo_move_count = 2;
@@ -451,7 +456,7 @@ void set_servo_angle(uint8_t n_servo, int angulo)
 {
   int duty;
   duty = map(angulo, 0, 180, pos0_pwm, pos180_pwm);
-  PCA.setPWM(n_servo, 0, duty);
+  PCA1.setPWM(n_servo, 0, duty);
 }
 
 // Needs debug/calibration
@@ -543,38 +548,38 @@ int pwm_ramp_2 = 0;
 
 void ramp_led(int current_ramp)
 {
-  PCA.setPWM(PCA_PIN_LEDS_E1, 0, current_ramp);
-  PCA.setPWM(PCA_PIN_LEDS_M1, current_ramp, 4095);
+  PCA1.setPWM(PCA_PIN_LEDS_E1, 0, current_ramp);
+  PCA1.setPWM(PCA_PIN_LEDS_M1, current_ramp, 4095);
 }
 
 void ramp_led_2(int current_ramp)
 {
-  PCA.setPWM(PCA_PIN_LEDS_E2, 0, current_ramp);
-  PCA.setPWM(PCA_PIN_LEDS_M2, current_ramp, 4095);
+  PCA1.setPWM(PCA_PIN_LEDS_E2, 0, current_ramp);
+  PCA1.setPWM(PCA_PIN_LEDS_M2, current_ramp, 4095);
 }
 
 void turn_on_led()
 {
-  PCA.setPWM(PCA_PIN_LEDS_E1, 0, 2045);
-  PCA.setPWM(PCA_PIN_LEDS_M1, 2045, 4090);
+  PCA1.setPWM(PCA_PIN_LEDS_E1, 0, 2045);
+  PCA1.setPWM(PCA_PIN_LEDS_M1, 2045, 4090);
 }
 
 void turn_off_led()
 {
-  PCA.setPWM(PCA_PIN_LEDS_E1, 0, 0);
-  PCA.setPWM(PCA_PIN_LEDS_M1, 0, 0);
+  PCA1.setPWM(PCA_PIN_LEDS_E1, 0, 0);
+  PCA1.setPWM(PCA_PIN_LEDS_M1, 0, 0);
 }
 
 void turn_on_led_n(int ledIndx) {
   switch (ledIndx)
   {
   case 1:
-    PCA.setPWM(PCA_PIN_LEDS_E1, 0, 2045);
-    PCA.setPWM(PCA_PIN_LEDS_M1, 2045, 4095);
+    PCA1.setPWM(PCA_PIN_LEDS_E1, 0, 2045);
+    PCA1.setPWM(PCA_PIN_LEDS_M1, 2045, 4095);
     break;
   case 2:
-    PCA.setPWM(PCA_PIN_LEDS_E2, 0, 2045);
-    PCA.setPWM(PCA_PIN_LEDS_M2, 2045, 4095);
+    PCA1.setPWM(PCA_PIN_LEDS_E2, 0, 2045);
+    PCA1.setPWM(PCA_PIN_LEDS_M2, 2045, 4095);
     break;  
   default:
     break;
@@ -586,12 +591,12 @@ void turn_off_led_n(int ledIndx) {
   switch (ledIndx)
   {
   case 1:
-    PCA.setPWM(PCA_PIN_LEDS_E1, 0, 0);
-    PCA.setPWM(PCA_PIN_LEDS_M1, 0, 0);
+    PCA1.setPWM(PCA_PIN_LEDS_E1, 0, 0);
+    PCA1.setPWM(PCA_PIN_LEDS_M1, 0, 0);
     break;
   case 2:
-    PCA.setPWM(PCA_PIN_LEDS_E2, 0, 0);
-    PCA.setPWM(PCA_PIN_LEDS_M2, 0, 0);
+    PCA1.setPWM(PCA_PIN_LEDS_E2, 0, 0);
+    PCA1.setPWM(PCA_PIN_LEDS_M2, 0, 0);
     break;  
   default:
     break;
@@ -672,12 +677,12 @@ void setup()
   // myStepper.step(stepsPerRevolution);
   // delay(500);
 
-  PCA.begin();
+  PCA1.begin();
   // In theory the internal oscillator is 25MHz but it really isn't
   // that precise. You can 'calibrate' by tweaking this number till
   // you get the frequency you're expecting!
-  PCA.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
-  PCA.setPWMFreq(50);                   // 60 for the servo                // This is the maximum PWM frequency
+  PCA1.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
+  PCA1.setPWMFreq(50);                   // 60 for the servo                // This is the maximum PWM frequency
 
   // if you want to really speed stuff up, you can go into 'fast 400khz I2C' mode
   // some i2c devices dont like this so much so if you're sharing the bus, watch
@@ -799,6 +804,8 @@ void loop()
     Serial.print("Move index: ");
     Serial.println(servo_move_index);    
     servo_state = true;
+
+    focus4_state = true; 
   }
 
   // stop servo 1 move
@@ -810,7 +817,24 @@ void loop()
     set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle);
 
     servo_move_index++;
+
+    focus4_state = false; 
   }
+
+
+  if (focus4_state  ) { 
+    PCA1.setPWM(7, 0, 4095);
+
+  } else {
+    PCA1.setPWM(7, 4095, 4095);
+  }
+
+  if (focus3_state  ) { 
+    PCA1.setPWM(6, 0, 4095);
+
+  } else {
+    PCA1.setPWM(6, 4095, 4095);
+  }  
 
   // Servo 2 move
   if (run_state && !servo_state_2 && servo_move_index_2 < servo_move_count_2 && ((elapsed > servo_start_array_2[servo_move_index_2]) && (elapsed < servo_stop_array_2[servo_move_index_2])))
@@ -820,6 +844,8 @@ void loop()
     Serial.print("Move index: ");
     Serial.println(servo_move_index_2);
     servo_state_2 = true;
+
+    focus3_state = true ; 
   }
 
   // stop servo 2 move
@@ -831,6 +857,8 @@ void loop()
     set_servo_angle(PCA_PIN_SERVO_2, servo_default_angle_2);
 
     servo_move_index_2++;
+     
+     focus3_state = false;
   }  
 
   // light 1
