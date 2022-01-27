@@ -358,12 +358,12 @@ int steps_ccw;
 int ramp_time_divisor = 5; 
 
 int light1_cycle_count = 1;
-long light1_start_array[] = {60000};
-long light1_stop_array[] = {85000};
+long light1_start_array[] = {0};
+long light1_stop_array[] = {9900};
 
 int light2_cycle_lenght = 1;
-long light2_start_array[] = {0};
-long light2_stop_array[] = {75000};
+long light2_start_array[] = {60000};
+long light2_stop_array[] = {85000};
 
 // Servos
 int servo_move_count = 2;
