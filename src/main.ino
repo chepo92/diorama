@@ -309,7 +309,7 @@ void setup()
   // out for this!
   Wire.setClock(400000);
 
-  help();
+  // help();
 
   pinMode(buttonPin, INPUT_PULLUP);
 

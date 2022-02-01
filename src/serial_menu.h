@@ -226,22 +226,22 @@ void parse_menu(byte key_command)
   Serial.println(F(",h :"));
 }
 
-//------------------------------------------------------------------------------
-/**
- * \brief Print Help Menu.
- *
- * Prints a full menu of the commands available along with descriptions.
- */
-void help()
-{
-  Serial.println(F("Arduino vs1053 Library Example:"));
-  // Serial.println(F(" courtesy of Bill Porter & Michael P. Flaga"));
-  Serial.println(F("COMMANDS:"));
-  Serial.println(F(" [1-9] to play a track"));
+// //------------------------------------------------------------------------------
+// /**
+//  * \brief Print Help Menu.
+//  *
+//  * Prints a full menu of the commands available along with descriptions.
+//  */
+// void help()
+// {
+//   Serial.println(F("Arduino vs1053 Library Example:"));
+//   // Serial.println(F(" courtesy of Bill Porter & Michael P. Flaga"));
+//   Serial.println(F("COMMANDS:"));
+//   Serial.println(F(" [1-9] to play a track"));
 
-  Serial.println(F(" [s] to stop playing"));
-  // Serial.println(F(" [d] display directory of SdCard"));
-  Serial.println(F(" [+ or -] to change volume"));
+//   Serial.println(F(" [s] to stop playing"));
+//   // Serial.println(F(" [d] display directory of SdCard"));
+//   Serial.println(F(" [+ or -] to change volume"));
 
-  Serial.println(F(" [h] this help"));
-}
+//   Serial.println(F(" [h] this help"));
+// }
