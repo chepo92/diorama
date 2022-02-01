@@ -109,10 +109,10 @@ void parse_menu(byte key_command)
     // if < or > to change Play Speed
   }
 
-  else if (key_command == 'h')
-  {
-    help();
-  }
+  // else if (key_command == 'h')
+  // {
+  //   //help();
+  // }
   else if (key_command == 'l')
   {
     manual_led_state = !manual_led_state;

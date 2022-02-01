@@ -1,10 +1,15 @@
 // #include <Stepper.h>
 
 #include "Arduino.h"
-// Files in ssrc
+
+
+// Files in src
 #include <config.h>
 #include <serial_menu.h>
+#include <stepper_lite.h>
 
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
 
 #include <SPI.h>
 #include <FreeStack.h>
@@ -15,6 +20,7 @@
 // and the MP3 Shield Library
 #include <vs1053_SdFat.h>
 
+
 // Below is not needed if interrupt driven. Safe to remove if not using.
 #if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
 #include <TimerOne.h>
@@ -24,26 +30,10 @@
 
 #define FW_VERSION 1
 
-
-
-/**
- * \brief Object instancing the SdFat library.
- *
- * principal object for handling all SdCard functions.
- */
 SdFat sd;
-
 vs1053 MP3player;
 
-// const int stepsPerRevolution = 200; // change this to fit the number of steps per revolutio for your motor
-
 // Pins
-
-#define STEPPER_PIN_A A0
-#define STEPPER_PIN_B A1
-#define STEPPER_PIN_C A2
-#define STEPPER_PIN_D A3
-
 const int buttonPin = 5; // the number of the pushbutton pin
 
 #define PCA_PIN_LEDS_E1 8
@@ -56,11 +46,7 @@ const int buttonPin = 5; // the number of the pushbutton pin
 #define PCA_PIN_SERVO_2 13
 
 #define NUMBER_OF_STEPS_PER_REV 512
-// initialize the stepper library on pins 8 through 11:
-// Stepper myStepper(stepsPerRevolution, A0, A1, A2, A3);
 
-#include <Wire.h>
-#include <Adafruit_PWMServoDriver.h>
 
 // called this way, it uses the default address 0x40
 Adafruit_PWMServoDriver PCA1 = Adafruit_PWMServoDriver();
@@ -124,7 +110,8 @@ int ramp_time_counter_2;
 int seconds_display ;  // millis to sec
 int last_timer_print ; 
 
-
+// Files in src
+#include <serial_menu.h>
 
 void set_servo_angle(uint8_t n_servo, int angulo)
 {
@@ -151,86 +138,6 @@ void servo_continuous(uint8_t n_servo, int dir)
 }
 
 
-
-/* LED control */
-boolean do_ramp_led;
-boolean do_ramp_led_2;
-
-boolean fade_in_led_1;
-boolean fade_in_led_2;
-
-boolean fade_out_led_1;
-boolean fade_out_led_2;
-
-int pwm_ramp = 0;
-int pwm_ramp_2 = 0;
-
-void ramp_led(int current_ramp)
-{
-  PCA1.setPWM(PCA_PIN_LEDS_E1, 0, current_ramp);
-  PCA1.setPWM(PCA_PIN_LEDS_M1, current_ramp, 4095);
-}
-
-void ramp_led_2(int current_ramp)
-{
-  PCA1.setPWM(PCA_PIN_LEDS_E2, 0, current_ramp);
-  PCA1.setPWM(PCA_PIN_LEDS_M2, current_ramp, 4095);
-}
-
-void turn_on_led()
-{
-  PCA1.setPWM(PCA_PIN_LEDS_E1, 0, 2045);
-  PCA1.setPWM(PCA_PIN_LEDS_M1, 2045, 4090);
-}
-
-void turn_off_led()
-{
-  PCA1.setPWM(PCA_PIN_LEDS_E1, 0, 0);
-  PCA1.setPWM(PCA_PIN_LEDS_M1, 0, 0);
-}
-
-void turn_on_led_n(int ledIndx) {
-  switch (ledIndx)
-  {
-  case 1:
-    PCA1.setPWM(PCA_PIN_LEDS_E1, 0, 2045);
-    PCA1.setPWM(PCA_PIN_LEDS_M1, 2045, 4095);
-    break;
-  case 2:
-    PCA1.setPWM(PCA_PIN_LEDS_E2, 0, 2045);
-    PCA1.setPWM(PCA_PIN_LEDS_M2, 2045, 4095);
-    break;  
-  default:
-    break;
-  }
-  
-}
-
-void turn_off_led_n(int ledIndx) {
-  switch (ledIndx)
-  {
-  case 1:
-    PCA1.setPWM(PCA_PIN_LEDS_E1, 0, 0);
-    PCA1.setPWM(PCA_PIN_LEDS_M1, 0, 0);
-    break;
-  case 2:
-    PCA1.setPWM(PCA_PIN_LEDS_E2, 0, 0);
-    PCA1.setPWM(PCA_PIN_LEDS_M2, 0, 0);
-    break;  
-  default:
-    break;
-  }
-}
-
-void reset_all()
-{
-  turn_off_led();
-  turn_off_led_n(2);
-  set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle);
-  set_servo_angle(PCA_PIN_SERVO_2, servo_default_angle_2);
-  servo_current_position = servo_default_angle ; 
-  servo_current_position_2 = servo_default_angle_2 ; 
-}
 
 void setup()
 {
@@ -273,29 +180,12 @@ void setup()
   // Set volume
   MP3player.setVolume(2, 2); // commit new volume
 
-#if defined(__BIOFEEDBACK_MEGA__) // or other reasons, of your choosing.
-  // Typically not used by most shields, hence commented out.
-  Serial.println(F("Applying ADMixer patch."));
-  if (MP3player.ADMixerLoad("admxster.053") == 0)
-  {
-    Serial.println(F("Setting ADMixer Volume."));
-    MP3player.ADMixerVol(-3);
-  }
-#endif
-
-  // set the speed at 60 rpm:
-  // myStepper.setSpeed(10);
-
   // Stup stepper pins
   pinMode(STEPPER_PIN_A, OUTPUT);
   pinMode(STEPPER_PIN_B, OUTPUT);
   pinMode(STEPPER_PIN_C, OUTPUT);
   pinMode(STEPPER_PIN_D, OUTPUT);
 
-  // do one turn
-  // Serial.println("clockwise");
-  // myStepper.step(stepsPerRevolution);
-  // delay(500);
 
   PCA1.begin();
   // In theory the internal oscillator is 25MHz but it really isn't
@@ -417,7 +307,9 @@ void loop()
   }
 
   // Servo 1
-  if (run_state && !servo_state && servo_move_index < servo_move_count && ((elapsed > servo_start_array[servo_move_index]) && (elapsed < servo_stop_array[servo_move_index])))
+  if (run_state && !servo_state && servo_move_index < servo_move_count && 
+  ((elapsed > servo_start_array[servo_move_index]) && 
+  (elapsed < servo_stop_array[servo_move_index])))
   {
     // Do move
     Serial.println("Servo 2 On");
@@ -457,7 +349,9 @@ void loop()
   }  
 
   // Servo 2 move
-  if (run_state && !servo_state_2 && servo_move_index_2 < servo_move_count_2 && ((elapsed > servo_start_array_2[servo_move_index_2]) && (elapsed < servo_stop_array_2[servo_move_index_2])))
+  if (run_state && !servo_state_2 && servo_move_index_2 < servo_move_count_2 && 
+  ((elapsed > servo_start_array_2[servo_move_index_2]) && 
+  (elapsed < servo_stop_array_2[servo_move_index_2])))
   {
     // Do move
     Serial.println("Servo 2 On");
@@ -482,7 +376,9 @@ void loop()
   }  
 
   // light 1
-  if (run_state && !light1_state && (light1_time_index < light1_cycle_count) && ((elapsed > light1_start_array[light1_time_index]) && (elapsed < light1_stop_array[light1_time_index])))
+  if (run_state && !light1_state && (light1_time_index < light1_cycle_count) && 
+  ((elapsed > light1_start_array[light1_time_index]) && 
+  (elapsed < light1_stop_array[light1_time_index])))
   {
     // led on
     // turn_on_led();
@@ -506,7 +402,9 @@ void loop()
   }
 
   // On light 2
-  if (run_state && !light2_state && light2_time_index < light2_cycle_lenght && ((elapsed > light2_start_array[light2_time_index]) && (elapsed < light2_stop_array[light2_time_index])))
+  if (run_state && !light2_state && light2_time_index < light2_cycle_lenght && 
+  ((elapsed > light2_start_array[light2_time_index]) && 
+  (elapsed < light2_stop_array[light2_time_index])))
   {
     // led on
     // turn_on_led_n(2);
@@ -530,6 +428,7 @@ void loop()
     
   }
 
+  // Fade in
   if (do_ramp_led)
   {
     if (pwm_ramp > 2048)
@@ -553,6 +452,7 @@ void loop()
     }
   }
 
+  // Fade in 
   if (do_ramp_led_2)
   {
     if (pwm_ramp_2 > 2048)
@@ -574,6 +474,8 @@ void loop()
     }
   }
 
+
+  // Fade out 
   if (fade_out_led_1)
   {
     if (pwm_ramp < 0)
@@ -595,6 +497,7 @@ void loop()
     }
   }
 
+  // Fade out 
   if (fade_out_led_2)
   {
     if (pwm_ramp_2 < 0)
@@ -622,7 +525,9 @@ void loop()
     switch (servo_move_type)
     {
     case 0:
-      if (servo_move_index < servo_move_count && ((elapsed > servo_start_array[servo_move_index]) && (elapsed < servo_stop_array[servo_move_index])))
+      if (servo_move_index < servo_move_count &&
+         ((elapsed > servo_start_array[servo_move_index]) && 
+         (elapsed < servo_stop_array[servo_move_index])))
       {
         set_servo_angle(PCA_PIN_SERVO_1, max_servo_position);
         //Serial.println("Servo at max position");
@@ -665,7 +570,9 @@ void loop()
     switch (servo_move_type_2)
     {
     case 0:
-      if (servo_move_index_2 < servo_move_count_2 && ((elapsed > servo_start_array_2[servo_move_index_2]) && (elapsed < servo_stop_array_2[servo_move_index_2])))
+      if (servo_move_index_2 < servo_move_count_2 && 
+        ((elapsed > servo_start_array_2[servo_move_index_2]) && 
+          (elapsed < servo_stop_array_2[servo_move_index_2])))
       {
         set_servo_angle(PCA_PIN_SERVO_2, max_servo_position_2);
         //Serial.println("Servo at max position");
@@ -704,7 +611,10 @@ void loop()
   }  
 
   // Control stepper
-  if (run_state && !stepper_state && stepper_time_index < stepper_cycle_count && ((elapsed > stepper_start_array[stepper_time_index]) && (elapsed < stepper_stop_array[stepper_time_index])))
+
+  if (run_state && !stepper_state && stepper_time_index < stepper_cycle_count && 
+    ((elapsed > stepper_start_array[stepper_time_index]) && 
+    (elapsed < stepper_stop_array[stepper_time_index])))
   {
     stepper_state = true;
     stepper_running = true;
@@ -769,25 +679,12 @@ void loop()
 
   }
 
-  // // Drive each PWM in a 'wave'
-  // for (uint16_t i=0; i<4096; i += 8) {
-  //   for (uint8_t pwmnum=0; pwmnum < 16; pwmnum++) {
-  //     pwm.setPWM(pwmnum, 0, (i + (4096/16)*pwmnum) % 4096 );
-  //   }
-  // }
-
-// Below is only needed if not interrupt driven. Safe to remove if not using.
-#if defined(USE_MP3_REFILL_MEANS) && ((USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer) || (USE_MP3_REFILL_MEANS == USE_MP3_Polled))
-
-  MP3player.available();
-#endif
-
+  // Serial Commands
   if (Serial.available())
   {
     parse_menu(Serial.read()); // get command from serial input
   }
 
-  // delay(100); // slow the loop
 }
 
 uint32_t millis_prv;

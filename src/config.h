@@ -1,7 +1,7 @@
 #define DIORAMA_NUMBER 5
 
 // Individual Settings for each Diorama
-#if DIORAMA_NUMBER == 1 // el establo
+#if   DIORAMA_NUMBER == 1 // el establo
 
 int max_playtime = 128; // 
 
@@ -227,7 +227,7 @@ long servo_update_period_2 = 20;
 int servo_step = 1;
 int servo_step_2 = 1;
 
-#elif DIORAMA_NUMBER == 5  
+#elif DIORAMA_NUMBER == 5 // Pajarito 
 
 
 int max_playtime = 100; // 
@@ -287,7 +287,7 @@ unsigned int servo_update_period_2 = 40;
 uint8_t servo_step = 1;
 uint8_t servo_step_2 = 1;
 
-#elif DIORAMA_NUMBER == 6  // Se va la lancha 
+#elif DIORAMA_NUMBER == 6 // Mira niñita 
 
 long max_playtime = 150000; // 1:50 = 60+50
 
