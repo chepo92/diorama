@@ -12,8 +12,10 @@
 // and the MP3 Shield Library
 #include <vs1053_SdFat.h>
 
-SdFat sd;
-vs1053 MP3player;
+#if !defined(DISABLE_SD_MP3)  
+    SdFat sd;
+    vs1053 MP3player;
+#endif
 // called this way, it uses the default address 0x40
 Adafruit_PWMServoDriver PCA1 = Adafruit_PWMServoDriver();
 

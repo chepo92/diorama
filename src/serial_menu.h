@@ -42,7 +42,9 @@ void parse_menu(byte key_command)
   if (key_command == 's')
   {
     Serial.println(F("Stopping"));
+#if !defined(DISABLE_SD_MP3)
     MP3player.stopTrack();
+#endif
 
     // if 1-9, play corresponding track
   }
@@ -54,6 +56,9 @@ void parse_menu(byte key_command)
 #if USE_MULTIPLE_CARDS
     sd.chvol(); // assign desired sdcard's volume.
 #endif
+
+#if !defined(DISABLE_SD_MP3)
+
     // tell the MP3 Shield to play a track
     result = MP3player.playTrack(key_command);
 
@@ -85,11 +90,15 @@ void parse_menu(byte key_command)
       Serial.write((byte *)&album, 30);
       Serial.println();
     }
+#endif
 
     // if +/- to change volume
   }
   else if ((key_command == '-') || (key_command == '+'))
   {
+
+#if !defined(DISABLE_SD_MP3)
+   
     union twobyte mp3_vol;                // create key_command existing variable that can be both word and double byte of left and right.
     mp3_vol.word = MP3player.getVolume(); // returns a double uint8_t of Left and Right packed into int16_t
 
@@ -121,14 +130,15 @@ void parse_menu(byte key_command)
     Serial.print(F("Volume changed to -"));
     Serial.print(mp3_vol.byte[1] >> 1, 1);
     Serial.println(F("[dB]"));
-
+     
+#endif 
     // if < or > to change Play Speed
   }
 
-  // else if (key_command == 'h')
-  // {
-  //   //help();
-  // }
+  else if (key_command == 'h')
+  {
+    //help();
+  }
   else if (key_command == 'l')
   {
     manual_led_state = !manual_led_state;
@@ -136,7 +146,7 @@ void parse_menu(byte key_command)
     {
       Serial.println("manual led on");
       turn_on_led();
-      // delay(5000) ; 
+      // delay(5000) ;
       // servo_continuous(PCA_PIN_SERVO_1, 1);
     }
     else
@@ -161,7 +171,7 @@ void parse_menu(byte key_command)
       turn_off_led_n(2);
       // servo_continuous(PCA_PIN_SERVO_1, -1);
     }
-  }  
+  }
   else if (key_command == 'w')
   {
     servo_angle_active = !servo_angle_active;
@@ -169,29 +179,29 @@ void parse_menu(byte key_command)
   else if (key_command == 'W')
   {
     servo_angle_active_2 = !servo_angle_active_2;
-  }  
+  }
   else if (key_command == 'r')
   {
     Serial.println("manual ramp 1");
     do_ramp_led = !do_ramp_led;
-  }  
+  }
   else if (key_command == 'R')
   {
     Serial.println("manual ramp 2");
     do_ramp_led_2 = !do_ramp_led_2;
-  }  
+  }
   else if (key_command == 'f')
   {
     Serial.println("manual fade out 1");
     fade_out_led_1 = !fade_out_led_1;
-    pwm_ramp = 2048 ;
-  }  
+    pwm_ramp = 2048;
+  }
   else if (key_command == 'F')
   {
     Serial.println("manual fade out 2");
     fade_out_led_2 = !fade_out_led_2;
-    pwm_ramp_2 = 2048 ;
-  }      
+    pwm_ramp_2 = 2048;
+  }
   else if (key_command == 'p')
   {
     set_servo_angle(PCA_PIN_SERVO_1, min_servo_position);
@@ -211,7 +221,7 @@ void parse_menu(byte key_command)
   {
     set_servo_angle(PCA_PIN_SERVO_2, max_servo_position_2);
     Serial.println("Servo 2 at max position");
-  }  
+  }
   else if (key_command == 'C')
   {
     Serial.println("manual Step CCW");
@@ -223,7 +233,7 @@ void parse_menu(byte key_command)
   {
     Serial.println("manual Step CW");
     stepper_running = !stepper_running;
-    steps_cw = 100;    
+    steps_cw = 100;
     // myStepper.step(-stepsPerRevolution) ;
   }
   else if (key_command == 'u')
@@ -248,16 +258,16 @@ void parse_menu(byte key_command)
 //  *
 //  * Prints a full menu of the commands available along with descriptions.
 //  */
-// void help()
-// {
-//   Serial.println(F("Arduino vs1053 Library Example:"));
-//   // Serial.println(F(" courtesy of Bill Porter & Michael P. Flaga"));
-//   Serial.println(F("COMMANDS:"));
-//   Serial.println(F(" [1-9] to play a track"));
+void help()
+{
+  Serial.println(F("Arduino vs1053 Library Example:"));
+  // Serial.println(F(" courtesy of Bill Porter & Michael P. Flaga"));
+  Serial.println(F("COMMANDS:"));
+  Serial.println(F(" [1-9] to play a track"));
 
-//   Serial.println(F(" [s] to stop playing"));
-//   // Serial.println(F(" [d] display directory of SdCard"));
-//   Serial.println(F(" [+ or -] to change volume"));
+  Serial.println(F(" [s] to stop playing"));
+  // Serial.println(F(" [d] display directory of SdCard"));
+  Serial.println(F(" [+ or -] to change volume"));
 
-//   Serial.println(F(" [h] this help"));
-// }
+  Serial.println(F(" [h] this help"));
+}

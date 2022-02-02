@@ -31,6 +31,8 @@
 
 #define FW_VERSION 1
 
+#define DISABLE_SD_MP3
+
 void setup()
 {
 
@@ -48,29 +50,32 @@ void setup()
   Serial.print(FreeStack(), DEC); // FreeStack() is provided by SdFat
   Serial.println(F(" Should be a base line of 1028, on ATmega328 when using INTx"));
 
-  // Initialize the SdCard.
-  if (!sd.begin(SD_SEL, SPI_FULL_SPEED))
-    sd.initErrorHalt();
-  // depending upon your SdCard environment, SPI_HAVE_SPEED may work better.
-  if (!sd.chdir("/"))
-    sd.errorHalt("sd.chdir");
+  #if !defined(DISABLE_SD_MP3)  
+    // Initialize the SdCard.
+    if (!sd.begin(SD_SEL, SPI_FULL_SPEED))
+      sd.initErrorHalt();
+    // depending upon your SdCard environment, SPI_HAVE_SPEED may work better.
+    if (!sd.chdir("/"))
+      sd.errorHalt("sd.chdir");
 
-  // Initialize the MP3 Player Shield
-  result = MP3player.begin();
-  // check result, see readme for error codes.
-  if (result != 0)
-  {
-    Serial.print(F("Error code: "));
-    Serial.print(result);
-    Serial.println(F(" when trying to start MP3 player"));
-    if (result == 6)
+    // Initialize the MP3 Player Shield
+    result = MP3player.begin();
+    // check result, see readme for error codes.
+    if (result != 0)
     {
-      Serial.println(F("Warning: patch file not found, skipping."));           // can be removed for space, if needed.
-      Serial.println(F("Use the \"d\" command to verify SdCard can be read")); // can be removed for space, if needed.
+      Serial.print(F("Error code: "));
+      Serial.print(result);
+      Serial.println(F(" when trying to start MP3 player"));
+      if (result == 6)
+      {
+        Serial.println(F("Warning: patch file not found, skipping."));           // can be removed for space, if needed.
+        Serial.println(F("Use the \"d\" command to verify SdCard can be read")); // can be removed for space, if needed.
+      }
     }
-  }
-  // Set volume
-  MP3player.setVolume(2, 2); // commit new volume
+    // Set volume
+    MP3player.setVolume(2, 2); // commit new volume
+  #endif
+
 
   // Setup stepper pins
   pinMode(STEPPER_PIN_A, OUTPUT);
@@ -162,13 +167,15 @@ void loop()
   if (run_state && !prev_play_state)
   {
     // tell the MP3 Shield to play a track
+#if !defined(DISABLE_SD_MP3)
     result = MP3player.playTrack(track_number);
+#endif        
     start_play_time = millis();
     prev_play_state = true;
     Serial.println(F("Start Play"));
   }
 
-  /* Resets machine state after x millisseconds */
+  
   long time_now = millis()  ; 
   long elapsed = time_now - start_play_time;
   long elapsed_timer_print = time_now - last_timer_print;
@@ -179,6 +186,7 @@ void loop()
       last_timer_print = time_now; 
   }
 
+  /* Resets machine state after max_playtime */
   if (run_state && (elapsed > max_playtime))
   {
     run_state = false;
