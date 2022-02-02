@@ -72,7 +72,7 @@ void setup()
   // Set volume
   MP3player.setVolume(2, 2); // commit new volume
 
-  // Stup stepper pins
+  // Setup stepper pins
   pinMode(STEPPER_PIN_A, OUTPUT);
   pinMode(STEPPER_PIN_B, OUTPUT);
   pinMode(STEPPER_PIN_C, OUTPUT);

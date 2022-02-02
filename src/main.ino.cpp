@@ -1,4 +1,4 @@
-# 1 "C:\\Users\\Axel\\AppData\\Local\\Temp\\tmpc7qmmftf"
+# 1 "C:\\Users\\Axel\\AppData\\Local\\Temp\\tmpjim5wg64"
 #include <Arduino.h>
 # 1 "H:/Mi unidad/Proyectos/Arduino/Proyectos/Diorama/codigoBase/src/main.ino"
 
