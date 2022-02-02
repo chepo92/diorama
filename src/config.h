@@ -1,3 +1,17 @@
+// #ifndef ARDUINO_H
+// #define ARDUINO_H
+// #endif
+// #ifndef GLOBALS_H
+// #define GLOBALS_H
+// #endif
+// #ifndef CONFIG_H
+// #define CONFIG_H
+// #endif
+// #ifndef SERVO_CONTROL_H
+// #define SERVO_CONTROL_H
+// #endif
+
+
 #define DIORAMA_NUMBER 5
 
 // Individual Settings for each Diorama
