@@ -18,9 +18,11 @@ tiempo actual
 ## To Do
 
 - [ ] Organizar código, (main, servo, led) usar funciones y clases para códigos que se repiten
+  - [ ] Metodos: constructor, update, add, setTimmings, manualControl, off
   - [ ] funcion/clase que controle los led y luces
   - [ ] funcion/clase que controle los servos
   - [ ] funcion/clase que controle los steppers
+
 
 - [ ] Configurar timmings para cada diorama (config.h)
 - [ ] Diagrama y esquema de conexiones
