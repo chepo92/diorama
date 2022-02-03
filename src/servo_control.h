@@ -29,17 +29,25 @@
     // Needs debug/calibration
     void servo_continuous(uint8_t n_servo, int dir)
     {
-    if (dir > 0)
-    { // CW
-        set_servo_angle(n_servo, 10);
+        if (dir > 0)
+        { // CW
+            set_servo_angle(n_servo, 10);
+        }
+        else if (dir < 0)
+        { // CCW
+            set_servo_angle(n_servo, 45);
+        }
+        else
+        {
+            set_servo_angle(n_servo, 90);
+        }
     }
-    else if (dir < 0)
-    { // CCW
-        set_servo_angle(n_servo, 45);
-    }
-    else
+
+    void servo_defaults()
     {
-        set_servo_angle(n_servo, 90);
-    }
-    }
+        set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle_1);
+        set_servo_angle(PCA_PIN_SERVO_2, servo_default_angle_2);
+        servo_current_position_1 = servo_default_angle_1;
+        servo_current_position_2 = servo_default_angle_2;
+    }    
 #endif

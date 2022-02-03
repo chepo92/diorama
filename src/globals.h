@@ -53,7 +53,7 @@ long start_play_time = 0;
 int buttonState;           // the current reading from the input pin
 int lastButtonState = LOW; // the previous reading from the input pin
 
-int servo_current_position = 0;
+int servo_current_position_1 = 0;
 int servo_current_position_2 = 0;
 
 // the following variables are unsigned longs because the time, measured in

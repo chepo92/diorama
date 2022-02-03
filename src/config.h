@@ -54,11 +54,11 @@ int servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle = 20;
+int servo_default_angle_1 = 20;
 int servo_default_angle_2 = 90;
 
-int min_servo_position = 20;
-int max_servo_position = 90;
+int min_servo_position_1 = 20;
+int max_servo_position_2 = 90;
 
 int min_servo_position_2 = 40;
 int max_servo_position_2 = 90;
@@ -66,9 +66,9 @@ int max_servo_position_2 = 90;
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 480; // pwm 180°
 
-long last_servo_update;
+long last_servo_update_1;
 long last_servo_update_2;
-long servo_update_period = 10;
+long servo_update_period_1 = 10;
 long servo_update_period_2 = 20;
 
 int servo_step = 1;
@@ -109,16 +109,16 @@ int servo_move_type = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle = 90;
+int servo_default_angle_1 = 90;
 
-int min_servo_position = 20;
-int max_servo_position = 90;
+int min_servo_position_1 = 20;
+int max_servo_position_2 = 90;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 480; // pwm 180°
 
-long last_servo_update;
-long servo_update_period = 10;
+long last_servo_update_1;
+long servo_update_period_1 = 10;
 
 int servo_step = 1;
 
@@ -161,11 +161,11 @@ int servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle = 55;
+int servo_default_angle_1 = 55;
 int servo_default_angle_2 = 90;
 
-int min_servo_position = 40;
-int max_servo_position = 70;
+int min_servo_position_1 = 40;
+int max_servo_position_2 = 70;
 
 int min_servo_position_2 = 40;
 int max_servo_position_2 = 90;
@@ -173,9 +173,9 @@ int max_servo_position_2 = 90;
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 480; // pwm 180°
 
-long last_servo_update;
+long last_servo_update_1;
 long last_servo_update_2;
-long servo_update_period = 40;
+long servo_update_period_1 = 40;
 long servo_update_period_2 = 20;
 
 int servo_step = 1;
@@ -221,11 +221,11 @@ int servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle = 80;
+int servo_default_angle_1 = 80;
 int servo_default_angle_2 = 90;
 
-int min_servo_position = 20;
-int max_servo_position = 80;
+int min_servo_position_1 = 20;
+int max_servo_position_2 = 80;
 
 int min_servo_position_2 = 20;
 int max_servo_position_2 = 90;
@@ -233,9 +233,9 @@ int max_servo_position_2 = 90;
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 480; // pwm 180°
 
-long last_servo_update;
+long last_servo_update_1;
 long last_servo_update_2;
-long servo_update_period = 40;
+long servo_update_period_1 = 40;
 long servo_update_period_2 = 20;
 
 int servo_step = 1;
@@ -243,8 +243,8 @@ int servo_step_2 = 1;
 
 #elif DIORAMA_NUMBER == 5 // Pajarito 
 
-
-int max_playtime = 100; // 
+// in seconds
+int max_playtime = 100; 
 
 // steppers
 int stepper_cycle_count = 1;
@@ -294,11 +294,11 @@ int servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle = 60;
+int servo_default_angle_1 = 60;
 int servo_default_angle_2 = 40;
 
-int min_servo_position = 40;
-int max_servo_position = 80;
+int min_servo_position_1 = 40;
+int max_servo_position_2 = 80;
 
 int min_servo_position_2 = 30;
 int max_servo_position_2 = 50;
@@ -306,9 +306,9 @@ int max_servo_position_2 = 50;
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 480; // pwm 180°
 
-unsigned int last_servo_update;
+unsigned int last_servo_update_1;
 unsigned int last_servo_update_2;
-unsigned int servo_update_period = 40;
+unsigned int servo_update_period_1 = 40;
 unsigned int servo_update_period_2 = 40;
 
 uint8_t servo_step = 1;
@@ -346,16 +346,16 @@ int servo_move_type = 0; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle = 90;
+int servo_default_angle_1 = 90;
 
-int min_servo_position = 90;
-int max_servo_position = 20;
+int min_servo_position_1 = 90;
+int max_servo_position_2 = 20;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 480; // pwm 180°
 
-long last_servo_update;
-long servo_update_period = 10;
+long last_servo_update_1;
+long servo_update_period_1 = 10;
 
 int servo_step = 1;
 

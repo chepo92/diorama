@@ -194,12 +194,12 @@ void parse_menu(byte key_command)
   }      
   else if (key_command == 'p')
   {
-    set_servo_angle(PCA_PIN_SERVO_1, min_servo_position);
+    set_servo_angle(PCA_PIN_SERVO_1, min_servo_position_1);
     Serial.println("Servo at min position");
   }
   else if (key_command == 'P')
   {
-    set_servo_angle(PCA_PIN_SERVO_1, max_servo_position);
+    set_servo_angle(PCA_PIN_SERVO_1, max_servo_position_2);
     Serial.println("Servo at max position");
   }
   else if (key_command == 'o')
