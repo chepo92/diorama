@@ -65,18 +65,11 @@ boolean light3_state;
 boolean light4_state;
 boolean light5_state;
 
-
-// boolean focus1_state;
-// boolean focus2_state;
-// boolean focus3_state;
-// boolean focus4_state;
-
 boolean manual_led_state_1;
 boolean manual_led_state_2;
 boolean manual_led_state_3;
 boolean manual_led_state_4;
 boolean manual_led_state_5;
-
 
 boolean stepper_state;
 boolean stepper_running;

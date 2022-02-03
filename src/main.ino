@@ -32,6 +32,21 @@
 
 #define FW_VERSION 1
 
+
+void servo_defaults()
+{
+  set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle);
+  set_servo_angle(PCA_PIN_SERVO_2, servo_default_angle_2);
+  servo_current_position = servo_default_angle;
+  servo_current_position_2 = servo_default_angle_2;
+}
+
+void reset_all()
+{
+  all_lights_off();
+  servo_defaults();
+}
+
 void setup()
 {
 
@@ -191,7 +206,7 @@ void loop()
     servo_move_index_2 = 0;
 
     reset_light_indexes(); 
-    
+
     stepper_time_index = 0 ; 
     stepper_stop_flag = false ; 
     // Reset lights and servos  
@@ -438,17 +453,5 @@ void loop()
 }
 
 
-  void reset_all()
-  {
-    all_lights_off();
-    servo_defaults();
-  }
 
-  void servo_defaults()
-  {
-    set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle);
-    set_servo_angle(PCA_PIN_SERVO_2, servo_default_angle_2);
-    servo_current_position = servo_default_angle;
-    servo_current_position_2 = servo_default_angle_2;
-  }
 
