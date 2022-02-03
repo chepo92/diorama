@@ -438,4 +438,17 @@ void loop()
 }
 
 
+  void reset_all()
+  {
+    all_lights_off();
+    servo_defaults();
+  }
+
+  void servo_defaults()
+  {
+    set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle);
+    set_servo_angle(PCA_PIN_SERVO_2, servo_default_angle_2);
+    servo_current_position = servo_default_angle;
+    servo_current_position_2 = servo_default_angle_2;
+  }
 
