@@ -7,7 +7,7 @@
   #define LED_CONTROL_H
 
   /* LED control */
-  boolean do_ramp_led;
+  boolean do_ramp_led_1;
   boolean do_ramp_led_2;
 
   boolean fade_in_led_1;

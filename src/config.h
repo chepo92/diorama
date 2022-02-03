@@ -4,13 +4,13 @@
 // #ifndef GLOBALS_H
 // #define GLOBALS_H
 // #endif
-// #ifndef CONFIG_H
-// #define CONFIG_H
-// #endif
+
 // #ifndef SERVO_CONTROL_H
 // #define SERVO_CONTROL_H
 // #endif
 
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #define DIORAMA_NUMBER 5
 
@@ -345,5 +345,7 @@ long last_servo_update;
 long servo_update_period = 10;
 
 int servo_step = 1;
+
+#endif
 
 #endif

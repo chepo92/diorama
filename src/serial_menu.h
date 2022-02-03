@@ -173,7 +173,7 @@ void parse_menu(byte key_command)
   else if (key_command == 'r')
   {
     Serial.println("manual ramp 1");
-    do_ramp_led = !do_ramp_led;
+    do_ramp_led_1 = !do_ramp_led_1;
   }  
   else if (key_command == 'R')
   {

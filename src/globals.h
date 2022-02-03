@@ -12,6 +12,10 @@
 // and the MP3 Shield Library
 #include <vs1053_SdFat.h>
 
+
+#ifndef GLOBALS_H
+  #define GLOBALS_H
+
 SdFat sd;
 vs1053 MP3player;
 // called this way, it uses the default address 0x40
@@ -90,3 +94,6 @@ int ramp_time_counter_2;
 
 int seconds_display ;  // millis to sec
 int last_timer_print ; 
+
+
+#endif
