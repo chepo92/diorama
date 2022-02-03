@@ -11,9 +11,9 @@ void checkTurnOn1(long elapsed)
 {
 
   // light 1
-  if (run_state && !light1_state && (light1_time_index < light1_cycle_lenght) &&
-      ((elapsed > light1_start_array[light1_time_index]) &&
-       (elapsed < light1_stop_array[light1_time_index])))
+  if (run_state && !light1_state && (light1_time_cycle_index < light1_cycle_lenght) &&
+      ((elapsed > light1_start_array[light1_time_cycle_index]) &&
+       (elapsed < light1_stop_array[light1_time_cycle_index])))
   {
     // led on
     // turn_on_led();
@@ -29,9 +29,9 @@ void checkTurnOn2(long elapsed)
 {
 
   // On light 2
-  if (run_state && !light2_state && light2_time_index < light2_cycle_lenght &&
-      ((elapsed > light2_start_array[light2_time_index]) &&
-       (elapsed < light2_stop_array[light2_time_index])))
+  if (run_state && !light2_state && light2_time_cycle_index < light2_cycle_lenght &&
+      ((elapsed > light2_start_array[light2_time_cycle_index]) &&
+       (elapsed < light2_stop_array[light2_time_cycle_index])))
   {
     // led on
     // turn_on_led_n(2);
@@ -48,9 +48,9 @@ void checkTurnOn3(long elapsed)
 {
 
   // On light 3
-  if (run_state && !light3_state && light3_time_index < light3_cycle_lenght &&
-      ((elapsed > light3_start_array[light3_time_index]) &&
-       (elapsed < light3_stop_array[light3_time_index])))
+  if (run_state && !light3_state && light3_time_cycle_index < light3_cycle_lenght &&
+      ((elapsed > light3_start_array[light3_time_cycle_index]) &&
+       (elapsed < light3_stop_array[light3_time_cycle_index])))
   {
     // led on
     // turn_on_led_n(3);
@@ -66,9 +66,9 @@ void checkTurnOn4(long elapsed)
 {
 
   // On light 4
-  if (run_state && !light4_state && light4_time_index < light4_cycle_lenght &&
-      ((elapsed > light4_start_array[light4_time_index]) &&
-       (elapsed < light4_stop_array[light4_time_index])))
+  if (run_state && !light4_state && light4_time_cycle_index < light4_cycle_lenght &&
+      ((elapsed > light4_start_array[light4_time_cycle_index]) &&
+       (elapsed < light4_stop_array[light4_time_cycle_index])))
   {
     // led on
     // turn_on_led_n(4);
@@ -84,9 +84,9 @@ void checkTurnOn5(long elapsed)
 {
 
   // On light 5
-  if (run_state && !light5_state && light5_time_index < light5_cycle_lenght &&
-      ((elapsed > light5_start_array[light5_time_index]) &&
-       (elapsed < light5_stop_array[light5_time_index])))
+  if (run_state && !light5_state && light5_time_cycle_index < light5_cycle_lenght &&
+      ((elapsed > light5_start_array[light5_time_cycle_index]) &&
+       (elapsed < light5_stop_array[light5_time_cycle_index])))
   {
     // led on
     // turn_on_led_n(5);
@@ -102,12 +102,12 @@ void checkTurnOn5(long elapsed)
 void checkTurnOff1(long elapsed)
 {
   // stop light 1
-  if ((run_state) && light1_state && (elapsed > light1_stop_array[light1_time_index]) || (!run_state && light1_state))
+  if ((run_state) && light1_state && (elapsed > light1_stop_array[light1_time_cycle_index]) || (!run_state && light1_state))
   {
     // Do stop
     // turn_off_led();
     Serial.println(F("Led 1 fade out"));
-    light1_time_index++;
+    light1_time_cycle_index++;
     fade_in_led_1 = false;
     fade_out_led_1 = true;
     if (fade_out_led_1)
@@ -120,13 +120,13 @@ void checkTurnOff2(long elapsed)
 {
 
   // stop light 2
-  if (run_state && light2_state && (elapsed > light2_stop_array[light2_time_index]) || (!run_state && light2_state))
+  if (run_state && light2_state && (elapsed > light2_stop_array[light2_time_cycle_index]) || (!run_state && light2_state))
   {
     // Do stop
     // turn_off_led_n(2);
     fade_in_led_2 = false;
     Serial.println(F("Led 2 fade out"));
-    light2_time_index++;
+    light2_time_cycle_index++;
     light2_state = false;
     fade_out_led_2 = true;
     if (fade_out_led_2)
@@ -138,13 +138,13 @@ void checkTurnOff3(long elapsed)
 {
 
   // stop light 3
-  if (run_state && light3_state && (elapsed > light3_stop_array[light3_time_index]) || (!run_state && light3_state))
+  if (run_state && light3_state && (elapsed > light3_stop_array[light3_time_cycle_index]) || (!run_state && light3_state))
   {
     // Do stop
     // turn_off_led_n(3);
     fade_in_led_3 = false;
     Serial.println(F("Led 3 fade out"));
-    light3_time_index++;
+    light3_time_cycle_index++;
     light3_state = false;
     fade_out_led_3 = true;
     if (fade_out_led_3)
@@ -156,13 +156,13 @@ void checkTurnOff4(long elapsed)
 {
 
   // stop light 4
-  if (run_state && light4_state && (elapsed > light4_stop_array[light4_time_index]) || (!run_state && light4_state))
+  if (run_state && light4_state && (elapsed > light4_stop_array[light4_time_cycle_index]) || (!run_state && light4_state))
   {
     // Do stop
     // turn_off_led_n(4);
     fade_in_led_4 = false;
     Serial.println(F("Led 4 fade out"));
-    light4_time_index++;
+    light4_time_cycle_index++;
     light4_state = false;
     fade_out_led_4 = true;
     if (fade_out_led_4)
@@ -174,13 +174,13 @@ void checkTurnOff5(long elapsed)
 {
 
   // stop light 5
-  if (run_state && light5_state && (elapsed > light5_stop_array[light5_time_index]) || (!run_state && light5_state))
+  if (run_state && light5_state && (elapsed > light5_stop_array[light5_time_cycle_index]) || (!run_state && light5_state))
   {
     // Do stop
     // turn_off_led_n(5);
     fade_in_led_5 = false;
     Serial.println(F("Led 5 fade out"));
-    light5_time_index++;
+    light5_time_cycle_index++;
     light5_state = false;
     fade_out_led_5 = true;
     if (fade_out_led_5)
@@ -290,5 +290,15 @@ void fadeOut2()
     }
   }
 }
+void reset_light_indexes()
+{
+    light1_time_cycle_index = 0;
+    light2_time_cycle_index = 0;
+    light3_time_cycle_index = 0;
+    light4_time_cycle_index = 0;
+    light5_time_cycle_index = 0;
+}
+ 
+
 
 #endif

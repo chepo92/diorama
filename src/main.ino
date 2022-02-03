@@ -189,12 +189,12 @@ void loop()
     // Reset indexes
     servo_move_index = 0;
     servo_move_index_2 = 0;
-    light1_time_index = 0;
-    light2_time_index = 0;
-    stepper_time_index = 0 ; 
 
+    reset_light_indexes(); 
+    
+    stepper_time_index = 0 ; 
     stepper_stop_flag = false ; 
-    // Reset positions 
+    // Reset lights and servos  
     reset_all(); 
 
   }

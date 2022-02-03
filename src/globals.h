@@ -91,11 +91,11 @@ boolean servo_angle_active_2;
 
 int stepper_time_index;
 
-int light1_time_index;
-int light2_time_index;
-int light3_time_index;
-int light4_time_index;
-int light5_time_index;
+int light1_time_cycle_index;
+int light2_time_cycle_index;
+int light3_time_cycle_index;
+int light4_time_cycle_index;
+int light5_time_cycle_index;
 
 int servo_move_index;
 int servo_move_index_2;
