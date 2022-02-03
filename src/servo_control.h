@@ -21,9 +21,9 @@
 
     void set_servo_angle(uint8_t n_servo, int angulo)
     {
-    int duty;
-    duty = map(angulo, 0, 180, pos0_pwm, pos180_pwm);
-    PCA1.setPWM(n_servo, 0, duty);
+        int duty;
+        duty = map(angulo, 0, 180, pos0_pwm, pos180_pwm);
+        PCA2.setPWM(n_servo, 0, duty);
     }
 
     // Needs debug/calibration
