@@ -12,12 +12,21 @@
 // and the MP3 Shield Library
 #include <vs1053_SdFat.h>
 
+#ifndef GLOBALS_H
+  #define GLOBALS_H
+
 #if !defined(DISABLE_SD_MP3)  
     SdFat sd;
     vs1053 MP3player;
 #endif
-// called this way, it uses the default address 0x40
-Adafruit_PWMServoDriver PCA1 = Adafruit_PWMServoDriver();
+
+// default address 0x40
+// PCA 1 controls LEDS
+Adafruit_PWMServoDriver PCA1 = Adafruit_PWMServoDriver(0x40);
+
+// PCA 2 Controls servos
+Adafruit_PWMServoDriver PCA2 = Adafruit_PWMServoDriver(0x41);
+
 
 // Pins
 const int buttonPin = 5; // the number of the pushbutton pin
@@ -59,14 +68,15 @@ unsigned long debounceDelay = 50;   // the debounce time; increase if the output
 
 boolean light1_state;
 boolean light2_state;
+boolean light3_state;
+boolean light4_state;
+boolean light5_state;
 
-boolean focus1_state;
-boolean focus2_state;
-boolean focus3_state;
-boolean focus4_state;
-
-boolean manual_led_state;
+boolean manual_led_state_1;
 boolean manual_led_state_2;
+boolean manual_led_state_3;
+boolean manual_led_state_4;
+boolean manual_led_state_5;
 
 boolean stepper_state;
 boolean stepper_running;
@@ -80,8 +90,12 @@ boolean servo_angle_active;
 boolean servo_angle_active_2;
 
 int stepper_time_index;
-int light1_time_index;
-int light2_time_index;
+
+int light1_time_cycle_index;
+int light2_time_cycle_index;
+int light3_time_cycle_index;
+int light4_time_cycle_index;
+int light5_time_cycle_index;
 
 int servo_move_index;
 int servo_move_index_2;
@@ -92,3 +106,6 @@ int ramp_time_counter_2;
 
 int seconds_display ;  // millis to sec
 int last_timer_print ; 
+
+
+#endif

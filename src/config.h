@@ -4,13 +4,13 @@
 // #ifndef GLOBALS_H
 // #define GLOBALS_H
 // #endif
-// #ifndef CONFIG_H
-// #define CONFIG_H
-// #endif
+
 // #ifndef SERVO_CONTROL_H
 // #define SERVO_CONTROL_H
 // #endif
 
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #define DIORAMA_NUMBER 5
 
@@ -258,13 +258,26 @@ int steps_ccw;
 
 int ramp_time_divisor = 5; 
 
-int light1_cycle_count = 1;
+int light1_cycle_lenght = 1;
 int light1_start_array[] = {0};
 int light1_stop_array[] = {99};
 
 int light2_cycle_lenght = 0;
 int light2_start_array[] = {0};
 int light2_stop_array[] = {0};
+
+int light3_cycle_lenght = 0;
+int light3_start_array[] = {0};
+int light3_stop_array[] = {0};
+
+int light4_cycle_lenght = 0;
+int light4_start_array[] = {0};
+int light4_stop_array[] = {0};
+
+int light5_cycle_lenght = 0;
+int light5_start_array[] = {0};
+int light5_stop_array[] = {0};
+
 
 // Servos
 int servo_move_count = 2;
@@ -345,5 +358,7 @@ long last_servo_update;
 long servo_update_period = 10;
 
 int servo_step = 1;
+
+#endif
 
 #endif

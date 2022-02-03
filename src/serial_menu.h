@@ -141,8 +141,8 @@ void parse_menu(byte key_command)
   }
   else if (key_command == 'l')
   {
-    manual_led_state = !manual_led_state;
-    if (manual_led_state)
+    manual_led_state_1 = !manual_led_state_1;
+    if (manual_led_state_1)
     {
       Serial.println("manual led on");
       turn_on_led();
@@ -183,19 +183,19 @@ void parse_menu(byte key_command)
   else if (key_command == 'r')
   {
     Serial.println("manual ramp 1");
-    do_ramp_led = !do_ramp_led;
-  }
+    fade_in_led_1 = !fade_in_led_1;
+  }  
   else if (key_command == 'R')
   {
     Serial.println("manual ramp 2");
-    do_ramp_led_2 = !do_ramp_led_2;
-  }
+    fade_in_led_2 = !fade_in_led_2;
+  }  
   else if (key_command == 'f')
   {
     Serial.println("manual fade out 1");
     fade_out_led_1 = !fade_out_led_1;
-    pwm_ramp = 2048;
-  }
+    pwm_ramp_1 = 2048 ;
+  }  
   else if (key_command == 'F')
   {
     Serial.println("manual fade out 2");

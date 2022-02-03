@@ -21,6 +21,7 @@
 #include <servo_control.h>
 #include <led_control.h>
 #include <serial_menu.h>
+#include <led_state_machine.h>
 
 // Below is not needed if interrupt driven. Safe to remove if not using.
 #if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
@@ -31,7 +32,24 @@
 
 #define FW_VERSION 1
 
+
 #define DISABLE_SD_MP3
+
+
+void servo_defaults()
+{
+  set_servo_angle(PCA_PIN_SERVO_1, servo_default_angle);
+  set_servo_angle(PCA_PIN_SERVO_2, servo_default_angle_2);
+  servo_current_position = servo_default_angle;
+  servo_current_position_2 = servo_default_angle_2;
+}
+
+void reset_all()
+{
+  all_lights_off();
+  servo_defaults();
+}
+
 
 void setup()
 {
@@ -85,11 +103,13 @@ void setup()
 
 
   PCA1.begin();
-  // In theory the internal oscillator is 25MHz but it really isn't
-  // that precise. You can 'calibrate' by tweaking this number till
-  // you get the frequency you're expecting!
+  PCA2.begin();
+
   PCA1.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
-  PCA1.setPWMFreq(50);                   // 60 for the servo                // This is the maximum PWM frequency
+  PCA2.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
+
+  PCA1.setPWMFreq(1500);  // 1.5 kHz for the lights                              
+  PCA2.setPWMFreq(50);  // 50 Hz for the servos
 
   // if you want to really speed stuff up, you can go into 'fast 400khz I2C' mode
   // some i2c devices dont like this so much so if you're sharing the bus, watch
@@ -196,12 +216,12 @@ void loop()
     // Reset indexes
     servo_move_index = 0;
     servo_move_index_2 = 0;
-    light1_time_index = 0;
-    light2_time_index = 0;
-    stepper_time_index = 0 ; 
 
+    reset_light_indexes(); 
+
+    stepper_time_index = 0 ; 
     stepper_stop_flag = false ; 
-    // Reset positions 
+    // Reset lights and servos  
     reset_all(); 
 
   }
@@ -217,7 +237,6 @@ void loop()
     Serial.println(servo_move_index);    
     servo_state = true;
 
-    focus4_state = true; 
   }
 
   // stop servo 1 move
@@ -230,23 +249,10 @@ void loop()
 
     servo_move_index++;
 
-    focus4_state = false; 
   }
 
 
-  if (focus4_state  ) { 
-    PCA1.setPWM(7, 0, 4095);
-
-  } else {
-    PCA1.setPWM(7, 4095, 4095);
-  }
-
-  if (focus3_state  ) { 
-    PCA1.setPWM(6, 0, 4095);
-
-  } else {
-    PCA1.setPWM(6, 4095, 4095);
-  }  
+ 
 
   // Servo 2 move
   if (run_state && !servo_state_2 && servo_move_index_2 < servo_move_count_2 && 
@@ -259,7 +265,6 @@ void loop()
     Serial.println(servo_move_index_2);
     servo_state_2 = true;
 
-    focus3_state = true ; 
   }
 
   // stop servo 2 move
@@ -272,153 +277,25 @@ void loop()
 
     servo_move_index_2++;
      
-     focus3_state = false;
   }  
 
-  // light 1
-  if (run_state && !light1_state && (light1_time_index < light1_cycle_count) && 
-  ((elapsed > light1_start_array[light1_time_index]) && 
-  (elapsed < light1_stop_array[light1_time_index])))
-  {
-    // led on
-    // turn_on_led();
-    do_ramp_led = true;
-    if (do_ramp_led) pwm_ramp = 0 ; 
-    Serial.println(F("Led 1 Do ramp"));
-    light1_state = true;
-  }
+  checkTurnOn1(elapsed);
+  checkTurnOn2(elapsed);
+  checkTurnOn3(elapsed);
+  checkTurnOn4(elapsed);
+  checkTurnOn5(elapsed);
 
-  // stop light 1
-  if ( (run_state) && light1_state && (elapsed > light1_stop_array[light1_time_index]) || (!run_state && light1_state))
-  {
-    // Do stop
-    // turn_off_led();
-    Serial.println(F("Led 1 fade out"));
-    light1_time_index++;
-    do_ramp_led = false;
-    fade_out_led_1 = true ; 
-    if(fade_out_led_1) pwm_ramp = 2048 ; 
-    light1_state = false;
-  }
+  checkTurnOff1(elapsed);
+  checkTurnOff2(elapsed);
+  checkTurnOff3(elapsed);
+  checkTurnOff4(elapsed);
+  checkTurnOff5(elapsed);
 
-  // On light 2
-  if (run_state && !light2_state && light2_time_index < light2_cycle_lenght && 
-  ((elapsed > light2_start_array[light2_time_index]) && 
-  (elapsed < light2_stop_array[light2_time_index])))
-  {
-    // led on
-    // turn_on_led_n(2);
-    do_ramp_led_2 = true;
-    if (do_ramp_led_2) pwm_ramp_2 = 0 ; 
-    Serial.println(F("Led 2 Do Ramp"));
-    light2_state = true;
-  }
+  fadeIn1();
+  fadeIn2();
 
-  // stop light 2
-  if (run_state && light2_state && (elapsed > light2_stop_array[light2_time_index]) || (!run_state && light2_state))
-  {
-    // Do stop
-    // turn_off_led_n(2);
-    do_ramp_led_2 = false;
-    Serial.println(F("Led 2 fade out"));
-    light2_time_index++;
-    light2_state = false;
-    fade_out_led_2 = true;
-    if(fade_out_led_2) pwm_ramp_2 = 2048 ; 
-    
-  }
-
-  // Fade in
-  if (do_ramp_led)
-  {
-    if (pwm_ramp > 2048)
-    {
-      pwm_ramp = 0;
-      turn_on_led();
-      do_ramp_led = false;
-      Serial.println(F("Led Full ON after ramp"));
-    }
-    else
-    {
-      ramp_led(pwm_ramp);
-      ramp_time_counter ++ ; 
-      if (ramp_time_counter > ramp_time_divisor ) {
-        pwm_ramp ++;
-        ramp_time_counter = 0 ; 
-        // Serial.println(F("Ramp UP 1 "));
-        // Serial.println(pwm_ramp);
-      }
-      
-    }
-  }
-
-  // Fade in 
-  if (do_ramp_led_2)
-  {
-    if (pwm_ramp_2 > 2048)
-    {
-      pwm_ramp_2 = 0;
-      turn_on_led_n(2);
-      do_ramp_led_2 = false;
-      Serial.println(F("Led 2 Full ON after ramp"));
-    }
-    else
-    {
-      ramp_led_2(pwm_ramp_2);
-      ramp_time_counter_2 ++ ; 
-      if (ramp_time_counter_2 > ramp_time_divisor ) {
-        pwm_ramp_2 ++;
-        ramp_time_counter_2 = 0 ; 
-        // Serial.println(F("Ramp UP"));
-      }
-    }
-  }
-
-
-  // Fade out 
-  if (fade_out_led_1)
-  {
-    if (pwm_ramp < 0)
-    {
-      pwm_ramp = 2048;
-      turn_off_led();
-      light1_state = false ; 
-      fade_out_led_1 = false;
-      Serial.println(F("Led 1 Full Off after fade out"));
-    }
-    else
-    {
-      ramp_led(pwm_ramp);
-      ramp_time_counter ++ ; 
-      if (ramp_time_counter > ramp_time_divisor ) {
-        pwm_ramp -- ;
-        ramp_time_counter = 0 ; 
-      }      
-    }
-  }
-
-  // Fade out 
-  if (fade_out_led_2)
-  {
-    if (pwm_ramp_2 < 0)
-    {
-      pwm_ramp_2 = 2048;
-      turn_off_led_n(2);
-      light2_state = false ; 
-      fade_out_led_2 = false;
-      Serial.println(F("Led 2 Full Off after fade out"));
-    }
-    else
-    {
-      ramp_led_2(pwm_ramp_2);
-      ramp_time_counter_2 ++ ; 
-      if (ramp_time_counter_2 > ramp_time_divisor ) {
-        pwm_ramp_2 -- ;
-        ramp_time_counter_2 = 0 ; 
-      }      
-    }
-  }  
-
+  fadeOut1();
+  fadeOut2();
 
   if (servo_angle_active || servo_state)
   {
@@ -586,6 +463,7 @@ void loop()
   }
 
 }
+
 
 
 
