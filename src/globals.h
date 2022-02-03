@@ -61,14 +61,22 @@ unsigned long debounceDelay = 50;   // the debounce time; increase if the output
 
 boolean light1_state;
 boolean light2_state;
+boolean light3_state;
+boolean light4_state;
+boolean light5_state;
 
-boolean focus1_state;
-boolean focus2_state;
-boolean focus3_state;
-boolean focus4_state;
 
-boolean manual_led_state;
+// boolean focus1_state;
+// boolean focus2_state;
+// boolean focus3_state;
+// boolean focus4_state;
+
+boolean manual_led_state_1;
 boolean manual_led_state_2;
+boolean manual_led_state_3;
+boolean manual_led_state_4;
+boolean manual_led_state_5;
+
 
 boolean stepper_state;
 boolean stepper_running;
@@ -82,8 +90,12 @@ boolean servo_angle_active;
 boolean servo_angle_active_2;
 
 int stepper_time_index;
+
 int light1_time_index;
 int light2_time_index;
+int light3_time_index;
+int light4_time_index;
+int light5_time_index;
 
 int servo_move_index;
 int servo_move_index_2;

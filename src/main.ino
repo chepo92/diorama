@@ -210,7 +210,6 @@ void loop()
     Serial.println(servo_move_index);    
     servo_state = true;
 
-    focus4_state = true; 
   }
 
   // stop servo 1 move
@@ -223,23 +222,10 @@ void loop()
 
     servo_move_index++;
 
-    focus4_state = false; 
   }
 
 
-  if (focus4_state  ) { 
-    PCA1.setPWM(7, 0, 4095);
-
-  } else {
-    PCA1.setPWM(7, 4095, 4095);
-  }
-
-  if (focus3_state  ) { 
-    PCA1.setPWM(6, 0, 4095);
-
-  } else {
-    PCA1.setPWM(6, 4095, 4095);
-  }  
+ 
 
   // Servo 2 move
   if (run_state && !servo_state_2 && servo_move_index_2 < servo_move_count_2 && 
@@ -252,7 +238,6 @@ void loop()
     Serial.println(servo_move_index_2);
     servo_state_2 = true;
 
-    focus3_state = true ; 
   }
 
   // stop servo 2 move
@@ -265,14 +250,19 @@ void loop()
 
     servo_move_index_2++;
      
-     focus3_state = false;
   }  
 
   checkTurnOn1(elapsed);
   checkTurnOn2(elapsed);
+  checkTurnOn3(elapsed);
+  checkTurnOn4(elapsed);
+  checkTurnOn5(elapsed);
 
   checkTurnOff1(elapsed);
   checkTurnOff2(elapsed);
+  checkTurnOff3(elapsed);
+  checkTurnOff4(elapsed);
+  checkTurnOff5(elapsed);
 
   fadeIn1();
   fadeIn2();
