@@ -18,8 +18,13 @@
 
 SdFat sd;
 vs1053 MP3player;
-// called this way, it uses the default address 0x40
-Adafruit_PWMServoDriver PCA1 = Adafruit_PWMServoDriver();
+
+// default address 0x40
+// PCA 1 controls LEDS
+Adafruit_PWMServoDriver PCA1 = Adafruit_PWMServoDriver(0x40);
+
+// PCA 2 Controls servos
+Adafruit_PWMServoDriver PCA2 = Adafruit_PWMServoDriver(0x41);
 
 // Pins
 const int buttonPin = 5; // the number of the pushbutton pin

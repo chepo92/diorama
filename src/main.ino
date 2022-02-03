@@ -96,11 +96,13 @@ void setup()
 
 
   PCA1.begin();
-  // In theory the internal oscillator is 25MHz but it really isn't
-  // that precise. You can 'calibrate' by tweaking this number till
-  // you get the frequency you're expecting!
+  PCA2.begin();
+
   PCA1.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
-  PCA1.setPWMFreq(50);                   // 60 for the servo                // This is the maximum PWM frequency
+  PCA2.setOscillatorFrequency(27000000); // The int.osc. is closer to 27MHz
+
+  PCA1.setPWMFreq(1500);  // 1.5 kHz for the lights                              
+  PCA2.setPWMFreq(50);  // 50 Hz for the servos
 
   // if you want to really speed stuff up, you can go into 'fast 400khz I2C' mode
   // some i2c devices dont like this so much so if you're sharing the bus, watch
