@@ -81,10 +81,10 @@ boolean stepper_running;
 boolean stepper_direction;
 boolean stepper_stop_flag ; 
 
-boolean servo_state;
+boolean servo_state_1;
 boolean servo_state_2;
 
-boolean servo_angle_active;
+boolean servo_angle_active_1;
 boolean servo_angle_active_2;
 
 int stepper_time_index;
@@ -95,7 +95,7 @@ int light3_time_cycle_index;
 int light4_time_cycle_index;
 int light5_time_cycle_index;
 
-int servo_move_index;
+int servo_move_index_1;
 int servo_move_index_2;
 
 int ramp_time_counter;
