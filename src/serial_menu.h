@@ -174,7 +174,7 @@ void parse_menu(byte key_command)
   }
   else if (key_command == 'w')
   {
-    servo_angle_active = !servo_angle_active;
+    servo_angle_active_1 = !servo_angle_active_1;
   }
   else if (key_command == 'W')
   {
