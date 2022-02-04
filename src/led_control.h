@@ -31,26 +31,26 @@
 
   void ramp_led(int current_ramp)
   {
-    PCA1.setPWM(PCA_PIN_LEDS_E1, 0, current_ramp);
-    PCA1.setPWM(PCA_PIN_LEDS_M1, current_ramp, 4095);
+    PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, current_ramp);
+    PCA1.setPWM(PCA1_PIN_LEDS_M1, current_ramp, 4095);
   }
 
   void ramp_led_2(int current_ramp)
   {
-    PCA1.setPWM(PCA_PIN_LEDS_E2, 0, current_ramp);
-    PCA1.setPWM(PCA_PIN_LEDS_M2, current_ramp, 4095);
+    PCA1.setPWM(PCA1_PIN_LEDS_E2, 0, current_ramp);
+    PCA1.setPWM(PCA1_PIN_LEDS_M2, current_ramp, 4095);
   }
 
   void turn_on_led()
   {
-    PCA1.setPWM(PCA_PIN_LEDS_E1, 0, 2045);
-    PCA1.setPWM(PCA_PIN_LEDS_M1, 2045, 4090);
+    PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, 2045);
+    PCA1.setPWM(PCA1_PIN_LEDS_M1, 2045, 4090);
   }
 
   void turn_off_led()
   {
-    PCA1.setPWM(PCA_PIN_LEDS_E1, 0, 0);
-    PCA1.setPWM(PCA_PIN_LEDS_M1, 0, 0);
+    PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, 0);
+    PCA1.setPWM(PCA1_PIN_LEDS_M1, 0, 0);
   }
 
   void turn_on_led_n(int ledPin)

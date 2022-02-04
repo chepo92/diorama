@@ -31,14 +31,14 @@ Adafruit_PWMServoDriver PCA2 = Adafruit_PWMServoDriver(0x41);
 // Pins
 const int buttonPin = 5; // the number of the pushbutton pin
 
-#define PCA_PIN_LEDS_E1 8
-#define PCA_PIN_LEDS_M1 9
+#define PCA1_PIN_LEDS_E1 8
+#define PCA1_PIN_LEDS_M1 9
 
-#define PCA_PIN_LEDS_E2 10
-#define PCA_PIN_LEDS_M2 11
+#define PCA1_PIN_LEDS_E2 10
+#define PCA1_PIN_LEDS_M2 11
 
-#define PCA_PIN_SERVO_1 12
-#define PCA_PIN_SERVO_2 13
+#define PCA2_PIN_SERVO_1 12
+#define PCA2_PIN_SERVO_2 13
 
 #define NUMBER_OF_STEPS_PER_REV 512
 

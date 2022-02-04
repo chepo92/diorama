@@ -58,7 +58,7 @@ int servo_default_angle_1 = 20;
 int servo_default_angle_2 = 90;
 
 int min_servo_position_1 = 20;
-int max_servo_position_2 = 90;
+int max_servo_position_1 = 90;
 
 int min_servo_position_2 = 40;
 int max_servo_position_2 = 90;
@@ -112,7 +112,7 @@ int servo_angles[] = {0};
 int servo_default_angle_1 = 90;
 
 int min_servo_position_1 = 20;
-int max_servo_position_2 = 90;
+int max_servo_position_1 = 90;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 480; // pwm 180°
@@ -165,7 +165,7 @@ int servo_default_angle_1 = 55;
 int servo_default_angle_2 = 90;
 
 int min_servo_position_1 = 40;
-int max_servo_position_2 = 70;
+int max_servo_position_1 = 70;
 
 int min_servo_position_2 = 40;
 int max_servo_position_2 = 90;
@@ -225,7 +225,7 @@ int servo_default_angle_1 = 80;
 int servo_default_angle_2 = 90;
 
 int min_servo_position_1 = 20;
-int max_servo_position_2 = 80;
+int max_servo_position_1 = 80;
 
 int min_servo_position_2 = 20;
 int max_servo_position_2 = 90;
@@ -349,7 +349,7 @@ int servo_angles[] = {0};
 int servo_default_angle_1 = 90;
 
 int min_servo_position_1 = 90;
-int max_servo_position_2 = 20;
+int max_servo_position_1 = 20;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 480; // pwm 180°
