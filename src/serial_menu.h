@@ -45,7 +45,11 @@ void parse_menu(byte key_command)
 #if !defined(DISABLE_SD_MP3)
     MP3player.stopTrack();
 #endif
-
+    if (relay_commands)
+    {
+      Serial1.print(key_command); 
+    }
+    
     // if 1-9, play corresponding track
   }
   else if (key_command >= '1' && key_command <= '9')
@@ -91,7 +95,10 @@ void parse_menu(byte key_command)
       Serial.println();
     }
 #endif
-
+    if (relay_commands)
+    {
+      Serial1.print(key_command); 
+    }
     // if +/- to change volume
   }
   else if ((key_command == '-') || (key_command == '+'))

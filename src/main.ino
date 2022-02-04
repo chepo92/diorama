@@ -47,6 +47,7 @@ void setup()
   uint8_t result; // result code from some function as to be tested at later time.
 
   Serial.begin(115200);
+  Serial1.begin(115200);
   Serial.print("Fw version: ");
   Serial.println(FW_VERSION);
   Serial.print("Diorama: ");
@@ -450,6 +451,13 @@ void loop()
   if (Serial.available())
   {
     parse_menu(Serial.read()); // get command from serial input
+  }
+
+  // Serial1 replies
+  if (Serial1.available() && relay_commands)
+  {
+    byte read_reply = Serial1.read(); // get command from serial1 input
+    Serial.print(read_reply) ; // Relay reply to serial (usb)
   }
 
 }

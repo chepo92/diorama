@@ -103,9 +103,9 @@ int servo_move_index_2;
 int ramp_time_counter;
 int ramp_time_counter_2;
 
-
 int seconds_display ;  // millis to sec
 int last_timer_print ; 
 
+boolean relay_commands =  true ; 
 
 #endif
