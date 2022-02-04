@@ -58,7 +58,7 @@ int servo_default_angle_1 = 20;
 int servo_default_angle_2 = 90;
 
 int min_servo_position_1 = 20;
-int max_servo_position_2 = 90;
+int max_servo_position_1 = 80;
 
 int min_servo_position_2 = 40;
 int max_servo_position_2 = 90;
