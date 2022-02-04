@@ -71,17 +71,6 @@ vs1053 MP3player;
 // // initialize the stepper library on pins 8 through 11:
 // Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);
 
-
-#include <Wire.h>
-#include <Adafruit_PWMServoDriver.h>
-
-// called this way, it uses the default address 0x40
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
-// you can also call it with a different address you want
-//Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x41);
-// you can also call it with a different address and I2C interface
-//Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40, Wire);
- 
 void setup() {
 
   uint8_t result; //result code from some function as to be tested at later time.
@@ -113,49 +102,8 @@ void setup() {
     }
   }
 
-#if defined(__BIOFEEDBACK_MEGA__) // or other reasons, of your choosing.
-  // Typically not used by most shields, hence commented out.
-  Serial.println(F("Applying ADMixer patch."));
-  if(MP3player.ADMixerLoad("admxster.053") == 0) {
-    Serial.println(F("Setting ADMixer Volume."));
-    MP3player.ADMixerVol(-3);
-  }
-#endif
-
-
-  // // set the speed at 60 rpm:
-  // myStepper.setSpeed(60);
-
-  // Serial.println("clockwise");
-  // myStepper.step(stepsPerRevolution);
-  // delay(500);
-
-
-  pwm.begin();
-  // In theory the internal oscillator is 25MHz but it really isn't
-  // that precise. You can 'calibrate' by tweaking this number till
-  // you get the frequency you're expecting!
-  pwm.setOscillatorFrequency(27000000);  // The int.osc. is closer to 27MHz
-  pwm.setPWMFreq(1600);  // This is the maximum PWM frequency
-
-  // if you want to really speed stuff up, you can go into 'fast 400khz I2C' mode
-  // some i2c devices dont like this so much so if you're sharing the bus, watch
-  // out for this!
-  Wire.setClock(400000);
-  
   help();
 
-}
-
-long led_timer;
-long led_period;
-
-#define PCA_PIN_LEDS_E 8
-#define PCA_PIN_LEDS_M 9
-
-void turn_on_led(){
-  pwm.setPWM(PCA_PIN_LEDS_E, 0, 4095 );
-  pwm.setPWM(PCA_PIN_LEDS_E, 4095, 0 );
 }
 
 //------------------------------------------------------------------------------
@@ -174,16 +122,6 @@ void turn_on_led(){
  */
 void loop() {
 
-
-  // // Drive each PWM in a 'wave'
-  // for (uint16_t i=0; i<4096; i += 8) {
-  //   for (uint8_t pwmnum=0; pwmnum < 16; pwmnum++) {
-  //     pwm.setPWM(pwmnum, 0, (i + (4096/16)*pwmnum) % 4096 );
-  //   }
-  // }
-
-  
-
 // Below is only needed if not interrupt driven. Safe to remove if not using.
 #if defined(USE_MP3_REFILL_MEANS) \
     && ( (USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer) \
@@ -194,7 +132,6 @@ void loop() {
 
   if(Serial.available()) {
     parse_menu(Serial.read()); // get command from serial input
-    turn_on_led();
   }
 
   delay(100);
