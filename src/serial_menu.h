@@ -137,13 +137,13 @@ void parse_menu(byte key_command)
       Serial.println("manual led on");
       turn_on_led();
       // delay(5000) ; 
-      // servo_continuous(PCA_PIN_SERVO_1, 1);
+      // servo_continuous(PCA2_PIN_SERVO_1, 1);
     }
     else
     {
       Serial.println("manual led off");
       turn_off_led();
-      // servo_continuous(PCA_PIN_SERVO_1, -1);
+      // servo_continuous(PCA2_PIN_SERVO_1, -1);
     }
   }
   else if (key_command == 'L')
@@ -153,13 +153,13 @@ void parse_menu(byte key_command)
     {
       Serial.println("manual led2 on");
       turn_on_led_n(2);
-      // servo_continuous(PCA_PIN_SERVO_1, 1);
+      // servo_continuous(PCA2_PIN_SERVO_1, 1);
     }
     else
     {
       Serial.println("manual led2 off");
       turn_off_led_n(2);
-      // servo_continuous(PCA_PIN_SERVO_1, -1);
+      // servo_continuous(PCA2_PIN_SERVO_1, -1);
     }
   }  
   else if (key_command == 'w')
@@ -194,22 +194,30 @@ void parse_menu(byte key_command)
   }      
   else if (key_command == 'p')
   {
+<<<<<<< Updated upstream
     set_servo_angle(PCA_PIN_SERVO_1, min_servo_position);
+=======
+    set_servo_angle(PCA2_PIN_SERVO_1, min_servo_position_1);
+>>>>>>> Stashed changes
     Serial.println("Servo at min position");
   }
   else if (key_command == 'P')
   {
+<<<<<<< Updated upstream
     set_servo_angle(PCA_PIN_SERVO_1, max_servo_position);
+=======
+    set_servo_angle(PCA2_PIN_SERVO_1, max_servo_position_2);
+>>>>>>> Stashed changes
     Serial.println("Servo at max position");
   }
   else if (key_command == 'o')
   {
-    set_servo_angle(PCA_PIN_SERVO_2, min_servo_position_2);
+    set_servo_angle(PCA2_PIN_SERVO_2, min_servo_position_2);
     Serial.println("Servo 2 at min position");
   }
   else if (key_command == 'O')
   {
-    set_servo_angle(PCA_PIN_SERVO_2, max_servo_position_2);
+    set_servo_angle(PCA2_PIN_SERVO_2, max_servo_position_2);
     Serial.println("Servo 2 at max position");
   }  
   else if (key_command == 'C')
