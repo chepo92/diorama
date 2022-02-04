@@ -294,12 +294,12 @@ void loop()
          ((elapsed > servo_start_array[servo_move_index]) && 
          (elapsed < servo_stop_array[servo_move_index])))
       {
-        set_servo_angle(PCA_PIN_SERVO_1, max_servo_position);
+        set_servo_angle(PCA_PIN_SERVO_1, max_servo_position_1);
         //Serial.println("Servo at max position");
       }
       else if (servo_move_index < servo_move_count && (elapsed > servo_stop_array[servo_move_index]))
       {
-        set_servo_angle(PCA_PIN_SERVO_1, min_servo_position);
+        set_servo_angle(PCA_PIN_SERVO_1, min_servo_position_1);
         //Serial.println("Servo at min position");
       }
       break;
@@ -314,11 +314,11 @@ void loop()
         set_servo_angle(PCA_PIN_SERVO_1, servo_current_position);
         servo_current_position = servo_current_position + servo_step;
 
-        if (servo_current_position <= min_servo_position)
+        if (servo_current_position <= min_servo_position_1)
         {
           servo_step = abs(servo_step);
         }
-        if (servo_current_position >= max_servo_position)
+        if (servo_current_position >= max_servo_position_1)
         {
           servo_step = -abs(servo_step);
         }
