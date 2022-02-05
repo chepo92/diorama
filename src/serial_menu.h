@@ -57,10 +57,11 @@ void parse_menu(byte key_command)
   {
     if (relay_commands)
     {
-      //Serial1.print("1");
-      //Serial1.println("1");
-      Serial1.write(49);
-      //Serial1.write(key_command); 
+      //Serial1.print('1');
+      //Serial1.println('1');
+      //Serial1.write(49);
+      //Serial.println("relayed");
+      Serial1.write(key_command); 
     }
 
     // convert ascii numbers to real numbers
