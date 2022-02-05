@@ -186,6 +186,11 @@ void parse_menu(byte key_command)
   {
     all_lights_on();
   }  
+  else if (key_command == 'Y')
+  {
+    all_lights_off();
+  }  
+
   else if (key_command == 't')
   {
     fade_in_led_1 = !fade_in_led_1;
