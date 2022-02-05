@@ -189,10 +189,12 @@ void parse_menu(byte key_command)
   else if (key_command == 'y')
   {
     all_lights_on();
+    turn_on_led_5();
   }  
   else if (key_command == 'Y')
   {
     all_lights_off();
+    turn_off_led_5();
   }  
 
   else if (key_command == 't')
@@ -239,16 +241,35 @@ void parse_menu(byte key_command)
   {
     servo_angle_active_4 = !servo_angle_active_4;
   }    
-  else if (key_command == 'r')
+  else if (key_command == 'r') //Luces peces led1
   {
     Serial.println("manual ramp 1");
     fade_in_led_1 = !fade_in_led_1;
   }  
-  else if (key_command == 'R')
+  else if (key_command == 'R') //Llamas led2
   {
     Serial.println("manual ramp 2");
     fade_in_led_2 = !fade_in_led_2;
   }  
+
+  else if (key_command == 'z') //Mama led3
+  {
+    Serial.println("manual ramp 3");
+    fade_in_led_3 = !fade_in_led_3;
+  } 
+
+  else if (key_command == 'x') //Pajarraco led4
+  {
+    Serial.println("manual ramp 4");
+    fade_in_led_4 = !fade_in_led_4;
+  } 
+
+  else if (key_command == 'c') //Led trasero, no prende con esta funcion XD
+  {
+    Serial.println("manual ramp 5");
+    turn_on_led_n(pin_light_5);
+  } 
+
   else if (key_command == 'f')
   {
     Serial.println("manual fade out 1");

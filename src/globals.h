@@ -37,8 +37,8 @@ byte pin_light_3 = 6 ;
 byte pin_light_4 = 7 ;  
 byte pin_light_5 = 12 ;  
 
-#define PCA1_PIN_LEDS_E1 8
-#define PCA1_PIN_LEDS_M1 9
+#define PCA1_PIN_LEDS_E1 12
+#define PCA1_PIN_LEDS_M1 13
 
 #define PCA1_PIN_LEDS_E2 10
 #define PCA1_PIN_LEDS_M2 11

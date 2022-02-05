@@ -52,6 +52,18 @@
     PCA1.setPWM(PCA1_PIN_LEDS_M1, 2045, 4090);
   }
 
+  void turn_on_led_5()
+  {
+    PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, 2045);
+    PCA1.setPWM(PCA1_PIN_LEDS_M1, 2045, 4090);
+  }
+
+  void turn_off_led_5()
+  {
+    PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, 0);
+    PCA1.setPWM(PCA1_PIN_LEDS_M1, 0, 0);
+  }
+
   void turn_off_led_1()
   {
     PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, 0);
