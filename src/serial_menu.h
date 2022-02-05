@@ -55,6 +55,14 @@ void parse_menu(byte key_command)
   }
   else if (key_command >= '1' && key_command <= '9')
   {
+    if (relay_commands)
+    {
+      //Serial1.print("1");
+      //Serial1.println("1");
+      Serial1.write(49);
+      //Serial1.write(key_command); 
+    }
+
     // convert ascii numbers to real numbers
     key_command = key_command - 48;
 
@@ -98,9 +106,10 @@ void parse_menu(byte key_command)
 #endif
     if (relay_commands)
     {
-      Serial1.print("1");
-      Serial1.println("1");
-      Serial1.write('49'); 
+      //Serial1.print("1");
+      //Serial1.println("1");
+      //Serial1.write(49);
+      Serial1.write(key_command); 
     }
     // if +/- to change volume
   }
