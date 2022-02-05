@@ -12,7 +12,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define DIORAMA_NUMBER 5
+#define DIORAMA_NUMBER 2
 
 // Individual Settings for each Diorama
 #if   DIORAMA_NUMBER == 1 // el establo
@@ -77,7 +77,7 @@ int servo_step_2 = 1;
 #elif DIORAMA_NUMBER == 2 // Se va la lancha
 
 
-long max_playtime = 120000; // 1:50 = 60+50
+long max_playtime = 120; // 1:50 = 60+50
 
 // steppers
 int stepper_cycle_count = 0;
@@ -90,19 +90,38 @@ int steps_ccw;
 // LED lights
 
 int ramp_time_divisor = 5; 
+int ramp_pwm_step = 10;  
 
-int light1_cycle_count = 1;
+//  
+int light1_cycle_lenght = 2;
 long light1_start_array[] = {0};
-long light1_stop_array[] = {100000};
+long light1_stop_array[] = {100};
 
-int light2_cycle_lenght = 1;
-long light2_start_array[] = {23000};
-long light2_stop_array[] = {80000};
+// 
+int light2_cycle_lenght = 2;
+long light2_start_array[] = {23};
+long light2_stop_array[] = {80};
+
+// 
+int light3_cycle_lenght = 1;
+int light3_start_array[] = {16};
+int light3_stop_array[] = {99};
+
+// 
+int light4_cycle_lenght = 1;
+int light4_start_array[] = {4};
+int light4_stop_array[] = {15};
+
+// Light 5 is backlight
+int light5_cycle_lenght = 1;
+int light5_start_array[] = {0};
+int light5_stop_array[] = {99};
+
 
 // Servos
 int servo_move_count_1 = 1;
-long servo_start_array_1[] = {28000};
-long servo_stop_array_1[] = {85000};
+long servo_start_array_1[] = {28};
+long servo_stop_array_1[] = {85};
 
 /* Servo Control */
 int servo_move_type_1 = 1; // 0 : initial, final; 1: move continuous.
