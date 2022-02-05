@@ -35,7 +35,7 @@ byte pin_light_1 = 4 ;
 byte pin_light_2 = 5;  
 byte pin_light_3 = 6 ;  
 byte pin_light_4 = 7 ;  
-byte pin_light_5 = 8 ;  
+byte pin_light_5 = 12 ;  
 
 #define PCA1_PIN_LEDS_E1 8
 #define PCA1_PIN_LEDS_M1 9
@@ -43,8 +43,14 @@ byte pin_light_5 = 8 ;
 #define PCA1_PIN_LEDS_E2 10
 #define PCA1_PIN_LEDS_M2 11
 
-#define PCA2_PIN_SERVO_1 12
-#define PCA2_PIN_SERVO_2 13
+#define PCA2_PIN_SERVO_1 10
+#define PCA2_PIN_SERVO_2 11
+
+byte PCA2_pin_servo_1 = 8 ;
+byte PCA2_pin_servo_2 = 9 ;
+byte PCA2_pin_servo_3 = 10 ;
+byte PCA2_pin_servo_4 = 11 ;
+
 
 #define NUMBER_OF_STEPS_PER_REV 512
 

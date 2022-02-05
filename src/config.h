@@ -295,17 +295,17 @@ int servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle_1 = 60;
-int servo_default_angle_2 = 40;
+int servo_default_angle_1 = 45;
+int servo_default_angle_2 = 45;
 
-int min_servo_position_1 = 40;
-int max_servo_position_1 = 80;
+int min_servo_position_1 = 30;
+int max_servo_position_1 = 90;
 
 int min_servo_position_2 = 30;
-int max_servo_position_2 = 50;
+int max_servo_position_2 = 90;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
-unsigned int pos180_pwm = 480; // pwm 180°
+unsigned int pos180_pwm = 500; // pwm 180°
 
 unsigned int last_servo_update_1;
 unsigned int last_servo_update_2;

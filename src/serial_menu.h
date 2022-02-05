@@ -141,9 +141,13 @@ void parse_menu(byte key_command)
 #endif 
     // if < or > to change Play Speed
   }
-  else if (key_command == 'h')
+  else if (key_command == 'j')
   {
     servo_defaults(); 
+  }
+  else if (key_command == 'h')
+  {
+    all_servos_min(); 
   }
   else if (key_command == 'H')
   {
