@@ -240,6 +240,9 @@ void loop()
 
   fadeIn1();
   fadeIn2();
+  fadeIn3();
+  fadeIn4();
+  fadeIn5();
 
   fadeOut1();
   fadeOut2();

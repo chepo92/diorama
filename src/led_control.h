@@ -23,13 +23,13 @@
   boolean fade_out_led_4;
   boolean fade_out_led_5;
 
-  int pwm_ramp_1 = 0;
-  int pwm_ramp_2 = 0;
-  int pwm_ramp_3 = 0;
-  int pwm_ramp_4 = 0;
-  int pwm_ramp_5 = 0;
+  int pwm_light_1 = 0;
+  int pwm_light_2 = 0;
+  int pwm_light_3 = 0;
+  int pwm_light_4 = 0;
+  int pwm_light_5 = 0;
 
-  void ramp_led(int current_ramp)
+  void ramp_led_1(int current_ramp)
   {
     PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, current_ramp);
     PCA1.setPWM(PCA1_PIN_LEDS_M1, current_ramp, 4095);
@@ -41,13 +41,18 @@
     PCA1.setPWM(PCA1_PIN_LEDS_M2, current_ramp, 4095);
   }
 
-  void turn_on_led()
+  void apply_pwm_led_n(int pin, int current_ramp)
+  {
+    PCA1.setPWM(pin, 0, current_ramp);    
+  }  
+
+  void turn_on_led_1()
   {
     PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, 2045);
     PCA1.setPWM(PCA1_PIN_LEDS_M1, 2045, 4090);
   }
 
-  void turn_off_led()
+  void turn_off_led_1()
   {
     PCA1.setPWM(PCA1_PIN_LEDS_E1, 0, 0);
     PCA1.setPWM(PCA1_PIN_LEDS_M1, 0, 0);

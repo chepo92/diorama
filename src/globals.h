@@ -31,6 +31,12 @@ Adafruit_PWMServoDriver PCA2 = Adafruit_PWMServoDriver(0x41);
 // Pins
 const int buttonPin = 5; // the number of the pushbutton pin
 
+byte pin_light_1 = 4 ;  
+byte pin_light_2 = 5;  
+byte pin_light_3 = 6 ;  
+byte pin_light_4 = 7 ;  
+byte pin_light_5 = 8 ;  
+
 #define PCA1_PIN_LEDS_E1 8
 #define PCA1_PIN_LEDS_M1 9
 
@@ -100,8 +106,11 @@ int light5_time_cycle_index;
 int servo_move_index_1;
 int servo_move_index_2;
 
-int ramp_time_counter;
+int ramp_time_counter_1;
 int ramp_time_counter_2;
+int ramp_time_counter_3;
+int ramp_time_counter_4;
+int ramp_time_counter_5;
 
 int seconds_display ;  // millis to sec
 int last_timer_print ; 

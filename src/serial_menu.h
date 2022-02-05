@@ -155,14 +155,14 @@ void parse_menu(byte key_command)
     if (manual_led_state_1)
     {
       Serial.println("manual led on");
-      turn_on_led();
+      turn_on_led_1();
       // delay(5000) ; 
       // servo_continuous(PCA2_PIN_SERVO_1, 1);
     }
     else
     {
       Serial.println("manual led off");
-      turn_off_led();
+      turn_off_led_1();
       // servo_continuous(PCA2_PIN_SERVO_1, -1);
     }
   }
@@ -186,6 +186,22 @@ void parse_menu(byte key_command)
   {
     all_lights_on();
   }  
+  else if (key_command == 't')
+  {
+    fade_in_led_1 = !fade_in_led_1;
+    fade_in_led_2 = !fade_in_led_2;
+    fade_in_led_3 = !fade_in_led_3;
+    fade_in_led_4 = !fade_in_led_4;
+    fade_in_led_5 = !fade_in_led_5;
+  }
+  else if (key_command == 'T')
+  {
+    fade_out_led_1 = !fade_out_led_1;
+    fade_out_led_2 = !fade_out_led_2;
+    fade_out_led_3 = !fade_out_led_3;
+    fade_out_led_4 = !fade_out_led_4;
+    fade_out_led_5 = !fade_in_led_5;
+  }   
   else if (key_command == 'w')
   {
     servo_angle_active_1 = !servo_angle_active_1;
@@ -208,13 +224,13 @@ void parse_menu(byte key_command)
   {
     Serial.println("manual fade out 1");
     fade_out_led_1 = !fade_out_led_1;
-    pwm_ramp_1 = 2048 ;
+    pwm_light_1 = 2048 ;
   }  
   else if (key_command == 'F')
   {
     Serial.println("manual fade out 2");
     fade_out_led_2 = !fade_out_led_2;
-    pwm_ramp_2 = 2048;
+    pwm_light_2 = 2048;
   }
   else if (key_command == 'p')
   {
