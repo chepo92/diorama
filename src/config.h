@@ -247,6 +247,7 @@ int servo_step_2 = 1;
 int max_playtime = 100; 
 
 // steppers
+// Peces
 int stepper_cycle_count = 1;
 int stepper_start_array[] = {20};
 int stepper_stop_array[] =  {40};
@@ -259,43 +260,52 @@ int steps_ccw;
 int ramp_time_divisor = 5; 
 int ramp_pwm_step = 10; 
 
-int light1_cycle_lenght = 1;
-int light1_start_array[] = {0};
-int light1_stop_array[] = {99};
+// Peces 
+int light1_cycle_lenght = 2;
+int light1_start_array[] = {17, 45};
+int light1_stop_array[] = {30, 59};
 
-int light2_cycle_lenght = 0;
-int light2_start_array[] = {0};
-int light2_stop_array[] = {0};
+// Llamas
+int light2_cycle_lenght = 2;
+int light2_start_array[] = {5, 33};
+int light2_stop_array[] = {15, 44};
 
-int light3_cycle_lenght = 0;
-int light3_start_array[] = {0};
-int light3_stop_array[] = {0};
+// Madre
+int light3_cycle_lenght = 1;
+int light3_start_array[] = {16};
+int light3_stop_array[] = {99};
 
-int light4_cycle_lenght = 0;
-int light4_start_array[] = {0};
-int light4_stop_array[] = {0};
+// Pajarito
+int light4_cycle_lenght = 1;
+int light4_start_array[] = {4};
+int light4_stop_array[] = {15};
 
-int light5_cycle_lenght = 0;
+// Light 5 is backlight
+int light5_cycle_lenght = 1;
 int light5_start_array[] = {0};
-int light5_stop_array[] = {0};
+int light5_stop_array[] = {99};
 
 
 // Servos
-int servo_move_count_1 = 2;
-int servo_start_array_1[] = {3, 63};
-int servo_stop_array_1[] = {15, 73};
+// Mama
+int servo_move_count_1 = 3;
+int servo_start_array_1[] = {17, 45, 75};
+int servo_stop_array_1[] = {30, 59, 95};
 
+// Pajarito
 int servo_move_count_2 = 3;
-int servo_start_array_2[] = {17, 47, 77};
-int servo_stop_array_2[] = {22, 59, 82};
+int servo_start_array_2[] = {5,33 , 62};
+int servo_stop_array_2[] = {15,44 , 73 };
 
-int servo_move_count_3 = 3;
-int servo_start_array_3[] = {17, 47, 77};
-int servo_stop_array_3[] = {22, 59, 82};
+// Llamas Izq
+int servo_move_count_3 = 2;
+int servo_start_array_3[] = {5, 33};
+int servo_stop_array_3[] = {15, 44};
 
-int servo_move_count_4 = 3;
-int servo_start_array_4[] = {17, 47, 77};
-int servo_stop_array_4[] = {22, 59, 82};
+// Llamas Der
+int servo_move_count_4 = 2;
+int servo_start_array_4[] = {5 , 33};
+int servo_stop_array_4[] = {15, 44};
 
 /* Servo Control */
 int servo_move_type_1 = 1; // 0 : initial, final; 1: move continuous.
