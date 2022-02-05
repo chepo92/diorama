@@ -196,7 +196,7 @@ void fadeIn1()
     if (pwm_light_1 > 4095)
     {
       pwm_light_1 = 0;
-      turn_on_led_1();
+      turn_on_led_n(pin_light_1);
       fade_in_led_1 = false;
       Serial.println(F("Led 1 Full ON after ramp"));
     }
@@ -223,7 +223,7 @@ void fadeIn2()
     if (pwm_light_2 > 4095)
     {
       pwm_light_2 = 0;
-      turn_on_led_n(2);
+      turn_on_led_n(pin_light_2);
       fade_in_led_2 = false;
       Serial.println(F("Led 2 Full ON after ramp"));
     }
@@ -249,7 +249,7 @@ void fadeIn3()
     if (pwm_light_3 > 4095)
     {
       pwm_light_3 = 0;
-      turn_on_led_n(3);
+      turn_on_led_n(pin_light_3);
       fade_in_led_3 = false;
       Serial.println(F("Led 3 Full ON after ramp"));
     }
@@ -276,7 +276,7 @@ void fadeIn4()
     if (pwm_light_4 > 4095)
     {
       pwm_light_4 = 0;
-      turn_on_led_n(4);
+      turn_on_led_n(pin_light_4);
       fade_in_led_4 = false;
       Serial.println(F("Led 4 Full ON after ramp"));
     }
@@ -302,7 +302,7 @@ void fadeIn5()
     if (pwm_light_5 > 4095)
     {
       pwm_light_5 = 0;
-      turn_on_led_n(5);
+      turn_on_led_n(pin_light_5);
       fade_in_led_5 = false;
       Serial.println(F("Led 5 Full ON after ramp"));
     }
@@ -328,15 +328,15 @@ void fadeOut1()
   {
     if (pwm_light_1 < 0)
     {
-      pwm_light_1 = 2048;
-      turn_off_led_1();
+      pwm_light_1 = 4095;
+      turn_off_led_n(pin_light_1);
       light1_state = false;
       fade_out_led_1 = false;
       Serial.println(F("Led 1 Full Off after fade out"));
     }
     else
     {
-      ramp_led_1(pwm_light_1);
+      apply_pwm_led_n(pin_light_1 , pwm_light_1);
       ramp_time_counter_1++;
       if (ramp_time_counter_1 > ramp_time_divisor)
       {
@@ -346,6 +346,7 @@ void fadeOut1()
     }
   }
 }
+
 void fadeOut2()
 {
 
@@ -372,6 +373,88 @@ void fadeOut2()
     }
   }
 }
+
+
+void fadeOut3()
+{
+  // Fade out
+  if (fade_out_led_3)
+  {
+    if (pwm_light_3 < 0)
+    {
+      pwm_light_3 = 4095;
+      turn_off_led_n(pin_light_3);
+      light3_state = false;
+      fade_out_led_3 = false;
+      Serial.println(F("Led 3 Full Off after fade out"));
+    }
+    else
+    {
+      apply_pwm_led_n(pin_light_3 , pwm_light_3);
+      ramp_time_counter_3++;
+      if (ramp_time_counter_3 > ramp_time_divisor)
+      {
+        pwm_light_3--;
+        ramp_time_counter_3 = 0;
+      }
+    }
+  }
+}
+
+void fadeOut4()
+{
+  // Fade out
+  if (fade_out_led_4)
+  {
+    if (pwm_light_4 < 0)
+    {
+      pwm_light_4 = 4095;
+      turn_off_led_n(pin_light_4);
+      light4_state = false;
+      fade_out_led_4 = false;
+      Serial.println(F("Led 4 Full Off after fade out"));
+    }
+    else
+    {
+      apply_pwm_led_n(pin_light_4 , pwm_light_4);
+      ramp_time_counter_4++;
+      if (ramp_time_counter_4 > ramp_time_divisor)
+      {
+        pwm_light_4--;
+        ramp_time_counter_4 = 0;
+      }
+    }
+  }
+}
+
+void fadeOut5()
+{
+  // Fade out
+  if (fade_out_led_5)
+  {
+    if (pwm_light_5 < 0)
+    {
+      pwm_light_5 = 4095;
+      turn_off_led_n(pin_light_5);
+      light5_state = false;
+      fade_out_led_5 = false;
+      Serial.println(F("Led 5 Full Off after fade out"));
+    }
+    else
+    {
+      apply_pwm_led_n(pin_light_5 , pwm_light_5);
+      ramp_time_counter_5++;
+      if (ramp_time_counter_5 > ramp_time_divisor)
+      {
+        pwm_light_5--;
+        ramp_time_counter_5 = 0;
+      }
+    }
+  }
+}
+
+
+
 void reset_light_indexes()
 {
     light1_time_cycle_index = 0;

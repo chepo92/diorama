@@ -200,7 +200,7 @@ void parse_menu(byte key_command)
     fade_out_led_2 = !fade_out_led_2;
     fade_out_led_3 = !fade_out_led_3;
     fade_out_led_4 = !fade_out_led_4;
-    fade_out_led_5 = !fade_in_led_5;
+    fade_out_led_5 = !fade_out_led_5;
   }   
   else if (key_command == 'w')
   {
