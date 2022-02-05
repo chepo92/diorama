@@ -1,24 +1,11 @@
 #include "Arduino.h"
-// #ifndef ARDUINO_H
-// #define ARDUINO_H
-// #endif
-// #ifndef GLOBALS_H
-// #define GLOBALS_H
-// #endif
-// #ifndef CONFIG_H
-// #define CONFIG_H
-// #endif
 
-// #ifndef SERVO_CONTROL_H
-// #define SERVO_CONTROL_H
-// #endif
+#define DISABLE_SD_MP3
 //------------------------------------------------------------------------------
 /**
  * \brief Decode the Menu.
- *
- * Parses through the characters of the users input, executing corresponding
- * MP3player library functions and features then displaying a brief menu and
- * prompting for next input command.
+ * 
+ *  
  */
 
 uint32_t millis_prv;
