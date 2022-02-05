@@ -188,18 +188,18 @@ void parse_menu(byte key_command) {
 
       //we can get track info by using the following functions and arguments
       //the functions will extract the requested information, and put it in the array we pass in
-      MP3player.trackTitle((char*)&title);
-      MP3player.trackArtist((char*)&artist);
-      MP3player.trackAlbum((char*)&album);
+      //MP3player.trackTitle((char*)&title);
+      //MP3player.trackArtist((char*)&artist);
+      //MP3player.trackAlbum((char*)&album);
 
       //print out the arrays of track information
-      Serial.write((byte*)&title, 30);
+      //Serial.write((byte*)&title, 30);
       ////Serial.println();
       //Serial.print(F("by:  "));
-      Serial.write((byte*)&artist, 30);
+      //Serial.write((byte*)&artist, 30);
       ////Serial.println();
       //Serial.print(F("Album:  "));
-      Serial.write((byte*)&album, 30);
+      //Serial.write((byte*)&album, 30);
       ////Serial.println();
     }
 
