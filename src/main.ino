@@ -324,7 +324,8 @@ void loop()
   if (Serial1.available() && relay_commands)
   {
     byte read_reply = Serial1.read(); // get command from serial1 input
-    Serial.print(read_reply) ; // Relay reply to serial (usb)
+    //Serial.print("R:") ;
+    Serial.write(read_reply) ; // Relay reply to serial (usb)
   }
 
 }

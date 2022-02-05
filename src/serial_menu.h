@@ -22,6 +22,7 @@
  */
 
 uint32_t millis_prv;
+#define DISABLE_SD_MP3
 
 void parse_menu(byte key_command)
 {
@@ -47,7 +48,7 @@ void parse_menu(byte key_command)
 #endif
     if (relay_commands)
     {
-      Serial1.print(key_command); 
+      Serial1.write(key_command); 
     }
     
     // if 1-9, play corresponding track
@@ -97,7 +98,9 @@ void parse_menu(byte key_command)
 #endif
     if (relay_commands)
     {
-      Serial1.print(key_command); 
+      Serial1.print("1");
+      Serial1.println("1");
+      Serial1.write('49'); 
     }
     // if +/- to change volume
   }
