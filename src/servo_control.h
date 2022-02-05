@@ -49,5 +49,14 @@
         set_servo_angle(PCA2_PIN_SERVO_2, servo_default_angle_2);
         servo_current_position_1 = servo_default_angle_1;
         servo_current_position_2 = servo_default_angle_2;
-    }    
+    }
+    
+    void all_servos_max () { 
+        servo_current_position_1 = max_servo_position_1;
+        servo_current_position_2 = max_servo_position_2;
+        set_servo_angle(PCA2_PIN_SERVO_1, servo_current_position_1);
+        set_servo_angle(PCA2_PIN_SERVO_2, servo_current_position_2);        
+    }
+
+
 #endif

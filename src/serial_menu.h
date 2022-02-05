@@ -128,10 +128,13 @@ void parse_menu(byte key_command)
 #endif 
     // if < or > to change Play Speed
   }
-
   else if (key_command == 'h')
   {
-    //help();
+    servo_defaults(); 
+  }
+  else if (key_command == 'H')
+  {
+    all_servos_max(); 
   }
   else if (key_command == 'l')
   {
@@ -166,6 +169,10 @@ void parse_menu(byte key_command)
       // servo_continuous(PCA2_PIN_SERVO_1, -1);
     }
   }
+  else if (key_command == 'y')
+  {
+    all_lights_on();
+  }  
   else if (key_command == 'w')
   {
     servo_angle_active_1 = !servo_angle_active_1;

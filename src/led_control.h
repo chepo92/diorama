@@ -67,14 +67,20 @@
 
   void all_lights_off()
   {
-    turn_off_led_n(1);
-    turn_off_led_n(2);
-    turn_off_led_n(3);
-    turn_off_led_n(4);
-    turn_off_led_n(5);
- 
+
+     for(int i = 0 ; i < 16 ; i++) {
+      turn_off_led_n(i);
+    }
   }
 
+  void all_lights_on()
+  {
+
+    for(int i = 0 ; i < 16 ; i++) {
+      turn_on_led_n(i);
+    }
+ 
+  }
 
 
 #endif
