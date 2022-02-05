@@ -101,7 +101,7 @@ void setup() {
       Serial.println(F("Use the \"d\" command to verify SdCard can be read")); // can be removed for space, if needed.
     }
   }
-
+  MP3player.setVolume(1, 1); // Lo iniciamos con el vol al maximo :)
   help();
 
 }
