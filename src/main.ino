@@ -246,6 +246,9 @@ void loop()
 
   fadeOut1();
   fadeOut2();
+  fadeOut3();
+  fadeOut4();
+  fadeOut5();
 
   checkServoStart_1( elapsed_s); 
   checkServoStop_1( elapsed_s) ;

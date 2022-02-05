@@ -206,7 +206,7 @@ void fadeIn1()
       ramp_time_counter_1++;
       if (ramp_time_counter_1 > ramp_time_divisor)
       {
-        pwm_light_1++;
+        pwm_light_1 += ramp_pwm_step;
         ramp_time_counter_1 = 0;
         // Serial.println(F("Ramp UP 1 "));
         // Serial.println(pwm_ramp);
@@ -233,7 +233,7 @@ void fadeIn2()
       ramp_time_counter_2++;
       if (ramp_time_counter_2 > ramp_time_divisor)
       {
-        pwm_light_2++;
+        pwm_light_2 += ramp_pwm_step;
         ramp_time_counter_2 = 0;
         // Serial.println(F("Ramp UP"));
       }
@@ -259,7 +259,7 @@ void fadeIn3()
       ramp_time_counter_3++;
       if (ramp_time_counter_3 > ramp_time_divisor)
       {
-        pwm_light_3++;
+        pwm_light_3 += ramp_pwm_step;
         ramp_time_counter_3 = 0;
         // Serial.println(F("Ramp UP"));
       }
@@ -286,7 +286,7 @@ void fadeIn4()
       ramp_time_counter_4++;
       if (ramp_time_counter_4 > ramp_time_divisor)
       {
-        pwm_light_4++;
+        pwm_light_4 += ramp_pwm_step;
         ramp_time_counter_4 = 0;
         // Serial.println(F("Ramp UP"));
       }
@@ -312,7 +312,7 @@ void fadeIn5()
       ramp_time_counter_5++;
       if (ramp_time_counter_5 > ramp_time_divisor)
       {
-        pwm_light_5++;
+        pwm_light_5 += ramp_pwm_step;
         ramp_time_counter_5 = 0;
         // Serial.println(F("Ramp UP"));
       }
@@ -340,7 +340,7 @@ void fadeOut1()
       ramp_time_counter_1++;
       if (ramp_time_counter_1 > ramp_time_divisor)
       {
-        pwm_light_1--;
+        pwm_light_1 -= ramp_pwm_step;
         ramp_time_counter_1 = 0;
       }
     }
@@ -355,19 +355,19 @@ void fadeOut2()
   {
     if (pwm_light_2 < 0)
     {
-      pwm_light_2 = 2048;
-      turn_off_led_n(2);
+      pwm_light_2 = 4095;
+      turn_off_led_n(pin_light_2);
       light2_state = false;
       fade_out_led_2 = false;
       Serial.println(F("Led 2 Full Off after fade out"));
     }
     else
     {
-      ramp_led_2(pwm_light_2);
+      apply_pwm_led_n(pin_light_2 , pwm_light_2);
       ramp_time_counter_2++;
       if (ramp_time_counter_2 > ramp_time_divisor)
       {
-        pwm_light_2--;
+        pwm_light_2 -= ramp_pwm_step;
         ramp_time_counter_2 = 0;
       }
     }
@@ -394,7 +394,7 @@ void fadeOut3()
       ramp_time_counter_3++;
       if (ramp_time_counter_3 > ramp_time_divisor)
       {
-        pwm_light_3--;
+        pwm_light_3 -= ramp_pwm_step;
         ramp_time_counter_3 = 0;
       }
     }
@@ -420,7 +420,7 @@ void fadeOut4()
       ramp_time_counter_4++;
       if (ramp_time_counter_4 > ramp_time_divisor)
       {
-        pwm_light_4--;
+        pwm_light_4 -= ramp_pwm_step;
         ramp_time_counter_4 = 0;
       }
     }
@@ -446,7 +446,7 @@ void fadeOut5()
       ramp_time_counter_5++;
       if (ramp_time_counter_5 > ramp_time_divisor)
       {
-        pwm_light_5--;
+        pwm_light_5 -= ramp_pwm_step;
         ramp_time_counter_5 = 0;
       }
     }

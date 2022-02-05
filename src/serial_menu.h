@@ -193,6 +193,12 @@ void parse_menu(byte key_command)
 
   else if (key_command == 't')
   {
+    pwm_light_1 = 0;
+    pwm_light_2 = 0;
+    pwm_light_3 = 0;
+    pwm_light_4 = 0;
+    pwm_light_5 = 0;
+
     fade_in_led_1 = !fade_in_led_1;
     fade_in_led_2 = !fade_in_led_2;
     fade_in_led_3 = !fade_in_led_3;
@@ -201,6 +207,12 @@ void parse_menu(byte key_command)
   }
   else if (key_command == 'T')
   {
+    pwm_light_1 = 4095;
+    pwm_light_2 = 4095;
+    pwm_light_3 = 4095;
+    pwm_light_4 = 4095;
+    pwm_light_5 = 4095;
+
     fade_out_led_1 = !fade_out_led_1;
     fade_out_led_2 = !fade_out_led_2;
     fade_out_led_3 = !fade_out_led_3;

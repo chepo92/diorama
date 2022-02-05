@@ -257,6 +257,7 @@ int steps_ccw;
 // LED lights
 
 int ramp_time_divisor = 5; 
+int ramp_pwm_step = 10; 
 
 int light1_cycle_lenght = 1;
 int light1_start_array[] = {0};
