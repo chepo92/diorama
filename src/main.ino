@@ -158,7 +158,7 @@ void parse_menu(byte key_command) {
   char album[30]; // buffer to contain the extract the album name from the current filehandles
 
   //Serial.print(F("Received command: "));
-  Serial.write(key_command);
+  //Serial.write(key_command);
   ////Serial.println(F(" "));
 
   //if s, stop the current track
