@@ -45,6 +45,8 @@ byte pin_light_5 = 12 ;
 
 #define PCA2_PIN_SERVO_1  8
 #define PCA2_PIN_SERVO_2  9
+#define PCA2_PIN_SERVO_3  10
+#define PCA2_PIN_SERVO_4  11
 
 byte PCA2_pin_servo_1 = 8 ;
 byte PCA2_pin_servo_2 = 9 ;
@@ -67,8 +69,21 @@ long start_play_time = 0;
 int buttonState;           // the current reading from the input pin
 int lastButtonState = LOW; // the previous reading from the input pin
 
+
+
+int servo_move_index_1;
+int servo_move_index_2;
+
+int servo_move_index_3;
+int servo_move_index_4;
+
+ 
+
 int servo_current_position_1 = 0;
 int servo_current_position_2 = 0;
+int servo_current_position_3 = 0;
+int servo_current_position_4 = 0;
+
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
@@ -97,9 +112,13 @@ boolean stepper_stop_flag ;
 
 boolean servo_state_1;
 boolean servo_state_2;
+boolean servo_state_3;
+boolean servo_state_4;
 
 boolean servo_angle_active_1;
 boolean servo_angle_active_2;
+boolean servo_angle_active_3;
+boolean servo_angle_active_4;
 
 int stepper_time_index;
 
@@ -109,8 +128,6 @@ int light3_time_cycle_index;
 int light4_time_cycle_index;
 int light5_time_cycle_index;
 
-int servo_move_index_1;
-int servo_move_index_2;
 
 int ramp_time_counter_1;
 int ramp_time_counter_2;

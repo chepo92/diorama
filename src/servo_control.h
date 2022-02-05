@@ -26,6 +26,12 @@
         PCA2.setPWM(n_servo, 0, duty);
     }
 
+    void set_servo_us(uint8_t n_servo, int microsec)
+    {
+        PCA2.writeMicroseconds(n_servo, microsec);
+    }
+
+
     // Needs debug/calibration
     void servo_continuous(uint8_t n_servo, int dir)
     {
@@ -45,8 +51,8 @@
 
     void servo_defaults()
     {
-        set_servo_angle(PCA2_PIN_SERVO_1, servo_default_angle_1);
-        set_servo_angle(PCA2_PIN_SERVO_2, servo_default_angle_2);
+        set_servo_us(PCA2_PIN_SERVO_1, servo_default_angle_1);
+        set_servo_us(PCA2_PIN_SERVO_2, servo_default_angle_2);
         servo_current_position_1 = servo_default_angle_1;
         servo_current_position_2 = servo_default_angle_2;
     }
@@ -54,15 +60,15 @@
     void all_servos_min () { 
         servo_current_position_1 = min_servo_position_1;
         servo_current_position_2 = min_servo_position_2;
-        set_servo_angle(PCA2_PIN_SERVO_1, servo_current_position_1);
-        set_servo_angle(PCA2_PIN_SERVO_2, servo_current_position_2);        
+        set_servo_us(PCA2_PIN_SERVO_1, servo_current_position_1);
+        set_servo_us(PCA2_PIN_SERVO_2, servo_current_position_2);        
     }    
     
     void all_servos_max () { 
         servo_current_position_1 = max_servo_position_1;
         servo_current_position_2 = max_servo_position_2;
-        set_servo_angle(PCA2_PIN_SERVO_1, servo_current_position_1);
-        set_servo_angle(PCA2_PIN_SERVO_2, servo_current_position_2);        
+        set_servo_us(PCA2_PIN_SERVO_1, servo_current_position_1);
+        set_servo_us(PCA2_PIN_SERVO_2, servo_current_position_2);        
     }
 
 

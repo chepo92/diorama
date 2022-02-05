@@ -289,31 +289,62 @@ int servo_move_count_2 = 3;
 int servo_start_array_2[] = {17, 47, 77};
 int servo_stop_array_2[] = {22, 59, 82};
 
+int servo_move_count_3 = 3;
+int servo_start_array_3[] = {17, 47, 77};
+int servo_stop_array_3[] = {22, 59, 82};
+
+int servo_move_count_4 = 3;
+int servo_start_array_4[] = {17, 47, 77};
+int servo_stop_array_4[] = {22, 59, 82};
+
 /* Servo Control */
 int servo_move_type_1 = 1; // 0 : initial, final; 1: move continuous.
 int servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
+int servo_move_type_3 = 1; // 0 : initial, final; 1: move continuous.
+int servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
+
+
 
 int servo_angles[] = {0};
 
-int servo_default_angle_1 = 45;
-int servo_default_angle_2 = 45;
+int servo_default_angle_1 = 1300;
+int servo_default_angle_2 = 1300;
+int servo_default_angle_3 = 1300;
+int servo_default_angle_4 = 1300;
 
-int min_servo_position_1 = 40;
-int max_servo_position_1 = 60;
 
-int min_servo_position_2 = 40;
-int max_servo_position_2 = 60;
+int min_servo_position_1 = 1300;
+int max_servo_position_1 = 1500;
+
+int min_servo_position_2 = 1300;
+int max_servo_position_2 = 1500;
+
+int min_servo_position_3 = 1300;
+int max_servo_position_3 = 1500;
+
+int min_servo_position_4 = 1300;
+int max_servo_position_4 = 1500;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 450; // pwm 180°
 
 unsigned int last_servo_update_1;
 unsigned int last_servo_update_2;
-unsigned int servo_update_period_1 = 100;
-unsigned int servo_update_period_2 = 100;
+unsigned int last_servo_update_3;
+unsigned int last_servo_update_4;
 
-uint8_t servo_step = 1;
-uint8_t servo_step_2 = 1;
+
+
+unsigned int servo_update_period_1 = 5;
+unsigned int servo_update_period_2 = 5;
+unsigned int servo_update_period_3 = 5;
+unsigned int servo_update_period_4 = 5;
+
+
+int servo_step = 1;
+int servo_step_2 = 1;
+int servo_step_3 = 1;
+int servo_step_4 = 1;
 
 #elif DIORAMA_NUMBER == 6 // Mira niñita 
 

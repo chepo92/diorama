@@ -106,7 +106,7 @@ void setup()
   // if you want to really speed stuff up, you can go into 'fast 400khz I2C' mode
   // some i2c devices dont like this so much so if you're sharing the bus, watch
   // out for this!
-  Wire.setClock(400000);
+  //Wire.setClock(400000);
 
   // help();
 
@@ -257,6 +257,14 @@ void loop()
   checkServoStart_2( elapsed_s); 
   checkServoStop_2( elapsed_s) ;
   updateServoPosition_2( elapsed_s);
+
+  checkServoStart_3( elapsed_s); 
+  checkServoStop_3( elapsed_s) ;
+  updateServoPosition_3( elapsed_s);
+
+  // checkServoStart_2( elapsed_s); 
+  // checkServoStop_2( elapsed_s) ;
+  // updateServoPosition_2( elapsed_s);
 
   // Control stepper
 

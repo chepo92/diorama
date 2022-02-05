@@ -23,8 +23,6 @@ void checkServoStart_1(uint32_t elapsed_s) {
 }
 
 
-
-
 void checkServoStop_1(uint32_t elapsed_s) {
   // stop servo 1 move
   if (run_state && servo_state_1 && (elapsed_s > servo_stop_array_1[servo_move_index_1]))
@@ -70,6 +68,64 @@ void checkServoStop_2(uint32_t elapsed_s) {
 }
 
 
+void checkServoStart_3(uint32_t elapsed_s) {
+  // Servo 3 move
+  if (run_state && !servo_state_3 && servo_move_index_3 < servo_move_count_3 && 
+  ((elapsed_s > servo_start_array_3[servo_move_index_3]) && 
+  (elapsed_s < servo_stop_array_3[servo_move_index_3])))
+  {
+    // Do move
+    Serial.println("Servo 3 On");
+    Serial.print("Move index: ");
+    Serial.println(servo_move_index_3);
+    servo_state_3 = true;
+
+  }
+}
+
+void checkServoStop_3(uint32_t elapsed_s) {
+  // stop servo 3 move
+  if (run_state && servo_state_3 && (elapsed_s > servo_stop_array_3[servo_move_index_3]))
+  {
+    // Do stop
+    Serial.println("Servo 3 Off");
+    servo_state_3 = false;
+    set_servo_angle(PCA2_PIN_SERVO_3, servo_default_angle_3);
+
+    servo_move_index_3++;
+     
+  }  
+}
+
+
+void checkServoStart_4(uint32_t elapsed_s) {
+  // Servo 4 move
+  if (run_state && !servo_state_4 && servo_move_index_4 < servo_move_count_4 && 
+  ((elapsed_s > servo_start_array_4[servo_move_index_4]) && 
+  (elapsed_s < servo_stop_array_4[servo_move_index_4])))
+  {
+    // Do move
+    Serial.println("Servo 4 On");
+    Serial.print("Move index: ");
+    Serial.println(servo_move_index_4);
+    servo_state_4 = true;
+
+  }
+}
+
+void checkServoStop_4(uint32_t elapsed_s) {
+  // stop servo 4 move
+  if (run_state && servo_state_4 && (elapsed_s > servo_stop_array_4[servo_move_index_4]))
+  {
+    // Do stop
+    Serial.println("Servo 4 Off");
+    servo_state_4 = false;
+    set_servo_angle(PCA2_PIN_SERVO_4, servo_default_angle_4);
+
+    servo_move_index_4++;
+     
+  }  
+}
 
 
 void checkServoStart_n(uint32_t elapsed_s) {
