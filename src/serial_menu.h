@@ -1,24 +1,11 @@
 #include "Arduino.h"
-// #ifndef ARDUINO_H
-// #define ARDUINO_H
-// #endif
-// #ifndef GLOBALS_H
-// #define GLOBALS_H
-// #endif
-// #ifndef CONFIG_H
-// #define CONFIG_H
-// #endif
 
-// #ifndef SERVO_CONTROL_H
-// #define SERVO_CONTROL_H
-// #endif
+#define DISABLE_SD_MP3
 //------------------------------------------------------------------------------
 /**
  * \brief Decode the Menu.
- *
- * Parses through the characters of the users input, executing corresponding
- * MP3player library functions and features then displaying a brief menu and
- * prompting for next input command.
+ * 
+ *  
  */
 
 uint32_t millis_prv;
@@ -154,10 +141,13 @@ void parse_menu(byte key_command)
 #endif 
     // if < or > to change Play Speed
   }
-
   else if (key_command == 'h')
   {
-    //help();
+    servo_defaults(); 
+  }
+  else if (key_command == 'H')
+  {
+    all_servos_max(); 
   }
   else if (key_command == 'l')
   {
@@ -192,6 +182,10 @@ void parse_menu(byte key_command)
       // servo_continuous(PCA2_PIN_SERVO_1, -1);
     }
   }
+  else if (key_command == 'y')
+  {
+    all_lights_on();
+  }  
   else if (key_command == 'w')
   {
     servo_angle_active_1 = !servo_angle_active_1;
