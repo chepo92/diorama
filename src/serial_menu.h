@@ -231,6 +231,14 @@ void parse_menu(byte key_command)
   {
     servo_angle_active_2 = !servo_angle_active_2;
   }
+  else if (key_command == 'e')
+  {
+    servo_angle_active_3 = !servo_angle_active_3;
+  }
+  else if (key_command == 'E')
+  {
+    servo_angle_active_4 = !servo_angle_active_4;
+  }    
   else if (key_command == 'r')
   {
     Serial.println("manual ramp 1");

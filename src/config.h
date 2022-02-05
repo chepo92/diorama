@@ -328,17 +328,17 @@ int max_servo_position_4 = 1500;
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 450; // pwm 180°
 
-unsigned int last_servo_update_1;
-unsigned int last_servo_update_2;
-unsigned int last_servo_update_3;
-unsigned int last_servo_update_4;
+unsigned long last_servo_update_1;
+unsigned long last_servo_update_2;
+unsigned long last_servo_update_3;
+unsigned long last_servo_update_4;
 
 
 
-unsigned int servo_update_period_1 = 5;
-unsigned int servo_update_period_2 = 5;
-unsigned int servo_update_period_3 = 5;
-unsigned int servo_update_period_4 = 5;
+unsigned long servo_update_period_1 = 5;
+unsigned long servo_update_period_2 = 5;
+unsigned long servo_update_period_3 = 5;
+unsigned long servo_update_period_4 = 5;
 
 
 int servo_step = 1;

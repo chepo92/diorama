@@ -53,22 +53,39 @@
     {
         set_servo_us(PCA2_PIN_SERVO_1, servo_default_angle_1);
         set_servo_us(PCA2_PIN_SERVO_2, servo_default_angle_2);
+        set_servo_us(PCA2_PIN_SERVO_3, servo_default_angle_3);
+        set_servo_us(PCA2_PIN_SERVO_4, servo_default_angle_4);
         servo_current_position_1 = servo_default_angle_1;
         servo_current_position_2 = servo_default_angle_2;
+        servo_current_position_3 = servo_default_angle_3;        
+        servo_current_position_4 = servo_default_angle_4;
+
     }
 
     void all_servos_min () { 
         servo_current_position_1 = min_servo_position_1;
         servo_current_position_2 = min_servo_position_2;
+        servo_current_position_3 = min_servo_position_3;
+        servo_current_position_4 = min_servo_position_4;
+
         set_servo_us(PCA2_PIN_SERVO_1, servo_current_position_1);
-        set_servo_us(PCA2_PIN_SERVO_2, servo_current_position_2);        
+        set_servo_us(PCA2_PIN_SERVO_2, servo_current_position_2);   
+        set_servo_us(PCA2_PIN_SERVO_3, servo_current_position_3);        
+        set_servo_us(PCA2_PIN_SERVO_4, servo_current_position_4);        
+
     }    
     
     void all_servos_max () { 
         servo_current_position_1 = max_servo_position_1;
         servo_current_position_2 = max_servo_position_2;
+        servo_current_position_3 = max_servo_position_3;
+        servo_current_position_4 = max_servo_position_4;
+
         set_servo_us(PCA2_PIN_SERVO_1, servo_current_position_1);
-        set_servo_us(PCA2_PIN_SERVO_2, servo_current_position_2);        
+        set_servo_us(PCA2_PIN_SERVO_2, servo_current_position_2);     
+        set_servo_us(PCA2_PIN_SERVO_3, servo_current_position_3);        
+        set_servo_us(PCA2_PIN_SERVO_4, servo_current_position_4);        
+
     }
 
 

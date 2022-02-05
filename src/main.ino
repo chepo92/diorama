@@ -262,9 +262,9 @@ void loop()
   checkServoStop_3( elapsed_s) ;
   updateServoPosition_3( elapsed_s);
 
-  // checkServoStart_2( elapsed_s); 
-  // checkServoStop_2( elapsed_s) ;
-  // updateServoPosition_2( elapsed_s);
+  checkServoStart_4( elapsed_s); 
+  checkServoStop_4( elapsed_s) ;
+  updateServoPosition_4( elapsed_s);
 
   // Control stepper
 
