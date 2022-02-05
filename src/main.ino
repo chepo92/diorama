@@ -33,8 +33,8 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x41);
 // have!
 #define SERVOMIN  250 // This is the 'minimum' pulse length count (out of 4096) // 150
 #define SERVOMAX  500 // This is the 'maximum' pulse length count (out of 4096) // 600
-#define USMIN  1000 // This is the rounded 'minimum' microsecond length based on the minimum pulse of 150
-#define USMAX  1800 // This is the rounded 'maximum' microsecond length based on the maximum pulse of 600
+#define USMIN  1300 // This is the rounded 'minimum' microsecond length based on the minimum pulse of 150
+#define USMAX  1500 // This is the rounded 'maximum' microsecond length based on the maximum pulse of 600
 #define SERVO_FREQ 50 // Analog servos run at ~50 Hz updates
 
 // our servo # counter
