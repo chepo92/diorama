@@ -115,6 +115,9 @@ void setup()
   // Initial state, everything off
   reset_all() ; 
 
+  // stops play, if playing 
+  Serial1.print('s');
+
 }
 
 //------------------------------------------------------------------------------
@@ -181,10 +184,14 @@ void loop()
     // tell the MP3 Shield to play a track
 #if !defined(DISABLE_SD_MP3)
     result = MP3player.playTrack(track_number);
+
 #endif        
     start_play_time = millis();
     prev_play_state = true;
     Serial.println(F("Start Play"));
+
+    // send to second arduino 
+    Serial1.print('1');
   }
 
   
