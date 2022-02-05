@@ -31,17 +31,17 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x41);
 // want these to be as small/large as possible without hitting the hard stop
 // for max range. You'll have to tweak them as necessary to match the servos you
 // have!
-#define SERVOMIN  150 // This is the 'minimum' pulse length count (out of 4096)
-#define SERVOMAX  600 // This is the 'maximum' pulse length count (out of 4096)
-#define USMIN  600 // This is the rounded 'minimum' microsecond length based on the minimum pulse of 150
-#define USMAX  2400 // This is the rounded 'maximum' microsecond length based on the maximum pulse of 600
+#define SERVOMIN  250 // This is the 'minimum' pulse length count (out of 4096) // 150
+#define SERVOMAX  500 // This is the 'maximum' pulse length count (out of 4096) // 600
+#define USMIN  1000 // This is the rounded 'minimum' microsecond length based on the minimum pulse of 150
+#define USMAX  1800 // This is the rounded 'maximum' microsecond length based on the maximum pulse of 600
 #define SERVO_FREQ 50 // Analog servos run at ~50 Hz updates
 
 // our servo # counter
-uint8_t servonum = 0;
+uint8_t servonum = 8;
 
 void setup() {
-  Serial.begin(11520);
+  Serial.begin(115200);
   Serial.println("8 channel Servo test!");
 
   pwm.begin();
@@ -72,25 +72,33 @@ void setServoPulse(uint8_t n, double pulse) {
 
 void loop() {
   // Drive each servo one at a time using setPWM()
-  Serial.println(servonum);
-  for (uint16_t pulselen = SERVOMIN; pulselen < SERVOMAX; pulselen++) {
-    pwm.setPWM(servonum, 0, pulselen);
-  }
+//   Serial.println("use pwm");
+//   Serial.println("CW");
+//   Serial.println(servonum);
+//   for (uint16_t pulselen = SERVOMIN; pulselen < SERVOMAX; pulselen++) {
+//     pwm.setPWM(servonum, 0, pulselen);
+//     delay(1);
+//   }
 
-  delay(500);
-  for (uint16_t pulselen = SERVOMAX; pulselen > SERVOMIN; pulselen--) {
-    pwm.setPWM(servonum, 0, pulselen);
-  }
+//   delay(500);
+// Serial.println("CCW");
+//   for (uint16_t pulselen = SERVOMAX; pulselen > SERVOMIN; pulselen--) {
+//     pwm.setPWM(servonum, 0, pulselen);
+//     delay(1);
+//   }
 
-  delay(500);
+//   delay(500);
 
   // Drive each servo one at a time using writeMicroseconds(), it's not precise due to calculation rounding!
   // The writeMicroseconds() function is used to mimic the Arduino Servo library writeMicroseconds() behavior. 
+  Serial.println("use write us");
+  Serial.println("CW");
   for (uint16_t microsec = USMIN; microsec < USMAX; microsec++) {
     pwm.writeMicroseconds(servonum, microsec);
   }
 
   delay(500);
+  Serial.println("CCW");
   for (uint16_t microsec = USMAX; microsec > USMIN; microsec--) {
     pwm.writeMicroseconds(servonum, microsec);
   }
@@ -98,5 +106,5 @@ void loop() {
   delay(500);
 
   servonum++;
-  if (servonum > 7) servonum = 0; // Testing the first 8 servo channels
+  if (servonum > 11) servonum = 8; // Testing the first 8 servo channels
 }
