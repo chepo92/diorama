@@ -298,19 +298,19 @@ int servo_angles[] = {0};
 int servo_default_angle_1 = 45;
 int servo_default_angle_2 = 45;
 
-int min_servo_position_1 = 30;
-int max_servo_position_1 = 90;
+int min_servo_position_1 = 40;
+int max_servo_position_1 = 60;
 
-int min_servo_position_2 = 30;
-int max_servo_position_2 = 90;
+int min_servo_position_2 = 40;
+int max_servo_position_2 = 60;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
-unsigned int pos180_pwm = 500; // pwm 180°
+unsigned int pos180_pwm = 450; // pwm 180°
 
 unsigned int last_servo_update_1;
 unsigned int last_servo_update_2;
-unsigned int servo_update_period_1 = 40;
-unsigned int servo_update_period_2 = 40;
+unsigned int servo_update_period_1 = 100;
+unsigned int servo_update_period_2 = 100;
 
 uint8_t servo_step = 1;
 uint8_t servo_step_2 = 1;

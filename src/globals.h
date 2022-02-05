@@ -43,8 +43,8 @@ byte pin_light_5 = 12 ;
 #define PCA1_PIN_LEDS_E2 10
 #define PCA1_PIN_LEDS_M2 11
 
-#define PCA2_PIN_SERVO_1 10
-#define PCA2_PIN_SERVO_2 11
+#define PCA2_PIN_SERVO_1  8
+#define PCA2_PIN_SERVO_2  9
 
 byte PCA2_pin_servo_1 = 8 ;
 byte PCA2_pin_servo_2 = 9 ;
