@@ -70,6 +70,8 @@ void checkServoStop_2(uint32_t elapsed_s) {
 }
 
 
+
+
 void checkServoStart_n(uint32_t elapsed_s) {
 
 }
@@ -107,14 +109,17 @@ void updateServoPosition_1(uint32_t elapsed_s) {
         // Serial.print("Current servo position: ");
         // Serial.println((servo_current_position));         
         last_servo_update_1 = millis();
-        set_servo_angle(PCA2_PIN_SERVO_1, servo_current_position_1);
+
+        Serial.println(servo_current_position_1) ;
+        set_servo_us(PCA2_pin_servo_1, servo_current_position_1);
+        //set_servo_angle(PCA2_PIN_SERVO_1, servo_current_position_1);
         servo_current_position_1 = servo_current_position_1 + servo_step;
 
         if (servo_current_position_1 <= min_servo_position_1)
         {
           servo_step = abs(servo_step);
         }
-        if (servo_current_position_1 >= max_servo_position_2)
+        if (servo_current_position_1 >= max_servo_position_1)
         {
           servo_step = -abs(servo_step);
         }
@@ -142,7 +147,7 @@ void updateServoPosition_2(uint32_t elapsed_s) {
         set_servo_angle(PCA2_PIN_SERVO_2, max_servo_position_2);
         //Serial.println("Servo at max position");
       }
-      else if (servo_move_index_1 < servo_move_count_1 && (elapsed_s > servo_stop_array_2[servo_move_index_2]))
+      else if (servo_move_index_2 < servo_move_count_2 && (elapsed_s > servo_stop_array_2[servo_move_index_2]))
       {
         set_servo_angle(PCA2_PIN_SERVO_2, min_servo_position_2);
         //Serial.println("Servo at min position");
@@ -156,7 +161,8 @@ void updateServoPosition_2(uint32_t elapsed_s) {
         // Serial.print("Current servo position: ");
         // Serial.println((servo_current_position));         
         last_servo_update_2 = millis();
-        set_servo_angle(PCA2_PIN_SERVO_2, servo_current_position_2);
+        set_servo_us(PCA2_pin_servo_2, servo_current_position_2);
+        //set_servo_angle(PCA2_PIN_SERVO_2, servo_current_position_2);
         servo_current_position_2 = servo_current_position_2 + servo_step_2;
 
         if (servo_current_position_2 <= min_servo_position_2)
@@ -166,6 +172,58 @@ void updateServoPosition_2(uint32_t elapsed_s) {
         if (servo_current_position_2 >= max_servo_position_2)
         {
           servo_step_2 = -abs(servo_step_2);
+        }
+      }
+      break;
+
+    default:
+      break;
+    }
+  }  
+
+}
+
+
+
+void updateServoPosition_3(uint32_t elapsed_s) {
+
+  if (servo_angle_active_3 || servo_state_3)
+  {
+    switch (servo_move_type_3)
+    {
+    case 0:
+      if (servo_move_index_3 < servo_move_count_3 && 
+        ((elapsed_s > servo_start_array_3[servo_move_index_3]) && 
+          (elapsed_s < servo_stop_array_3[servo_move_index_3])))
+      {
+        set_servo_angle(PCA2_PIN_SERVO_3, max_servo_position_3);
+        //Serial.println("Servo at max position");
+      }
+      else if (servo_move_index_1 < servo_move_count_1 && (elapsed_s > servo_stop_array_3[servo_move_index_3]))
+      {
+        set_servo_angle(PCA2_pin_servo_3, min_servo_position_3);
+        //Serial.println("Servo at min position");
+      }
+      break;
+    case 1:
+      
+      long elapsed_servo_update = millis() - last_servo_update_3;
+      if (elapsed_servo_update > servo_update_period_3)
+      {
+        // Serial.print("Current servo position: ");
+        // Serial.println((servo_current_position));         
+        last_servo_update_3 = millis();
+        set_servo_us(PCA2_pin_servo_3, servo_current_position_3);
+        //set_servo_angle(PCA3_PIN_SERVO_3, servo_current_position_3);
+        servo_current_position_3 = servo_current_position_3 + servo_step_3;
+
+        if (servo_current_position_3 <= min_servo_position_3)
+        {
+          servo_step_3 = abs(servo_step_3);
+        }
+        if (servo_current_position_3 >= max_servo_position_3)
+        {
+          servo_step_3 = -abs(servo_step_3);
         }
       }
       break;
