@@ -166,7 +166,7 @@ void updateServoPosition_1(uint32_t elapsed_s) {
         // Serial.println((servo_current_position));         
         last_servo_update_1 = millis();
 
-        Serial.println(servo_current_position_1) ;
+        //Serial.println(servo_current_position_1) ;
         set_servo_us(PCA2_pin_servo_1, servo_current_position_1);
         //set_servo_angle(PCA2_PIN_SERVO_1, servo_current_position_1);
         servo_current_position_1 = servo_current_position_1 + servo_step;
@@ -267,7 +267,7 @@ void updateServoPosition_3(uint32_t elapsed_s) {
       if (elapsed_servo_update > servo_update_period_3)
       {
         // Serial.print("Current servo position: ");
-         Serial.println((servo_current_position_3));         
+        //Serial.println((servo_current_position_3));         
         last_servo_update_3 = millis();
         set_servo_us(PCA2_pin_servo_3, servo_current_position_3);
         //set_servo_angle(PCA3_PIN_SERVO_3, servo_current_position_3);
@@ -318,7 +318,7 @@ void updateServoPosition_4(uint32_t elapsed_s) {
       if (elapsed_servo_update > servo_update_period_4)
       {
         // Serial.print("Current servo position: ");
-         Serial.println((servo_current_position_4));         
+        //Serial.println((servo_current_position_4));         
         last_servo_update_4 = millis();
         set_servo_us(PCA2_pin_servo_4, servo_current_position_4);
         //set_servo_angle(PCA4_PIN_SERVO_4, servo_current_position_4);

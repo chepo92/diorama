@@ -195,10 +195,10 @@ void loop()
   }
 
   
-  long time_now = millis()  ; 
-  long elapsed = time_now - start_play_time;
+  unsigned long time_now = millis()  ; 
+  unsigned long elapsed = time_now - start_play_time;
   uint32_t elapsed_s = elapsed /1000 ; 
-  long elapsed_timer_print = time_now - last_timer_print;
+  unsigned long elapsed_timer_print = time_now - last_timer_print;
 
   if (run_state && ( elapsed_timer_print >  1000))
   {

@@ -136,7 +136,7 @@ int ramp_time_counter_4;
 int ramp_time_counter_5;
 
 int seconds_display ;  // millis to sec
-int last_timer_print ; 
+unsigned long last_timer_print ; 
 
 boolean relay_commands =  true ; 
 
