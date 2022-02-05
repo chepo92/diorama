@@ -77,11 +77,11 @@ void setup() {
 
   Serial.begin(115200);
 
-  Serial.print(F("F_CPU = "));
-  Serial.println(F_CPU);
-  Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
-  Serial.print(FreeStack(), DEC);  // FreeStack() is provided by SdFat
-  Serial.println(F(" Should be a base line of 1028, on ATmega328 when using INTx"));
+  //Serial.print(F("F_CPU = "));
+  ////Serial.println(F_CPU);
+  //Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
+  //Serial.print(FreeStack(), DEC);  // FreeStack() is provided by SdFat
+  ////Serial.println(F(" Should be a base line of 1028, on ATmega328 when using INTx"));
 
 
   //Initialize the SdCard.
@@ -93,12 +93,12 @@ void setup() {
   result = MP3player.begin();
   //check result, see readme for error codes.
   if(result != 0) {
-    Serial.print(F("Error code: "));
-    Serial.print(result);
-    Serial.println(F(" when trying to start MP3 player"));
+    //Serial.print(F("Error code: "));
+    //Serial.print(result);
+    ////Serial.println(F(" when trying to start MP3 player"));
     if( result == 6 ) {
-      Serial.println(F("Warning: patch file not found, skipping.")); // can be removed for space, if needed.
-      Serial.println(F("Use the \"d\" command to verify SdCard can be read")); // can be removed for space, if needed.
+      ////Serial.println(F("Warning: patch file not found, skipping.")); // can be removed for space, if needed.
+      ////Serial.println(F("Use the \"d\" command to verify SdCard can be read")); // can be removed for space, if needed.
     }
   }
   MP3player.setVolume(1, 1); // Lo iniciamos con el vol al maximo :)
@@ -157,13 +157,13 @@ void parse_menu(byte key_command) {
   char artist[30]; // buffer to contain the extract the artist name from the current filehandles
   char album[30]; // buffer to contain the extract the album name from the current filehandles
 
-  Serial.print(F("Received command: "));
+  //Serial.print(F("Received command: "));
   Serial.write(key_command);
-  Serial.println(F(" "));
+  ////Serial.println(F(" "));
 
   //if s, stop the current track
   if(key_command == 's') {
-    Serial.println(F("Stopping"));
+    ////Serial.println(F("Stopping"));
     MP3player.stopTrack();
 
   //if 1-9, play corresponding track
@@ -179,12 +179,12 @@ void parse_menu(byte key_command) {
 
     //check result, see readme for error codes.
     if(result != 0) {
-      Serial.print(F("Error code: "));
-      Serial.print(result);
-      Serial.println(F(" when trying to play track"));
+      //Serial.print(F("Error code: "));
+      //Serial.print(result);
+      ////Serial.println(F(" when trying to play track"));
     } else {
 
-      Serial.println(F("Playing:"));
+      ////Serial.println(F("Playing:"));
 
       //we can get track info by using the following functions and arguments
       //the functions will extract the requested information, and put it in the array we pass in
@@ -194,13 +194,13 @@ void parse_menu(byte key_command) {
 
       //print out the arrays of track information
       Serial.write((byte*)&title, 30);
-      Serial.println();
-      Serial.print(F("by:  "));
+      ////Serial.println();
+      //Serial.print(F("by:  "));
       Serial.write((byte*)&artist, 30);
-      Serial.println();
-      Serial.print(F("Album:  "));
+      ////Serial.println();
+      //Serial.print(F("Album:  "));
       Serial.write((byte*)&album, 30);
-      Serial.println();
+      ////Serial.println();
     }
 
   //if +/- to change volume
@@ -224,9 +224,9 @@ void parse_menu(byte key_command) {
     }
     // push byte[1] into both left and right assuming equal balance.
     MP3player.setVolume(mp3_vol.byte[1], mp3_vol.byte[1]); // commit new volume
-    Serial.print(F("Volume changed to -"));
-    Serial.print(mp3_vol.byte[1]>>1, 1);
-    Serial.println(F("[dB]"));
+    //Serial.print(F("Volume changed to -"));
+    //Serial.print(mp3_vol.byte[1]>>1, 1);
+    ////Serial.println(F("[dB]"));
 
   //if < or > to change Play Speed
   } else if((key_command == '>') || (key_command == '<')) {
@@ -247,8 +247,8 @@ void parse_menu(byte key_command) {
       }
     }
     MP3player.setPlaySpeed(playspeed); // commit new playspeed
-    Serial.print(F("playspeed to "));
-    Serial.println(playspeed, DEC);
+    //Serial.print(F("playspeed to "));
+    ////Serial.println(playspeed, DEC);
 
   /* Alterativly, you could call a track by it's file name by using playMP3(filename);
   But you must stick to 8.1 filenames, only 8 characters long, and 3 for the extension */
@@ -268,9 +268,9 @@ void parse_menu(byte key_command) {
     result = MP3player.playMP3(trackName, offset);
     //check result, see readme for error codes.
     if(result != 0) {
-      Serial.print(F("Error code: "));
-      Serial.print(result);
-      Serial.println(F(" when trying to play track"));
+      //Serial.print(F("Error code: "));
+      //Serial.print(result);
+      ////Serial.println(F(" when trying to play track"));
     }
 
   /* Display the file on the SdCard */
@@ -279,10 +279,10 @@ void parse_menu(byte key_command) {
       // prevent root.ls when playing, something locks the dump. but keeps playing.
       // yes, I have tried another unique instance with same results.
       // something about SdFat and its 500byte cache.
-      Serial.println(F("Files found (name date time size):"));
+      ////Serial.println(F("Files found (name date time size):"));
       sd.ls(LS_R | LS_DATE | LS_SIZE);
     } else {
-      Serial.println(F("Busy Playing Files, try again later."));
+      ////Serial.println(F("Busy Playing Files, try again later."));
     }
 
   /* Get and Display the Audio Information */
@@ -292,81 +292,81 @@ void parse_menu(byte key_command) {
   } else if(key_command == 'p') {
     if( MP3player.getState() == playback) {
       MP3player.pauseMusic();
-      Serial.println(F("Pausing"));
+      ////Serial.println(F("Pausing"));
     } else if( MP3player.getState() == paused_playback) {
       MP3player.resumeMusic();
-      Serial.println(F("Resuming"));
+      ////Serial.println(F("Resuming"));
     } else {
-      Serial.println(F("Not Playing!"));
+      ////Serial.println(F("Not Playing!"));
     }
 
   } else if(key_command == 't') {
     int8_t teststate = MP3player.enableTestSineWave(126);
     if(teststate == -1) {
-      Serial.println(F("Un-Available while playing music or chip in reset."));
+      ////Serial.println(F("Un-Available while playing music or chip in reset."));
     } else if(teststate == 1) {
-      Serial.println(F("Enabling Test Sine Wave"));
+      ////Serial.println(F("Enabling Test Sine Wave"));
     } else if(teststate == 2) {
       MP3player.disableTestSineWave();
-      Serial.println(F("Disabling Test Sine Wave"));
+      ////Serial.println(F("Disabling Test Sine Wave"));
     }
 
   } else if(key_command == 'S') {
-    Serial.println(F("Current State of VS10xx is."));
-    Serial.print(F("isPlaying() = "));
-    Serial.println(MP3player.isPlaying());
+    ////Serial.println(F("Current State of VS10xx is."));
+    //Serial.print(F("isPlaying() = "));
+    ////Serial.println(MP3player.isPlaying());
 
-    Serial.print(F("getState() = "));
+    //Serial.print(F("getState() = "));
     switch (MP3player.getState()) {
     case uninitialized:
-      Serial.print(F("uninitialized"));
+      //Serial.print(F("uninitialized"));
       break;
     case initialized:
-      Serial.print(F("initialized"));
+      //Serial.print(F("initialized"));
       break;
     case deactivated:
-      Serial.print(F("deactivated"));
+      //Serial.print(F("deactivated"));
       break;
     case loading:
-      Serial.print(F("loading"));
+      //Serial.print(F("loading"));
       break;
     case ready:
-      Serial.print(F("ready"));
+      //Serial.print(F("ready"));
       break;
     case playback:
-      Serial.print(F("playback"));
+      //Serial.print(F("playback"));
       break;
     case paused_playback:
-      Serial.print(F("paused_playback"));
+      //Serial.print(F("paused_playback"));
       break;
     case testing_memory:
-      Serial.print(F("testing_memory"));
+      //Serial.print(F("testing_memory"));
       break;
     case testing_sinewave:
-      Serial.print(F("testing_sinewave"));
+      //Serial.print(F("testing_sinewave"));
       break;
     }
-    Serial.println();
+    ////Serial.println();
 
    } else if(key_command == 'b') {
-    Serial.println(F("Playing Static MIDI file."));
+    ////Serial.println(F("Playing Static MIDI file."));
     MP3player.SendSingleMIDInote();
-    Serial.println(F("Ended Static MIDI file."));
+    ////Serial.println(F("Ended Static MIDI file."));
 
 
 #if !defined(__AVR_ATmega32U4__)
   } else if(key_command == 'm') {
       uint16_t teststate = MP3player.memoryTest();
     if(teststate == -1) {
-      Serial.println(F("Un-Available while playing music or chip in reset."));
+      ////Serial.println(F("Un-Available while playing music or chip in reset."));
     } else if(teststate == 2) {
       teststate = MP3player.disableTestSineWave();
-      Serial.println(F("Un-Available while Sine Wave Test"));
+      ////Serial.println(F("Un-Available while Sine Wave Test"));
     } else {
-      Serial.print(F("Memory Test Results = "));
-      Serial.println(teststate, HEX);
-      Serial.println(F("Result should be 0x83FF."));
-      Serial.println(F("Reset is needed to recover to normal operation"));
+      //Serial.print(F("Memory Test Results = "));
+      ////Serial.println(teststate, HEX);
+      ////Serial.println(F("Result should be 0x83FF."));
+      ////Serial.println(F("Reset is needed to recover to normal operation"));
     }
 
   } else if(key_command == 'e') {
@@ -377,8 +377,8 @@ void parse_menu(byte key_command) {
       earspeaker++;
     }
     MP3player.setEarSpeaker(earspeaker); // commit new earspeaker
-    Serial.print(F("earspeaker to "));
-    Serial.println(earspeaker, DEC);
+    //Serial.print(F("earspeaker to "));
+    ////Serial.println(earspeaker, DEC);
 
   } else if(key_command == 'r') {
     MP3player.resumeMusic(2000);
@@ -386,135 +386,135 @@ void parse_menu(byte key_command) {
   } else if(key_command == 'R') {
     MP3player.stopTrack();
     MP3player.vs_init();
-    Serial.println(F("Reseting VS10xx chip"));
+    ////Serial.println(F("Reseting VS10xx chip"));
 
   } else if(key_command == 'g') {
     int32_t offset_ms = 20000; // Note this is just an example, try your own number.
-    Serial.print(F("jumping to "));
-    Serial.print(offset_ms, DEC);
-    Serial.println(F("[milliseconds]"));
+    //Serial.print(F("jumping to "));
+    //Serial.print(offset_ms, DEC);
+    ////Serial.println(F("[milliseconds]"));
     result = MP3player.skipTo(offset_ms);
     if(result != 0) {
-      Serial.print(F("Error code: "));
-      Serial.print(result);
-      Serial.println(F(" when trying to skip track"));
+      //Serial.print(F("Error code: "));
+      //Serial.print(result);
+      ////Serial.println(F(" when trying to skip track"));
     }
 
   } else if(key_command == 'k') {
     int32_t offset_ms = -1000; // Note this is just an example, try your own number.
-    Serial.print(F("moving = "));
-    Serial.print(offset_ms, DEC);
-    Serial.println(F("[milliseconds]"));
+    //Serial.print(F("moving = "));
+    //Serial.print(offset_ms, DEC);
+    ////Serial.println(F("[milliseconds]"));
     result = MP3player.skip(offset_ms);
     if(result != 0) {
-      Serial.print(F("Error code: "));
-      Serial.print(result);
-      Serial.println(F(" when trying to skip track"));
+      //Serial.print(F("Error code: "));
+      //Serial.print(result);
+      ////Serial.println(F(" when trying to skip track"));
     }
 
   } else if(key_command == 'O') {
     MP3player.end();
-    Serial.println(F("VS10xx placed into low power reset mode."));
+    ////Serial.println(F("VS10xx placed into low power reset mode."));
 
   } else if(key_command == 'o') {
     MP3player.begin();
-    Serial.println(F("VS10xx restored from low power reset mode."));
+    ////Serial.println(F("VS10xx restored from low power reset mode."));
 
   } else if(key_command == 'D') {
     uint16_t diff_state = MP3player.getDifferentialOutput();
-    Serial.print(F("Differential Mode "));
+    //Serial.print(F("Differential Mode "));
     if(diff_state == 0) {
       MP3player.setDifferentialOutput(1);
-      Serial.println(F("Enabled."));
+      ////Serial.println(F("Enabled."));
     } else {
       MP3player.setDifferentialOutput(0);
-      Serial.println(F("Disabled."));
+      ////Serial.println(F("Disabled."));
     }
 
   } else if(key_command == 'V') {
     MP3player.setVUmeter(1);
-    Serial.println(F("Use \"No line ending\""));
-    Serial.print(F("VU meter = "));
-    Serial.println(MP3player.getVUmeter());
-    Serial.println(F("Hit Any key to stop."));
+    ////Serial.println(F("Use \"No line ending\""));
+    //Serial.print(F("VU meter = "));
+    ////Serial.println(MP3player.getVUmeter());
+    ////Serial.println(F("Hit Any key to stop."));
 
     while(!Serial.available()) {
       union twobyte vu;
       vu.word = MP3player.getVUlevel();
-      Serial.print(F("VU: L = "));
-      Serial.print(vu.byte[1]);
-      Serial.print(F(" / R = "));
-      Serial.print(vu.byte[0]);
-      Serial.println(" dB");
+      //Serial.print(F("VU: L = "));
+      //Serial.print(vu.byte[1]);
+      //Serial.print(F(" / R = "));
+      //Serial.print(vu.byte[0]);
+      ////Serial.println(" dB");
       delay(1000);
     }
     Serial.read();
 
     MP3player.setVUmeter(0);
-    Serial.print(F("VU meter = "));
-    Serial.println(MP3player.getVUmeter());
+    //Serial.print(F("VU meter = "));
+    ////Serial.println(MP3player.getVUmeter());
 
   } else if(key_command == 'T') {
     uint16_t TrebleFrequency = MP3player.getTrebleFrequency();
-    Serial.print(F("Former TrebleFrequency = "));
-    Serial.println(TrebleFrequency, DEC);
+    //Serial.print(F("Former TrebleFrequency = "));
+    ////Serial.println(TrebleFrequency, DEC);
     if (TrebleFrequency >= 15000) { // Range is from 0 - 1500Hz
       TrebleFrequency = 0;
     } else {
       TrebleFrequency += 1000;
     }
     MP3player.setTrebleFrequency(TrebleFrequency);
-    Serial.print(F("New TrebleFrequency = "));
-    Serial.println(MP3player.getTrebleFrequency(), DEC);
+    //Serial.print(F("New TrebleFrequency = "));
+    ////Serial.println(MP3player.getTrebleFrequency(), DEC);
 
   } else if(key_command == 'E') {
     int8_t TrebleAmplitude = MP3player.getTrebleAmplitude();
-    Serial.print(F("Former TrebleAmplitude = "));
-    Serial.println(TrebleAmplitude, DEC);
+    //Serial.print(F("Former TrebleAmplitude = "));
+    ////Serial.println(TrebleAmplitude, DEC);
     if (TrebleAmplitude >= 7) { // Range is from -8 - 7dB
       TrebleAmplitude = -8;
     } else {
       TrebleAmplitude++;
     }
     MP3player.setTrebleAmplitude(TrebleAmplitude);
-    Serial.print(F("New TrebleAmplitude = "));
-    Serial.println(MP3player.getTrebleAmplitude(), DEC);
+    //Serial.print(F("New TrebleAmplitude = "));
+    ////Serial.println(MP3player.getTrebleAmplitude(), DEC);
 
   } else if(key_command == 'B') {
     uint16_t BassFrequency = MP3player.getBassFrequency();
-    Serial.print(F("Former BassFrequency = "));
-    Serial.println(BassFrequency, DEC);
+    //Serial.print(F("Former BassFrequency = "));
+    ////Serial.println(BassFrequency, DEC);
     if (BassFrequency >= 150) { // Range is from 20hz - 150hz
       BassFrequency = 0;
     } else {
       BassFrequency += 10;
     }
     MP3player.setBassFrequency(BassFrequency);
-    Serial.print(F("New BassFrequency = "));
-    Serial.println(MP3player.getBassFrequency(), DEC);
+    //Serial.print(F("New BassFrequency = "));
+    ////Serial.println(MP3player.getBassFrequency(), DEC);
 
   } else if(key_command == 'C') {
     uint16_t BassAmplitude = MP3player.getBassAmplitude();
-    Serial.print(F("Former BassAmplitude = "));
-    Serial.println(BassAmplitude, DEC);
+    //Serial.print(F("Former BassAmplitude = "));
+    ////Serial.println(BassAmplitude, DEC);
     if (BassAmplitude >= 15) { // Range is from 0 - 15dB
       BassAmplitude = 0;
     } else {
       BassAmplitude++;
     }
     MP3player.setBassAmplitude(BassAmplitude);
-    Serial.print(F("New BassAmplitude = "));
-    Serial.println(MP3player.getBassAmplitude(), DEC);
+    //Serial.print(F("New BassAmplitude = "));
+    ////Serial.println(MP3player.getBassAmplitude(), DEC);
 
   } else if(key_command == 'M') {
     uint16_t monostate = MP3player.getMonoMode();
-    Serial.print(F("Mono Mode "));
+    //Serial.print(F("Mono Mode "));
     if(monostate == 0) {
       MP3player.setMonoMode(1);
-      Serial.println(F("Enabled."));
+      ////Serial.println(F("Enabled."));
     } else {
       MP3player.setMonoMode(0);
-      Serial.println(F("Disabled."));
+      ////Serial.println(F("Disabled."));
     }
 #endif
 
@@ -523,14 +523,14 @@ void parse_menu(byte key_command) {
   }
 
   // print prompt after key stroke has been processed.
-  Serial.print(F("Time since last command: "));  
-  Serial.println((float) (millis() -  millis_prv)/1000, 2);  
+  //Serial.print(F("Time since last command: "));  
+  ////Serial.println((float) (millis() -  millis_prv)/1000, 2);  
   millis_prv = millis();
-  Serial.print(F("Enter s,1-9,+,-,>,<,f,F,d,i,p,t,S,b"));
+  //Serial.print(F("Enter s,1-9,+,-,>,<,f,F,d,i,p,t,S,b"));
 #if !defined(__AVR_ATmega32U4__)
-  Serial.print(F(",m,e,r,R,g,k,O,o,D,V,B,C,T,E,M:"));
+  //Serial.print(F(",m,e,r,R,g,k,O,o,D,V,B,C,T,E,M:"));
 #endif
-  Serial.println(F(",h :"));
+  ////Serial.println(F(",h :"));
 }
 
 //------------------------------------------------------------------------------
@@ -540,37 +540,37 @@ void parse_menu(byte key_command) {
  * Prints a full menu of the commands available along with descriptions.
  */
 void help() {
-  Serial.println(F("Arduino vs1053 Library Example:"));
-  Serial.println(F(" courtesy of Bill Porter & Michael P. Flaga"));
-  Serial.println(F("COMMANDS:"));
-  Serial.println(F(" [1-9] to play a track"));
-  Serial.println(F(" [f] play track001.mp3 by filename example"));
-  Serial.println(F(" [F] same as [f] but with initial skip of 2 second"));
-  Serial.println(F(" [s] to stop playing"));
-  Serial.println(F(" [d] display directory of SdCard"));
-  Serial.println(F(" [+ or -] to change volume"));
-  Serial.println(F(" [> or <] to increment or decrement play speed by 1 factor"));
-  Serial.println(F(" [i] retrieve current audio information (partial list)"));
-  Serial.println(F(" [p] to pause."));
-  Serial.println(F(" [t] to toggle sine wave test"));
-  Serial.println(F(" [S] Show State of Device."));
-  Serial.println(F(" [b] Play a MIDI File Beep"));
+  ////Serial.println(F("Arduino vs1053 Library Example:"));
+  ////Serial.println(F(" courtesy of Bill Porter & Michael P. Flaga"));
+  ////Serial.println(F("COMMANDS:"));
+  ////Serial.println(F(" [1-9] to play a track"));
+  ////Serial.println(F(" [f] play track001.mp3 by filename example"));
+  ////Serial.println(F(" [F] same as [f] but with initial skip of 2 second"));
+  ////Serial.println(F(" [s] to stop playing"));
+  ////Serial.println(F(" [d] display directory of SdCard"));
+  ////Serial.println(F(" [+ or -] to change volume"));
+  ////Serial.println(F(" [> or <] to increment or decrement play speed by 1 factor"));
+  ////Serial.println(F(" [i] retrieve current audio information (partial list)"));
+  ////Serial.println(F(" [p] to pause."));
+  ////Serial.println(F(" [t] to toggle sine wave test"));
+  ////Serial.println(F(" [S] Show State of Device."));
+  ////Serial.println(F(" [b] Play a MIDI File Beep"));
 #if !defined(__AVR_ATmega32U4__)
-  Serial.println(F(" [e] increment Spatial EarSpeaker, default is 0, wraps after 4"));
-  Serial.println(F(" [m] perform memory test. reset is needed after to recover."));
-  Serial.println(F(" [M] Toggle between Mono and Stereo Output."));
-  Serial.println(F(" [g] Skip to a predetermined offset of ms in current track."));
-  Serial.println(F(" [k] Skip a predetermined number of ms in current track."));
-  Serial.println(F(" [r] resumes play from 2s from begin of file"));
-  Serial.println(F(" [R] Resets and initializes VS10xx chip."));
-  Serial.println(F(" [O] turns OFF the VS10xx into low power reset."));
-  Serial.println(F(" [o] turns ON the VS10xx out of low power reset."));
-  Serial.println(F(" [D] to toggle SM_DIFF between inphase and differential output"));
-  Serial.println(F(" [V] Enable VU meter Test."));
-  Serial.println(F(" [B] Increament bass frequency by 10Hz"));
-  Serial.println(F(" [C] Increament bass amplitude by 1dB"));
-  Serial.println(F(" [T] Increament treble frequency by 1000Hz"));
-  Serial.println(F(" [E] Increament treble amplitude by 1dB"));
+  ////Serial.println(F(" [e] increment Spatial EarSpeaker, default is 0, wraps after 4"));
+  ////Serial.println(F(" [m] perform memory test. reset is needed after to recover."));
+  ////Serial.println(F(" [M] Toggle between Mono and Stereo Output."));
+  ////Serial.println(F(" [g] Skip to a predetermined offset of ms in current track."));
+  ////Serial.println(F(" [k] Skip a predetermined number of ms in current track."));
+  ////Serial.println(F(" [r] resumes play from 2s from begin of file"));
+  ////Serial.println(F(" [R] Resets and initializes VS10xx chip."));
+  ////Serial.println(F(" [O] turns OFF the VS10xx into low power reset."));
+  ////Serial.println(F(" [o] turns ON the VS10xx out of low power reset."));
+  ////Serial.println(F(" [D] to toggle SM_DIFF between inphase and differential output"));
+  ////Serial.println(F(" [V] Enable VU meter Test."));
+  ////Serial.println(F(" [B] Increament bass frequency by 10Hz"));
+  ////Serial.println(F(" [C] Increament bass amplitude by 1dB"));
+  ////Serial.println(F(" [T] Increament treble frequency by 1000Hz"));
+  ////Serial.println(F(" [E] Increament treble amplitude by 1dB"));
 #endif
-  Serial.println(F(" [h] this help"));
+  ////Serial.println(F(" [h] this help"));
 }
