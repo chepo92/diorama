@@ -73,11 +73,8 @@ int lastButtonState = LOW; // the previous reading from the input pin
 
 int servo_move_index_1;
 int servo_move_index_2;
-
 int servo_move_index_3;
 int servo_move_index_4;
-
- 
 
 int servo_current_position_1 = 0;
 int servo_current_position_2 = 0;

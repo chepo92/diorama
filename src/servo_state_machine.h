@@ -28,7 +28,7 @@ void checkServoStop_1(uint32_t elapsed_s) {
   if (run_state && servo_state_1 && (elapsed_s > servo_stop_array_1[servo_move_index_1]))
   {
     // Do stop
-    Serial.println("Servo 2 Off");
+    Serial.println("Servo 1 Default");
     servo_state_1 = false;
     set_servo_angle(PCA2_PIN_SERVO_1, servo_default_angle_1);
 
@@ -58,7 +58,7 @@ void checkServoStop_2(uint32_t elapsed_s) {
   if (run_state && servo_state_2 && (elapsed_s > servo_stop_array_2[servo_move_index_2]))
   {
     // Do stop
-    Serial.println("Servo 2 Off");
+    Serial.println("Servo 2 Default");
     servo_state_2 = false;
     set_servo_angle(PCA2_PIN_SERVO_2, servo_default_angle_2);
 
