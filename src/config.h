@@ -92,51 +92,51 @@ int steps_ccw;
 int ramp_time_divisor = 5; 
 int ramp_pwm_step = 10;  
 
-//  
-int light1_cycle_lenght = 2;
-long light1_start_array[] = {0};
-long light1_stop_array[] = {100};
+//  Pescador
+int light1_cycle_lenght = 1;
+long light1_start_array[] = {5};
+long light1_stop_array[] = {114};
 
-// 
-int light2_cycle_lenght = 2;
-long light2_start_array[] = {23};
-long light2_stop_array[] = {80};
+// Barco
+int light2_cycle_lenght = 1;
+long light2_start_array[] = {29};
+long light2_stop_array[] = {103};
 
-// 
+// Peces
 int light3_cycle_lenght = 1;
-int light3_start_array[] = {16};
-int light3_stop_array[] = {99};
+int light3_start_array[] = {49};
+int light3_stop_array[] = {100};
 
-// 
+// Faro
 int light4_cycle_lenght = 1;
-int light4_start_array[] = {4};
-int light4_stop_array[] = {15};
+int light4_start_array[] = {3};
+int light4_stop_array[] = {106};
 
 // Light 5 is backlight
 int light5_cycle_lenght = 1;
 int light5_start_array[] = {0};
-int light5_stop_array[] = {99};
+int light5_stop_array[] = {118};
 
 // Servos
-// 
-int servo_move_count_1 = 3;
-int servo_start_array_1[] = {17, 45, 75};
-int servo_stop_array_1[] = {30, 59, 95};
+// Peces
+int servo_move_count_1 = 1;
+int servo_start_array_1[] = {49};
+int servo_stop_array_1[] = {75};
+
+// Remos pescador
+int servo_move_count_2 = 1;
+int servo_start_array_2[] = {10};
+int servo_stop_array_2[] = {114};
 
 // 
-int servo_move_count_2 = 3;
-int servo_start_array_2[] = {5,33 , 62};
-int servo_stop_array_2[] = {15,44 , 73 };
+int servo_move_count_3 = 0;
+int servo_start_array_3[] = {0};
+int servo_stop_array_3[] = {0};
 
 // 
-int servo_move_count_3 = 2;
-int servo_start_array_3[] = {5, 33};
-int servo_stop_array_3[] = {15, 44};
-
-// 
-int servo_move_count_4 = 2;
-int servo_start_array_4[] = {5 , 33};
-int servo_stop_array_4[] = {15, 44};
+int servo_move_count_4 = 0;
+int servo_start_array_4[] = {0};
+int servo_stop_array_4[] = {0};
 
 /* Servo Control */
 int servo_move_type_1 = 1; // 0 : initial, final; 1: move continuous.
@@ -146,7 +146,7 @@ int servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle_1 = 1300;
+int servo_default_angle_1 = 1500;
 int servo_default_angle_2 = 1300;
 int servo_default_angle_3 = 1300;
 int servo_default_angle_4 = 1300;
