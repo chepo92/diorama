@@ -15,7 +15,7 @@
 #define DIORAMA_NUMBER 2
 
 // Individual Settings for each Diorama
-#if   DIORAMA_NUMBER == 1 // el establo
+#if   DIORAMA_NUMBER == 1 // El establo
 
 int max_playtime = 128; // 
 
@@ -117,29 +117,70 @@ int light5_cycle_lenght = 1;
 int light5_start_array[] = {0};
 int light5_stop_array[] = {99};
 
-
 // Servos
-int servo_move_count_1 = 1;
-long servo_start_array_1[] = {28};
-long servo_stop_array_1[] = {85};
+// 
+int servo_move_count_1 = 3;
+int servo_start_array_1[] = {17, 45, 75};
+int servo_stop_array_1[] = {30, 59, 95};
+
+// 
+int servo_move_count_2 = 3;
+int servo_start_array_2[] = {5,33 , 62};
+int servo_stop_array_2[] = {15,44 , 73 };
+
+// 
+int servo_move_count_3 = 2;
+int servo_start_array_3[] = {5, 33};
+int servo_stop_array_3[] = {15, 44};
+
+// 
+int servo_move_count_4 = 2;
+int servo_start_array_4[] = {5 , 33};
+int servo_stop_array_4[] = {15, 44};
 
 /* Servo Control */
 int servo_move_type_1 = 1; // 0 : initial, final; 1: move continuous.
+int servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
+int servo_move_type_3 = 1; // 0 : initial, final; 1: move continuous.
+int servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle_1 = 90;
+int servo_default_angle_1 = 1300;
+int servo_default_angle_2 = 1300;
+int servo_default_angle_3 = 1300;
+int servo_default_angle_4 = 1300;
 
-int min_servo_position_1 = 20;
-int max_servo_position_1 = 90;
+
+int min_servo_position_1 = 1300;
+int max_servo_position_1 = 1500;
+
+int min_servo_position_2 = 1300;
+int max_servo_position_2 = 1500;
+
+int min_servo_position_3 = 1300;
+int max_servo_position_3 = 1500;
+
+int min_servo_position_4 = 1300;
+int max_servo_position_4 = 1500;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
-unsigned int pos180_pwm = 480; // pwm 180°
+unsigned int pos180_pwm = 450; // pwm 180°
 
-long last_servo_update_1;
-long servo_update_period_1 = 10;
+unsigned long last_servo_update_1;
+unsigned long last_servo_update_2;
+unsigned long last_servo_update_3;
+unsigned long last_servo_update_4;
+
+unsigned long servo_update_period_1 = 5;
+unsigned long servo_update_period_2 = 5;
+unsigned long servo_update_period_3 = 5;
+unsigned long servo_update_period_4 = 5;
 
 int servo_step = 1;
+int servo_step_2 = 1;
+int servo_step_3 = 1;
+int servo_step_4 = 1;
 
 #elif DIORAMA_NUMBER == 3 // Arrurru 
 
@@ -362,13 +403,10 @@ unsigned long last_servo_update_2;
 unsigned long last_servo_update_3;
 unsigned long last_servo_update_4;
 
-
-
 unsigned long servo_update_period_1 = 5;
 unsigned long servo_update_period_2 = 5;
 unsigned long servo_update_period_3 = 5;
 unsigned long servo_update_period_4 = 5;
-
 
 int servo_step = 1;
 int servo_step_2 = 1;
