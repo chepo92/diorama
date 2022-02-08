@@ -189,14 +189,70 @@ void parse_menu(byte key_command)
     if (manual_led_state_1)
     {
       Serial.println("manual led on");
-      turn_on_led_n(1) ; 
+      turn_on_led_n(pin_light_1) ; 
     }
     else
     {
       Serial.println("manual led off");
-      turn_on_led_n(1) ; 
+      turn_off_led_n(pin_light_1) ; 
     }
   }  
+  else if (key_command == 'V')
+  {
+    manual_led_state_2 = !manual_led_state_2;
+    if (manual_led_state_2)
+    {
+      Serial.println("manual led on");
+      turn_on_led_n(pin_light_2) ; 
+    }
+    else
+    {
+      Serial.println("manual led off");
+      turn_off_led_n(pin_light_2) ; 
+    }
+  }    
+  else if (key_command == 'b')
+  {
+    manual_led_state_3 = !manual_led_state_3;
+    if (manual_led_state_3)
+    {
+      Serial.println("manual led on");
+      turn_on_led_n(pin_light_3) ; 
+    }
+    else
+    {
+      Serial.println("manual led off");
+      turn_off_led_n(pin_light_3) ; 
+    }
+  }    
+  else if (key_command == 'B')
+  {
+    manual_led_state_4 = !manual_led_state_4;
+    if (manual_led_state_4)
+    {
+      Serial.println("manual led on");
+      turn_on_led_n(pin_light_4) ; 
+    }
+    else
+    {
+      Serial.println("manual led off");
+      turn_off_led_n(pin_light_4) ; 
+    }
+  }   
+  else if (key_command == 'n')
+  {
+    manual_led_state_5 = !manual_led_state_5;
+    if (manual_led_state_5)
+    {
+      Serial.println("manual led on");
+      turn_on_led_n(pin_light_5) ; 
+    }
+    else
+    {
+      Serial.println("manual led off");
+      turn_off_led_n(pin_light_5) ; 
+    }
+  }     
   else if (key_command == 'y')
   {
     all_lights_on();
@@ -250,48 +306,69 @@ void parse_menu(byte key_command)
   {
     servo_angle_active_4 = !servo_angle_active_4;
   }    
-  else if (key_command == 'r')
+  // else if (key_command == 'r')
+  // {
+  //   Serial.println("manual ramp 1");
+  //   fade_in_led_1 = !fade_in_led_1;
+  // }  
+  // else if (key_command == 'R')
+  // {
+  //   Serial.println("manual ramp 2");
+  //   fade_in_led_2 = !fade_in_led_2;
+  // }  
+  // else if (key_command == 'f')
+  // {
+  //   Serial.println("manual fade out 1");
+  //   fade_out_led_1 = !fade_out_led_1;
+  //   pwm_light_1 = 2048 ;
+  // }  
+  // else if (key_command == 'F')
+  // {
+  //   Serial.println("manual fade out 2");
+  //   fade_out_led_2 = !fade_out_led_2;
+  //   pwm_light_2 = 2048;
+  // }
+  else if (key_command == 'u')
   {
-    Serial.println("manual ramp 1");
-    fade_in_led_1 = !fade_in_led_1;
-  }  
-  else if (key_command == 'R')
-  {
-    Serial.println("manual ramp 2");
-    fade_in_led_2 = !fade_in_led_2;
-  }  
-  else if (key_command == 'f')
-  {
-    Serial.println("manual fade out 1");
-    fade_out_led_1 = !fade_out_led_1;
-    pwm_light_1 = 2048 ;
-  }  
-  else if (key_command == 'F')
-  {
-    Serial.println("manual fade out 2");
-    fade_out_led_2 = !fade_out_led_2;
-    pwm_light_2 = 2048;
-  }
-  else if (key_command == 'p')
-  {
-    set_servo_angle(PCA2_PIN_SERVO_1, min_servo_position_1);
+    set_servo_us(PCA2_PIN_SERVO_1, min_servo_position_1);
     Serial.println("Servo at min position");
   }
-  else if (key_command == 'P')
+  else if (key_command == 'U')
   {
-    set_servo_angle(PCA2_PIN_SERVO_1, max_servo_position_2);
+    set_servo_us(PCA2_PIN_SERVO_1, max_servo_position_2);
     Serial.println("Servo at max position");
   }
-  else if (key_command == 'o')
+  else if (key_command == 'i')
   {
-    set_servo_angle(PCA2_PIN_SERVO_2, min_servo_position_2);
+    set_servo_us(PCA2_PIN_SERVO_2, min_servo_position_2);
     Serial.println("Servo 2 at min position");
+  }
+  else if (key_command == 'I')
+  {
+    set_servo_us(PCA2_PIN_SERVO_2, max_servo_position_2);
+    Serial.println("Servo 2 at max position");
+  }
+ else if (key_command == 'o')
+  {
+    set_servo_us(PCA2_PIN_SERVO_3, min_servo_position_3);
+    Serial.println("Servo at min position");
   }
   else if (key_command == 'O')
   {
-    set_servo_angle(PCA2_PIN_SERVO_2, max_servo_position_2);
+    set_servo_us(PCA2_PIN_SERVO_3, max_servo_position_3);
+    Serial.println("Servo at max position");
+  }
+  else if (key_command == 'p')
+  {
+    set_servo_us(PCA2_PIN_SERVO_4, min_servo_position_4);
+    Serial.println("Servo 2 at min position");
+  }
+  else if (key_command == 'P')
+  {
+    set_servo_us(PCA2_PIN_SERVO_4, max_servo_position_4);
     Serial.println("Servo 2 at max position");
   }
+
   else if (key_command == 'C')
   {
     Serial.println("manual Step CCW");
@@ -306,7 +383,7 @@ void parse_menu(byte key_command)
     steps_cw = 100;
     // myStepper.step(-stepsPerRevolution) ;
   }
-  else if (key_command == 'u')
+  else if (key_command == 'z')
   {
     run_state = true;
   }
