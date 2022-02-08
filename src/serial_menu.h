@@ -160,14 +160,11 @@ void parse_menu(byte key_command)
     {
       Serial.println("manual led on");
       turn_on_led_1();
-      // delay(5000) ; 
-      // servo_continuous(PCA2_PIN_SERVO_1, 1);
     }
     else
     {
       Serial.println("manual led off");
       turn_off_led_1();
-      // servo_continuous(PCA2_PIN_SERVO_1, -1);
     }
   }
   else if (key_command == 'L')
@@ -186,6 +183,20 @@ void parse_menu(byte key_command)
       // servo_continuous(PCA2_PIN_SERVO_1, -1);
     }
   }
+  else if (key_command == 'v')
+  {
+    manual_led_state_1 = !manual_led_state_1;
+    if (manual_led_state_1)
+    {
+      Serial.println("manual led on");
+      turn_on_led_n(1) ; 
+    }
+    else
+    {
+      Serial.println("manual led off");
+      turn_on_led_n(1) ; 
+    }
+  }  
   else if (key_command == 'y')
   {
     all_lights_on();

@@ -3,11 +3,15 @@
 
 
 // Pins
+byte stepper_pin_A = 8 ;
+byte stepper_pin_B = 9 ;
+byte stepper_pin_C = 10 ;
+byte stepper_pin_D = 11 ;
 
-#define STEPPER_PIN_A A0
-#define STEPPER_PIN_B A1
-#define STEPPER_PIN_C A2
-#define STEPPER_PIN_D A3
+#define STEPPER_PIN_A 8
+#define STEPPER_PIN_B 9
+#define STEPPER_PIN_C 10
+#define STEPPER_PIN_D 11
 
 /* Functions */
 
