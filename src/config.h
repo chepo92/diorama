@@ -12,67 +12,116 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define DIORAMA_NUMBER 3
+#define DIORAMA_NUMBER 1
 
 // Individual Settings for each Diorama
 #if   DIORAMA_NUMBER == 1 // El establo
 
-int max_playtime = 128; // 
+int max_playtime = 125; // 1:35 (60+35)
 
 // steppers
-int stepper_cycle_count = 0;
-int stepper_start_array[] = {0};
-int stepper_stop_array[] = {0};
+int stepper_cycle_count = 1;
+int stepper_start_array[] = {61};
+int stepper_stop_array[] = {94};
 
 int steps_cw;
 int steps_ccw;
 
 // LED lights
 
+
 int ramp_time_divisor = 5; 
+int ramp_pwm_step = 10;  
 
-int light1_cycle_count = 1;
-int light1_start_array[] = {0};
-int light1_stop_array[] = {115};
+//  Mamá
+int light1_cycle_lenght = 1;
+long light1_start_array[] = {5};
+long light1_stop_array[] = {118};
 
+// Buey
 int light2_cycle_lenght = 1;
-int light2_start_array[] = {46};
-int light2_stop_array[] = {115};
+long light2_start_array[] = {32};
+long light2_stop_array[] = {115};
+
+// Ovejaperro
+int light3_cycle_lenght = 1;
+int light3_start_array[] = {18};
+int light3_stop_array[] = {110};
+
+// Ocas
+int light4_cycle_lenght = 1;
+int light4_start_array[] = {60};
+int light4_stop_array[] = {115};
+
+// Light 5 is backlight
+int light5_cycle_lenght = 1;
+int light5_start_array[] = {0};
+int light5_stop_array[] = {120};
+
 
 // Servos
+// Perroveja
 int servo_move_count_1 = 1;
-int servo_start_array_1[] = {46};
-int servo_stop_array_1[] = {56};
+int servo_start_array_1[] = {19};
+int servo_stop_array_1[] = {39};
 
+// Buey
 int servo_move_count_2 = 1;
 int servo_start_array_2[] = {33};
-int servo_stop_array_2[] = {37};
+int servo_stop_array_2[] = {45};
+
+//  
+int servo_move_count_3 = 0;
+int servo_start_array_3[] = {0};
+int servo_stop_array_3[] = {0};
+
+// 
+int servo_move_count_4 = 0;
+int servo_start_array_4[] = {0};
+int servo_stop_array_4[] = {0};
 
 /* Servo Control */
 int servo_move_type_1 = 1; // 0 : initial, final; 1: move continuous.
 int servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
+int servo_move_type_3 = 1; // 0 : initial, final; 1: move continuous.
+int servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle_1 = 20;
-int servo_default_angle_2 = 90;
+int servo_default_angle_1 = 1500;
+int servo_default_angle_2 = 1300;
+int servo_default_angle_3 = 1300;
+int servo_default_angle_4 = 1300;
 
-int min_servo_position_1 = 20;
-int max_servo_position_1 = 90;
+int min_servo_position_1 = 1300;
+int max_servo_position_1 = 1500;
 
-int min_servo_position_2 = 40;
-int max_servo_position_2 = 90;
+int min_servo_position_2 = 1300;
+int max_servo_position_2 = 1500;
+
+int min_servo_position_3 = 1300;
+int max_servo_position_3 = 1500;
+
+int min_servo_position_4 = 1300;
+int max_servo_position_4 = 1500;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
-unsigned int pos180_pwm = 480; // pwm 180°
+unsigned int pos180_pwm = 450; // pwm 180°
 
-long last_servo_update_1;
-long last_servo_update_2;
-long servo_update_period_1 = 10;
-long servo_update_period_2 = 20;
+unsigned long last_servo_update_1;
+unsigned long last_servo_update_2;
+unsigned long last_servo_update_3;
+unsigned long last_servo_update_4;
+
+unsigned long servo_update_period_1 = 5;
+unsigned long servo_update_period_2 = 5;
+unsigned long servo_update_period_3 = 5;
+unsigned long servo_update_period_4 = 5;
 
 int servo_step = 1;
 int servo_step_2 = 1;
+int servo_step_3 = 1;
+int servo_step_4 = 1;
 
 #elif DIORAMA_NUMBER == 2 // Se va la lancha
 
