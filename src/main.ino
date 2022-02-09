@@ -269,8 +269,8 @@ void loop()
   // Control stepper
 
   if (run_state && !stepper_state && stepper_time_index < stepper_cycle_count && 
-    ((elapsed > stepper_start_array[stepper_time_index]) && 
-    (elapsed < stepper_stop_array[stepper_time_index])))
+    ((elapsed_s > stepper_start_array[stepper_time_index]) && 
+    (elapsed_s < stepper_stop_array[stepper_time_index])))
   {
     stepper_state = true;
     stepper_running = true;
@@ -281,29 +281,43 @@ void loop()
     Serial.println(F("Move Stepper"));
   }
 
-  if (stepper_running)
+  if (stepper_running) // stepper is running
   {
-    if (stepper_direction)
+    if (stepper_direction) // CW direction 
     {
       if (stepCounter < steps_cw)
       {
         oneCycleCW();
+        Serial.print(stepCounter);
         stepCounter++;
       } 
       else
       {
         stepCounter = 0;
         stepper_direction = !stepper_direction;
+        Serial.println("");       
         Serial.print("Change stepper Direction ");
         Serial.println(stepper_direction);        
       }
     }
-    else if (stepCounter < steps_ccw)
-    {
-      oneCycleCCW();
-      stepCounter++;
+    else   {
+      if (stepCounter < steps_ccw)
+      {
+        oneCycleCCW();
+        Serial.print(stepCounter);
+        stepCounter++;
+      }   
+      else
+      {
+        stepCounter = 0;
+        stepper_direction = !stepper_direction;
+        // Serial.println("reset stepper");
+        Serial.println("");       
+        Serial.print("Change stepper Direction ");
+        Serial.println(stepper_direction);
+      }
     }
-    else if (stepper_stop_flag) {
+    if (stepper_stop_flag) {
       
       stepper_state = false;
       stepper_running = false;      
@@ -313,20 +327,13 @@ void loop()
       Serial.print("Counter: ");
       Serial.println(stepCounter);   
       stepCounter = 0;     
-    }    
-    else
-    {
-      stepCounter = 0;
-      stepper_direction = !stepper_direction;
-      // Serial.println("reset stepper");
-      Serial.print("Change stepper Direction ");
-      Serial.println(stepper_direction);
-    }
+    } 
+
   }
 
   // flag stop stepper
 
-  if (run_state && stepper_state && (stepper_time_index < stepper_cycle_count) && (elapsed > stepper_stop_array[stepper_time_index]))
+  if (run_state && stepper_state && (stepper_time_index < stepper_cycle_count) && (elapsed_s > stepper_stop_array[stepper_time_index]))
   {
     //stepper_state = false ;
     stepper_stop_flag = true ; 
