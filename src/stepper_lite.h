@@ -32,40 +32,95 @@ void stepperOff()
 
 void oneCycleCW() // ~ 8 steps?
 {
+  byte stepdelay = 8 ;
   writeStep(1, 0, 0, 0);
-  delay(5);
+  delay(stepdelay);
   writeStep(1, 1, 0, 0);
-  delay(5);
+  delay(stepdelay);
   writeStep(0, 1, 0, 0);
-  delay(5);
+  delay(stepdelay);
   writeStep(0, 1, 1, 0);
-  delay(5);
+  delay(stepdelay);
   writeStep(0, 0, 1, 0);
-  delay(5);
+  delay(stepdelay);
   writeStep(0, 0, 1, 1);
-  delay(5);
+  delay(stepdelay);
   writeStep(0, 0, 0, 1);
-  delay(5);
+  delay(stepdelay);
   writeStep(1, 0, 0, 1);
-  delay(5);
+  delay(stepdelay);
 }
 
 void oneCycleCCW() // ~ 8 steps?
 {
+  byte stepdelay = 8 ;
   writeStep(1, 0, 0, 1);
-  delay(5);
+  delay(stepdelay);
   writeStep(0, 0, 0, 1);
-  delay(5);
+  delay(stepdelay);
   writeStep(0, 0, 1, 1);
-  delay(5);
+  delay(stepdelay);
   writeStep(0, 0, 1, 0);
-  delay(5);
+  delay(stepdelay);
   writeStep(0, 1, 1, 0);
-  delay(5);
+  delay(stepdelay);
   writeStep(0, 1, 0, 0);
-  delay(5);
+  delay(stepdelay);
   writeStep(1, 1, 0, 0);
-  delay(5);
+  delay(stepdelay);
   writeStep(1, 0, 0, 0);
-  delay(5);
+  delay(stepdelay);
+}
+
+
+void asyncStep (int step) {
+switch (step)
+{
+case 0:
+  /* code */
+  writeStep(1, 0, 0, 0);
+  break;
+case 1:
+  /* code */
+  writeStep(1, 1, 0, 0);
+  break;
+case 2:
+  /* code */
+  writeStep(0, 1, 0, 0);
+
+  break;
+case 3:
+  /* code */
+  writeStep(0, 1, 1, 0);
+
+  break;
+case 4:
+  /* code */
+  writeStep(0, 0, 1, 0);
+
+  break;
+case 5:
+  /* code */
+  writeStep(0, 0, 1, 1);
+
+  break;
+case 6:
+  /* code */
+  writeStep(0, 0, 0, 1);
+
+  break;
+case 7:
+  /* code */
+  writeStep(1, 0, 0, 1);
+
+  break;              
+  
+  
+
+default:
+  break;
+}
+
+
+  
 }
