@@ -31,7 +31,7 @@
 #include <SimpleTimer.h>
 #endif
 
-#define FW_VERSION 2
+#define FW_VERSION 2.1
 
 #define DISABLE_SD_MP3
 
