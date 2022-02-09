@@ -351,7 +351,7 @@ void parse_menu(byte key_command)
  else if (key_command == 'o')
   {
     set_servo_us(PCA2_PIN_SERVO_3, min_servo_position_3);
-    Serial.println("Servo at min position");
+    Serial.println("Servo 3 at min position");
   }
   else if (key_command == 'O')
   {
@@ -361,12 +361,12 @@ void parse_menu(byte key_command)
   else if (key_command == 'p')
   {
     set_servo_us(PCA2_PIN_SERVO_4, min_servo_position_4);
-    Serial.println("Servo 2 at min position");
+    Serial.println("Servo 4 at min position");
   }
   else if (key_command == 'P')
   {
     set_servo_us(PCA2_PIN_SERVO_4, max_servo_position_4);
-    Serial.println("Servo 2 at max position");
+    Serial.println("Servo 4 at max position");
   }
 
   else if (key_command == 'C')
