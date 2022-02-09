@@ -12,7 +12,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define DIORAMA_NUMBER 6
+#define DIORAMA_NUMBER 4
 
 // Individual Settings for each Diorama
 #if   DIORAMA_NUMBER == 1 // El establo
@@ -338,12 +338,12 @@ int servo_step_4 = 1;
 #elif DIORAMA_NUMBER == 4 // Cucu
 
 
-long max_playtime = 90; // 
+long max_playtime = 105; // 
 
 // steppers
-int stepper_cycle_count = 1;
-long stepper_start_array[] = {20};
-long stepper_stop_array[] =  {40};
+int stepper_cycle_count = 0;
+long stepper_start_array[] = {0};
+long stepper_stop_array[] =  {0};
 
 int steps_cw;
 int steps_ccw;
@@ -352,34 +352,34 @@ int steps_ccw;
 int ramp_time_divisor = 5; 
 int ramp_pwm_step = 10;  
 
-//  
+//  buho
 int light1_cycle_lenght = 1;
-long light1_start_array[] = {5};
-long light1_stop_array[] = {118};
+long light1_start_array[] = {12};
+long light1_stop_array[] = {80};
 
-// 
+// conejito 
 int light2_cycle_lenght = 1;
-long light2_start_array[] = {32};
-long light2_stop_array[] = {115};
+long light2_start_array[] = {24};
+long light2_stop_array[] = {75};
 
-// 
+// ciervos
 int light3_cycle_lenght = 1;
-int light3_start_array[] = {18};
-int light3_stop_array[] = {110};
+int light3_start_array[] = {44};
+int light3_stop_array[] = {70};
 
-// 
+// Cucu
 int light4_cycle_lenght = 1;
-int light4_start_array[] = {60};
-int light4_stop_array[] = {115};
+int light4_start_array[] = {2};
+int light4_stop_array[] = {86};
 
 // Light 5 is backlight
 int light5_cycle_lenght = 1;
 int light5_start_array[] = {0};
-int light5_stop_array[] = {120};
+int light5_stop_array[] = {86};
 
 
 // Servos
-// 
+// ciervo
 int servo_move_count_1 = 1;
 int servo_start_array_1[] = {19};
 int servo_stop_array_1[] = {39};
@@ -389,7 +389,7 @@ int servo_move_count_2 = 1;
 int servo_start_array_2[] = {33};
 int servo_stop_array_2[] = {45};
 
-//  
+//  cucu
 int servo_move_count_3 = 0;
 int servo_start_array_3[] = {0};
 int servo_stop_array_3[] = {0};
