@@ -52,7 +52,7 @@ byte PCA2_pin_servo_1 = 8 ;
 byte PCA2_pin_servo_2 = 9 ;
 byte PCA2_pin_servo_3 = 10 ;
 byte PCA2_pin_servo_4 = 11 ;
-
+byte PCA2_pin_servo_5 = 12 ;
 
 #define NUMBER_OF_STEPS_PER_REV 512
 
