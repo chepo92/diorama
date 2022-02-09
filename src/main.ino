@@ -288,7 +288,7 @@ void loop()
       if (stepCounter < steps_cw)
       {
         oneCycleCW();
-        Serial.print(stepCounter);
+        //Serial.print(stepCounter);
         stepCounter++;
       } 
       else
@@ -304,7 +304,7 @@ void loop()
       if (stepCounter < steps_ccw)
       {
         oneCycleCCW();
-        Serial.print(stepCounter);
+        //Serial.print(stepCounter);
         stepCounter++;
       }   
       else
