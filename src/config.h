@@ -12,7 +12,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define DIORAMA_NUMBER 4
+#define DIORAMA_NUMBER 2
 
 // Individual Settings for each Diorama
 #if   DIORAMA_NUMBER == 1 // El establo
@@ -24,8 +24,8 @@ int stepper_cycle_count = 1;
 int stepper_start_array[] = {61};
 int stepper_stop_array[] = {94};
 
-int steps_cw = 100*20; 
-int steps_ccw = 100*20 ;
+int steps_cw  = 10000; 
+int steps_ccw = 10000 ;
 
 // LED lights
 int ramp_time_divisor = 5; 
@@ -131,8 +131,8 @@ int stepper_cycle_count = 1;
 long stepper_start_array[] = {19};
 long stepper_stop_array[] = {48};
 
-int steps_cw = 100*20; 
-int steps_ccw = 100*20 ; 
+int steps_cw  = 2000; 
+int steps_ccw = 2000 ; 
 
 // LED lights
 
