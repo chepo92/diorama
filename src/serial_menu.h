@@ -335,7 +335,7 @@ void parse_menu(byte key_command)
   }
   else if (key_command == 'U')
   {
-    set_servo_us(PCA2_PIN_SERVO_1, max_servo_position_2);
+    set_servo_us(PCA2_PIN_SERVO_1, max_servo_position_1);
     Serial.println("Servo at max position");
   }
   else if (key_command == 'i')
