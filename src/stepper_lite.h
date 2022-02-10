@@ -72,7 +72,11 @@ void oneCycleCCW() // ~ 8 steps?
   delay(stepdelay);
 }
 
-
+/**
+ * @brief 
+ * 
+ * @param step 0-7
+ */
 void asyncStep (int step) {
 switch (step)
 {
@@ -115,8 +119,6 @@ case 7:
 
   break;              
   
-  
-
 default:
   break;
 }

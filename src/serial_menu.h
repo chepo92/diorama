@@ -387,8 +387,8 @@ void parse_menu(byte key_command)
   {
     Serial.println("CW and CCW");
     stepper_running = true;  
-    steps_cw = 100;
-    steps_ccw = 100;    
+    steps_cw = 100*10;
+    steps_ccw = 100*10;    
   }  
   else if (key_command == 'X')
   {

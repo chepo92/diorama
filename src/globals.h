@@ -106,6 +106,8 @@ boolean stepper_state;
 boolean stepper_running;
 boolean stepper_direction;
 boolean stepper_stop_flag ; 
+int8_t stepper_step; 
+int16_t stepper_step_net_counter; 
 
 boolean servo_state_1;
 boolean servo_state_2;
@@ -117,7 +119,9 @@ boolean servo_angle_active_2;
 boolean servo_angle_active_3;
 boolean servo_angle_active_4;
 
-int stepper_time_index;
+byte stepper_time_cycle_index;
+unsigned long last_step_time  ; 
+unsigned long step_period = 1 ; 
 
 int light1_time_cycle_index;
 int light2_time_cycle_index;
