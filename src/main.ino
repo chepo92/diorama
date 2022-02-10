@@ -317,30 +317,31 @@ void loop()
         Serial.println(stepper_direction);
       }
     }
-    if (stepper_stop_flag) {
-      
-      stepper_state = false;
-      stepper_running = false;      
-      stepperOff(); 
-      // myStepper.step(-stepsPerRevolution);
-      Serial.println(F("Stop stepper"));
-      Serial.print("Counter: ");
-      Serial.println(stepCounter);   
-      stepCounter = 0;     
-    } 
-
   }
 
   // flag stop stepper
-
   if (run_state && stepper_state && (stepper_time_index < stepper_cycle_count) && (elapsed_s > stepper_stop_array[stepper_time_index]))
   {
+    Serial.println("Stop stepper flag");
     //stepper_state = false ;
     stepper_stop_flag = true ; 
     stepper_time_index++;
-    Serial.println("Stop stepper flag");
-
   }
+
+  // Stop stepper 
+  if (run_state && stepper_state && stepper_stop_flag) {
+    
+    stepper_state = false;
+    stepper_running = false; 
+    stepper_stop_flag = false;      
+    
+    stepperOff(); 
+    // myStepper.step(-stepsPerRevolution);
+    Serial.println(F("Stop stepper"));
+    Serial.print("Counter: ");
+    Serial.println(stepCounter);   
+    stepCounter = 0;     
+  }   
 
   // Serial Commands
   if (Serial.available())
