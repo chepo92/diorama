@@ -218,7 +218,7 @@ void loop()
 
     reset_light_indexes(); 
 
-    stepper_time_index = 0 ; 
+    stepper_time_cycle_index = 0 ; 
     stepper_stop_flag = false ; 
     // Reset lights and servos  
     reset_all(); 
@@ -268,78 +268,98 @@ void loop()
 
   // Control stepper
 
-  if (run_state && !stepper_state && stepper_time_index < stepper_cycle_count && 
-    ((elapsed_s > stepper_start_array[stepper_time_index]) && 
-    (elapsed_s < stepper_stop_array[stepper_time_index])))
+  if (run_state && !stepper_state && stepper_time_cycle_index < stepper_cycle_count && 
+    ((elapsed_s > stepper_start_array[stepper_time_cycle_index]) && 
+    (elapsed_s < stepper_stop_array[stepper_time_cycle_index])))
   {
     stepper_state = true;
     stepper_running = true;
-
-    steps_cw = 100 ; 
-    steps_ccw = 100 ; 
     // myStepper.step(stepsPerRevolution);
     Serial.println(F("Move Stepper"));
   }
 
   if (stepper_running) // stepper is running
   {
-    if (stepper_direction) // CW direction 
+    unsigned long current_step_time = millis() ;
+    if (current_step_time - last_step_time > step_period )
     {
-      if (stepCounter < steps_cw)
+      last_step_time = current_step_time ;   
+      if (stepper_direction) // CW direction 
       {
-        oneCycleCW();
-        //Serial.print(stepCounter);
-        stepCounter++;
-      } 
-      else
-      {
-        stepCounter = 0;
-        stepper_direction = !stepper_direction;
-        Serial.println("");       
-        Serial.print("Change stepper Direction ");
-        Serial.println(stepper_direction);        
+        if (stepCounter < steps_cw)
+        {
+          //oneCycleCW();
+          asyncStep(stepper_step);
+          stepper_step++; 
+          if (stepper_step > 7 )
+          {
+            stepper_step = 0 ; 
+          }
+          //Serial.print(stepper_step);
+          
+          //Serial.print(stepCounter);
+          stepCounter++;
+          stepper_step_net_counter++ ; 
+        } 
+        else
+        {
+          stepCounter = 0;
+          stepper_direction = !stepper_direction;
+          Serial.println("");       
+          Serial.print("Change stepper Direction ");
+          Serial.println(stepper_direction);        
+        }
       }
-    }
-    else   {
-      if (stepCounter < steps_ccw)
-      {
-        oneCycleCCW();
-        //Serial.print(stepCounter);
-        stepCounter++;
-      }   
-      else
-      {
-        stepCounter = 0;
-        stepper_direction = !stepper_direction;
-        // Serial.println("reset stepper");
-        Serial.println("");       
-        Serial.print("Change stepper Direction ");
-        Serial.println(stepper_direction);
+      else   {
+        if (stepCounter < steps_ccw)
+        {
+          //oneCycleCCW();
+          asyncStep(stepper_step);
+          stepper_step--; 
+          if (stepper_step < 0 )
+          {
+            stepper_step = 7 ; 
+          }
+          //Serial.print(stepper_step);
+          //Serial.print(stepCounter);
+          stepCounter++;
+          stepper_step_net_counter--;
+        }   
+        else
+        {
+          stepCounter = 0;
+          stepper_direction = !stepper_direction;
+          // Serial.println("reset stepper");
+          Serial.println("");       
+          Serial.print("Change stepper Direction ");
+          Serial.println(stepper_direction);
+        }
       }
-    }
+      
+    }    
   }
 
   // flag stop stepper
-  if (run_state && stepper_state && (stepper_time_index < stepper_cycle_count) && (elapsed_s > stepper_stop_array[stepper_time_index]))
+  if (run_state && stepper_state && (stepper_time_cycle_index < stepper_cycle_count) && (elapsed_s > stepper_stop_array[stepper_time_cycle_index]))
   {
     Serial.println("Stop stepper flag");
     //stepper_state = false ;
     stepper_stop_flag = true ; 
-    stepper_time_index++;
+    stepper_time_cycle_index++;
   }
 
   // Stop stepper 
-  if (run_state && stepper_state && stepper_stop_flag) {
+  if (run_state && stepper_state && stepper_stop_flag && stepper_step_net_counter==0 ) {
     
     stepper_state = false;
     stepper_running = false; 
     stepper_stop_flag = false;      
-    
+
     stepperOff(); 
     // myStepper.step(-stepsPerRevolution);
     Serial.println(F("Stop stepper"));
-    Serial.print("Counter: ");
-    Serial.println(stepCounter);   
+    //Serial.print("Counter: ");
+    //Serial.println(stepCounter);   
     stepCounter = 0;     
   }   
 
