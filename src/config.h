@@ -12,7 +12,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define DIORAMA_NUMBER 6
+#define DIORAMA_NUMBER 4
 
 // Individual Settings for each Diorama
 #if   DIORAMA_NUMBER == 1 // El establo
@@ -337,16 +337,15 @@ int servo_step_4 = 1;
 
 #elif DIORAMA_NUMBER == 4 // Cucu
 
-
 long max_playtime = 105; // 
 
 // steppers
-int stepper_cycle_count = 0;
-long stepper_start_array[] = {0};
-long stepper_stop_array[] =  {0};
+int stepper_cycle_count = 1;
+long stepper_start_array[] = {3};
+long stepper_stop_array[] =  {100};
 
-int steps_cw = 100*20; 
-int steps_ccw = 100*20 ; 
+int steps_cw = 100*15; 
+int steps_ccw = 100*15 ; 
 
 // LED lights
 int ramp_time_divisor = 5; 
@@ -380,21 +379,37 @@ int light5_stop_array[] = {86};
 
 // Servos
 // ciervo
-int servo_move_count_1 = 1;
-int servo_start_array_1[] = {19};
-int servo_stop_array_1[] = {39};
+int min_servo_position_1 = 500;
+int max_servo_position_1 = 1500;
+int servo_default_position_1 = 1000;
 
-// 
+int servo_move_count_1 = 1;
+int servo_start_array_1[] = {45};
+int servo_stop_array_1[] = {67};
+
+// conejo
+int min_servo_position_2 = 1300;
+int max_servo_position_2 = 1800;
+int servo_default_position_2 = 1300;
+
 int servo_move_count_2 = 1;
-int servo_start_array_2[] = {33};
-int servo_stop_array_2[] = {45};
+int servo_start_array_2[] = {25};
+int servo_stop_array_2[] = {33};
 
 //  cucu
-int servo_move_count_3 = 0;
-int servo_start_array_3[] = {0};
-int servo_stop_array_3[] = {0};
+int min_servo_position_3 = 1200;
+int max_servo_position_3 = 1700;
+int servo_default_position_3 = 1300;
+
+int servo_move_count_3 = 2;
+int servo_start_array_3[] = {13, 34};
+int servo_stop_array_3[] = {23, 43};
 
 // 
+int min_servo_position_4 = 1300;
+int max_servo_position_4 = 1500;
+int servo_default_position_4 = 1300;
+
 int servo_move_count_4 = 0;
 int servo_start_array_4[] = {0};
 int servo_stop_array_4[] = {0};
@@ -406,23 +421,6 @@ int servo_move_type_3 = 1; // 0 : initial, final; 1: move continuous.
 int servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
-
-int servo_default_position_1 = 1500;
-int servo_default_position_2 = 1300;
-int servo_default_position_3 = 1300;
-int servo_default_position_4 = 1300;
-
-int min_servo_position_1 = 1300;
-int max_servo_position_1 = 1500;
-
-int min_servo_position_2 = 1300;
-int max_servo_position_2 = 1500;
-
-int min_servo_position_3 = 1300;
-int max_servo_position_3 = 1500;
-
-int min_servo_position_4 = 1300;
-int max_servo_position_4 = 1500;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 450; // pwm 180°
