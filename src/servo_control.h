@@ -28,6 +28,10 @@
 
     void set_servo_us(uint8_t n_servo, int microsec)
     {
+        /**
+         * @brief min value ~ 400 us, max value 2200 us, center: 1300
+         * 
+         */
         PCA2.writeMicroseconds(n_servo, microsec);
     }
 
@@ -51,14 +55,14 @@
 
     void servo_defaults()
     {
-        set_servo_us(PCA2_PIN_SERVO_1, servo_default_angle_1);
-        set_servo_us(PCA2_PIN_SERVO_2, servo_default_angle_2);
-        set_servo_us(PCA2_PIN_SERVO_3, servo_default_angle_3);
-        set_servo_us(PCA2_PIN_SERVO_4, servo_default_angle_4);
-        servo_current_position_1 = servo_default_angle_1;
-        servo_current_position_2 = servo_default_angle_2;
-        servo_current_position_3 = servo_default_angle_3;        
-        servo_current_position_4 = servo_default_angle_4;
+        set_servo_us(PCA2_PIN_SERVO_1, servo_default_position_1);
+        set_servo_us(PCA2_PIN_SERVO_2, servo_default_position_2);
+        set_servo_us(PCA2_PIN_SERVO_3, servo_default_position_3);
+        set_servo_us(PCA2_PIN_SERVO_4, servo_default_position_4);
+        servo_current_position_1 = servo_default_position_1;
+        servo_current_position_2 = servo_default_position_2;
+        servo_current_position_3 = servo_default_position_3;        
+        servo_current_position_4 = servo_default_position_4;
 
     }
 

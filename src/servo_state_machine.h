@@ -30,7 +30,7 @@ void checkServoStop_1(uint32_t elapsed_s) {
     // Do stop
     Serial.println("Servo 1 Default");
     servo_state_1 = false;
-    set_servo_angle(PCA2_PIN_SERVO_1, servo_default_angle_1);
+    set_servo_angle(PCA2_PIN_SERVO_1, servo_default_position_1);
 
     servo_move_index_1++;
 
@@ -60,7 +60,7 @@ void checkServoStop_2(uint32_t elapsed_s) {
     // Do stop
     Serial.println("Servo 2 Default");
     servo_state_2 = false;
-    set_servo_angle(PCA2_PIN_SERVO_2, servo_default_angle_2);
+    set_servo_angle(PCA2_PIN_SERVO_2, servo_default_position_2);
 
     servo_move_index_2++;
      
@@ -90,7 +90,7 @@ void checkServoStop_3(uint32_t elapsed_s) {
     // Do stop
     Serial.println("Servo 3 Off");
     servo_state_3 = false;
-    set_servo_angle(PCA2_PIN_SERVO_3, servo_default_angle_3);
+    set_servo_angle(PCA2_PIN_SERVO_3, servo_default_position_3);
 
     servo_move_index_3++;
      
@@ -120,7 +120,7 @@ void checkServoStop_4(uint32_t elapsed_s) {
     // Do stop
     Serial.println("Servo 4 Off");
     servo_state_4 = false;
-    set_servo_angle(PCA2_PIN_SERVO_4, servo_default_angle_4);
+    set_servo_angle(PCA2_PIN_SERVO_4, servo_default_position_4);
 
     servo_move_index_4++;
      
@@ -169,15 +169,15 @@ void updateServoPosition_1(uint32_t elapsed_s) {
         //Serial.println(servo_current_position_1) ;
         set_servo_us(PCA2_pin_servo_1, servo_current_position_1);
         //set_servo_angle(PCA2_PIN_SERVO_1, servo_current_position_1);
-        servo_current_position_1 = servo_current_position_1 + servo_step;
+        servo_current_position_1 = servo_current_position_1 + servo_step_1;
 
         if (servo_current_position_1 <= min_servo_position_1)
         {
-          servo_step = abs(servo_step);
+          servo_step_1 = abs(servo_step_1);
         }
         if (servo_current_position_1 >= max_servo_position_1)
         {
-          servo_step = -abs(servo_step);
+          servo_step_1 = -abs(servo_step_1);
         }
       }
       break;
