@@ -12,7 +12,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define DIORAMA_NUMBER 2
+#define DIORAMA_NUMBER 4
 
 // Individual Settings for each Diorama
 #if   DIORAMA_NUMBER == 1 // El establo
@@ -20,12 +20,12 @@
 int max_playtime = 125; // 1:35 (60+35)
 
 // steppers
-int stepper_cycle_count = 1;
-int stepper_start_array[] = {61};
-int stepper_stop_array[] = {94};
+int stepper1_cycle_count = 1;
+int stepper1_start_array[] = {61};
+int stepper1_stop_array[] = {94};
 
-int steps_cw  = 10000; 
-int steps_ccw = 10000 ;
+int stepper1_steps_cw  = 10000; 
+int stepper1_steps_ccw = 10000 ;
 
 // LED lights
 int ramp_time_divisor = 5; 
@@ -127,12 +127,12 @@ int servo_step_4 = 1;
 long max_playtime = 120; // 1:50 = 60+50
 
 // steppers
-int stepper_cycle_count = 1;
-long stepper_start_array[] = {19};
-long stepper_stop_array[] = {48};
+int stepper1_cycle_count = 1;
+long stepper1_start_array[] = {19};
+long stepper1_stop_array[] = {48};
 
-int steps_cw  = 2000; 
-int steps_ccw = 2000 ; 
+int stepper1_steps_cw  = 2000; 
+int stepper1_steps_ccw = 2000 ; 
 
 // LED lights
 
@@ -233,12 +233,12 @@ int servo_step_4 = 1;
 long max_playtime = 100; // 
 
 // steppers
-int stepper_cycle_count = 0;
-long stepper_start_array[] = {0};
-long stepper_stop_array[] = {0};
+int stepper1_cycle_count = 0;
+long stepper1_start_array[] = {0};
+long stepper1_stop_array[] = {0};
 
-int steps_cw = 100*20; 
-int steps_ccw = 100*20 ; 
+int stepper1_steps_cw = 100*20; 
+int stepper1_steps_ccw = 100*20 ; 
 
 // LED lights
 
@@ -340,12 +340,19 @@ int servo_step_4 = 1;
 long max_playtime = 105; // 
 
 // steppers
-int stepper_cycle_count = 1;
-long stepper_start_array[] = {3};
-long stepper_stop_array[] =  {100};
+int  stepper1_cycle_count   =      1;
+long stepper1_start_array[] =    {3};
+long stepper1_stop_array[]  =  {100};
 
-int steps_cw = 100*15; 
-int steps_ccw = 100*15 ; 
+int stepper1_steps_cw  = 100*15; 
+int stepper1_steps_ccw = 100*15 ; 
+
+int  stepper2_cycle_count   =      1;
+long stepper2_start_array[] =    {3};
+long stepper2_stop_array[]  =  {100};
+
+int stepper2_steps_cw  = 100*15; 
+int stepper2_steps_ccw = 100*15 ; 
 
 // LED lights
 int ramp_time_divisor = 5; 
@@ -447,12 +454,12 @@ int max_playtime = 100;
 
 // steppers
 // Peces
-int stepper_cycle_count = 2;
-int stepper_start_array[] = {17, 45};
-int stepper_stop_array[] =  {30, 59};
+int stepper1_cycle_count = 2;
+int stepper1_start_array[] = {17, 45};
+int stepper1_stop_array[] =  {30, 59};
 
-int steps_cw = 100*20; 
-int steps_ccw = 100*20 ; 
+int stepper1_steps_cw = 100*20; 
+int stepper1_steps_ccw = 100*20 ; 
 
 // LED lights
 
@@ -554,12 +561,12 @@ int servo_step_4 = 1;
 long max_playtime = 150; // 120+30
 
 // steppers
-int stepper_cycle_count = 1;
-long stepper_start_array[] = {45}; //45
-long stepper_stop_array[] = {64};  // 64
+int stepper1_cycle_count = 1;
+long stepper1_start_array[] = {45}; //45
+long stepper1_stop_array[] = {64};  // 64
 
-int steps_cw  = 9000; 
-int steps_ccw = 9000 ; 
+int stepper1_steps_cw  = 9000; 
+int stepper1_steps_ccw = 9000 ; 
 
 // LED lights
 int ramp_time_divisor = 5; 

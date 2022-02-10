@@ -268,9 +268,9 @@ void loop()
 
   // Control stepper
 
-  if (run_state && !stepper_state && stepper_time_cycle_index < stepper_cycle_count && 
-    ((elapsed_s > stepper_start_array[stepper_time_cycle_index]) && 
-    (elapsed_s < stepper_stop_array[stepper_time_cycle_index])))
+  if (run_state && !stepper_state && stepper_time_cycle_index < stepper1_cycle_count && 
+    ((elapsed_s > stepper1_start_array[stepper_time_cycle_index]) && 
+    (elapsed_s < stepper1_stop_array[stepper_time_cycle_index])))
   {
     stepper_state = true;
     stepper_running = true;
@@ -286,7 +286,7 @@ void loop()
       last_step_time = current_step_time ;   
       if (stepper_direction) // CW direction 
       {
-        if (stepCounter < steps_cw)
+        if (stepCounter < stepper1_steps_cw)
         {
           //oneCycleCW();
           asyncStep(stepper_step);
@@ -311,7 +311,7 @@ void loop()
         }
       }
       else   {
-        if (stepCounter < steps_ccw)
+        if (stepCounter < stepper1_steps_ccw)
         {
           //oneCycleCCW();
           asyncStep(stepper_step);
@@ -340,7 +340,7 @@ void loop()
   }
 
   // flag stop stepper
-  if (run_state && stepper_state && (stepper_time_cycle_index < stepper_cycle_count) && (elapsed_s > stepper_stop_array[stepper_time_cycle_index]))
+  if (run_state && stepper_state && (stepper_time_cycle_index < stepper1_cycle_count) && (elapsed_s > stepper1_stop_array[stepper_time_cycle_index]))
   {
     Serial.println("Stop stepper flag");
     //stepper_state = false ;
