@@ -12,7 +12,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define DIORAMA_NUMBER 4
+#define DIORAMA_NUMBER 5
 
 // Individual Settings for each Diorama
 #if   DIORAMA_NUMBER == 1 // El establo
@@ -86,10 +86,10 @@ int servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle_1 = 1500;
-int servo_default_angle_2 = 1300;
-int servo_default_angle_3 = 1300;
-int servo_default_angle_4 = 1300;
+int servo_default_position_1 = 1500;
+int servo_default_position_2 = 1300;
+int servo_default_position_3 = 1300;
+int servo_default_position_4 = 1300;
 
 int min_servo_position_1 = 1300;
 int max_servo_position_1 = 1500;
@@ -116,7 +116,7 @@ unsigned long servo_update_period_2 = 5;
 unsigned long servo_update_period_3 = 5;
 unsigned long servo_update_period_4 = 5;
 
-int servo_step = 1;
+int servo_step_1 = 1;
 int servo_step_2 = 1;
 int servo_step_3 = 1;
 int servo_step_4 = 1;
@@ -193,10 +193,10 @@ int servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle_1 = 1500;
-int servo_default_angle_2 = 1300;
-int servo_default_angle_3 = 1300;
-int servo_default_angle_4 = 1300;
+int servo_default_position_1 = 1500;
+int servo_default_position_2 = 1300;
+int servo_default_position_3 = 1300;
+int servo_default_position_4 = 1300;
 
 int min_servo_position_1 = 1300;
 int max_servo_position_1 = 1500;
@@ -223,7 +223,7 @@ unsigned long servo_update_period_2 = 5;
 unsigned long servo_update_period_3 = 5;
 unsigned long servo_update_period_4 = 5;
 
-int servo_step = 1;
+int servo_step_1 = 1;
 int servo_step_2 = 1;
 int servo_step_3 = 1;
 int servo_step_4 = 1;
@@ -300,10 +300,10 @@ int servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle_1 = 1500;
-int servo_default_angle_2 = 1300;
-int servo_default_angle_3 = 1300;
-int servo_default_angle_4 = 1300;
+int servo_default_position_1 = 1500;
+int servo_default_position_2 = 1300;
+int servo_default_position_3 = 1300;
+int servo_default_position_4 = 1300;
 
 int min_servo_position_1 = 1300;
 int max_servo_position_1 = 1500;
@@ -330,7 +330,7 @@ unsigned long servo_update_period_2 = 5;
 unsigned long servo_update_period_3 = 5;
 unsigned long servo_update_period_4 = 5;
 
-int servo_step = 1;
+int servo_step_1 = 1;
 int servo_step_2 = 1;
 int servo_step_3 = 1;
 int servo_step_4 = 1;
@@ -407,10 +407,10 @@ int servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle_1 = 1500;
-int servo_default_angle_2 = 1300;
-int servo_default_angle_3 = 1300;
-int servo_default_angle_4 = 1300;
+int servo_default_position_1 = 1500;
+int servo_default_position_2 = 1300;
+int servo_default_position_3 = 1300;
+int servo_default_position_4 = 1300;
 
 int min_servo_position_1 = 1300;
 int max_servo_position_1 = 1500;
@@ -437,7 +437,7 @@ unsigned long servo_update_period_2 = 5;
 unsigned long servo_update_period_3 = 5;
 unsigned long servo_update_period_4 = 5;
 
-int servo_step = 1;
+int servo_step_1 = 1;
 int servo_step_2 = 1;
 int servo_step_3 = 1;
 int servo_step_4 = 1;
@@ -449,9 +449,9 @@ int max_playtime = 100;
 
 // steppers
 // Peces
-int stepper_cycle_count = 1;
-int stepper_start_array[] = {20};
-int stepper_stop_array[] =  {40};
+int stepper_cycle_count = 2;
+int stepper_start_array[] = {17, 45};
+int stepper_stop_array[] =  {30, 59};
 
 int steps_cw;
 int steps_ccw;
@@ -474,7 +474,7 @@ int light2_stop_array[] = {15, 44};
 // Madre
 int light3_cycle_lenght = 1;
 int light3_start_array[] = {16};
-int light3_stop_array[] = {99};
+int light3_stop_array[] = {98};
 
 // Pajarito
 int light4_cycle_lenght = 1;
@@ -488,22 +488,39 @@ int light5_stop_array[] = {99};
 
 
 // Servos
+
 // Mama
+int min_servo_position_1 = 2200;
+int max_servo_position_1 = 2500;
+int servo_default_position_1 = 2500;
+
 int servo_move_count_1 = 3;
 int servo_start_array_1[] = {17, 45, 75};
-int servo_stop_array_1[] = {30, 59, 95};
+int servo_stop_array_1[] = {30, 59, 94};
 
 // Pajarito
-int servo_move_count_2 = 3;
-int servo_start_array_2[] = {5,33 , 62};
-int servo_stop_array_2[] = {15,44 , 73 };
+int min_servo_position_2 = 1900;
+int max_servo_position_2 = 2200;
+int servo_default_position_2 = 2200;
 
-// Llamas Izq
+int servo_move_count_2 = 3;
+int servo_start_array_2[] = {5, 33 , 62};
+int servo_stop_array_2[] = {15, 44 , 73 };
+
+// Llamas Der
+int min_servo_position_3 = 1800;
+int max_servo_position_3 = 2200;
+int servo_default_position_3 = 2200;
+
 int servo_move_count_3 = 2;
 int servo_start_array_3[] = {5, 33};
 int servo_stop_array_3[] = {15, 44};
 
-// Llamas Der
+// Llamas Izq
+int min_servo_position_4 =  400;
+int max_servo_position_4 = 700;
+int servo_default_position_4 = 400;
+
 int servo_move_count_4 = 2;
 int servo_start_array_4[] = {5 , 33};
 int servo_stop_array_4[] = {15, 44};
@@ -514,27 +531,7 @@ int servo_move_type_2 = 1; // 0 : initial, final; 1: move continuous.
 int servo_move_type_3 = 1; // 0 : initial, final; 1: move continuous.
 int servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
 
-
-
 int servo_angles[] = {0};
-
-int servo_default_angle_1 = 1300;
-int servo_default_angle_2 = 1300;
-int servo_default_angle_3 = 1300;
-int servo_default_angle_4 = 1300;
-
-
-int min_servo_position_1 = 1300;
-int max_servo_position_1 = 1500;
-
-int min_servo_position_2 = 1300;
-int max_servo_position_2 = 1500;
-
-int min_servo_position_3 = 1300;
-int max_servo_position_3 = 1500;
-
-int min_servo_position_4 = 1300;
-int max_servo_position_4 = 1500;
 
 unsigned int pos0_pwm = 100;   // pwm at 0°
 unsigned int pos180_pwm = 450; // pwm 180°
@@ -549,7 +546,7 @@ unsigned long servo_update_period_2 = 5;
 unsigned long servo_update_period_3 = 5;
 unsigned long servo_update_period_4 = 5;
 
-int servo_step = 1;
+int servo_step_1 = 1;
 int servo_step_2 = 1;
 int servo_step_3 = 1;
 int servo_step_4 = 1;
@@ -625,10 +622,10 @@ int servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_angle_1 = 1500;
-int servo_default_angle_2 = 1300;
-int servo_default_angle_3 = 1300;
-int servo_default_angle_4 = 1300;
+int servo_default_position_1 = 1500;
+int servo_default_position_2 = 1300;
+int servo_default_position_3 = 1300;
+int servo_default_position_4 = 1300;
 
 int min_servo_position_1 = 1000;
 int max_servo_position_1 = 1800;
@@ -655,7 +652,7 @@ unsigned long servo_update_period_2 = 5;
 unsigned long servo_update_period_3 = 5;
 unsigned long servo_update_period_4 = 5;
 
-int servo_step = 1;
+int servo_step_1 = 1;
 int servo_step_2 = 1;
 int servo_step_3 = 1;
 int servo_step_4 = 1;
