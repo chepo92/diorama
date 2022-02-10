@@ -289,20 +289,20 @@ void parse_menu(byte key_command)
     fade_out_led_3 = !fade_out_led_3;
     fade_out_led_4 = !fade_out_led_4;
     fade_out_led_5 = !fade_out_led_5;
-  }   
-  else if (key_command == 'w')
+  }
+  else if (key_command == 'q')
   {
     servo_angle_active_1 = !servo_angle_active_1;
-  }
-  else if (key_command == 'W')
+  }     
+  else if (key_command == 'Q')
   {
     servo_angle_active_2 = !servo_angle_active_2;
   }
-  else if (key_command == 'e')
+  else if (key_command == 'w')
   {
     servo_angle_active_3 = !servo_angle_active_3;
   }
-  else if (key_command == 'E')
+  else if (key_command == 'W')
   {
     servo_angle_active_4 = !servo_angle_active_4;
   }    
