@@ -21,11 +21,13 @@ int max_playtime = 125; // 1:35 (60+35)
 
 // steppers
 int stepper1_cycle_count = 1;
-int stepper1_start_array[] = {61};
-int stepper1_stop_array[] = {94};
+int stepper1_start_array[] = {61}; //  {1} ; //
+int stepper1_stop_array[] = {94}; //  {34} ;// 
 
-int stepper1_steps_cw  = 10000; 
-int stepper1_steps_ccw = 10000 ;
+int stepper1_steps_cw  = 20000; 
+int stepper1_steps_ccw = 20000 ;
+
+boolean stepper1_start_direction = 0 ; 
 
 // LED lights
 int ramp_time_divisor = 5; 
@@ -63,10 +65,19 @@ int servo_move_count_1 = 1;
 int servo_start_array_1[] = {19};
 int servo_stop_array_1[] = {39};
 
+int servo_default_position_1 = 1500;
+int min_servo_position_1 = 1300;
+int max_servo_position_1 = 1500;
+
+
 // Buey
 int servo_move_count_2 = 1;
 int servo_start_array_2[] = {33};
 int servo_stop_array_2[] = {45};
+
+int servo_default_position_2 = 1500;
+int min_servo_position_2 = 1300;
+int max_servo_position_2 = 1500;
 
 //  
 int servo_move_count_3 = 0;
@@ -86,16 +97,11 @@ int servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
 
 int servo_angles[] = {0};
 
-int servo_default_position_1 = 1500;
-int servo_default_position_2 = 1300;
+
+
 int servo_default_position_3 = 1300;
 int servo_default_position_4 = 1300;
 
-int min_servo_position_1 = 1300;
-int max_servo_position_1 = 1500;
-
-int min_servo_position_2 = 1300;
-int max_servo_position_2 = 1500;
 
 int min_servo_position_3 = 1300;
 int max_servo_position_3 = 1500;
@@ -233,14 +239,28 @@ int servo_step_4 = 1;
 long max_playtime = 100; // 
 
 // steppers
-int stepper1_cycle_count = 0;
-long stepper1_start_array[] = {0};
-long stepper1_stop_array[] = {0};
+// Caracol
+int stepper1_cycle_count =       1;
+long stepper1_start_array[] = {29};
+long stepper1_stop_array[] =  {65};
 
 int stepper1_steps_cw = 100*20; 
 int stepper1_steps_ccw = 100*20 ; 
 
-// LED lights
+boolean stepper1_start_direction = 0 ; 
+unsigned long step_period_1 = 10 ; 
+
+// Arbol   
+int  stepper2_cycle_count   =      1;
+long stepper2_start_array[] =    {12};
+long stepper2_stop_array[]  =    {84};
+
+int stepper2_steps_cw  = 100*100; 
+int stepper2_steps_ccw = 100*100; 
+
+boolean stepper2_start_direction = 0 ; 
+unsigned long step_period_2 = 3 ;
+
 
 // LED lights
 
@@ -340,19 +360,27 @@ int servo_step_4 = 1;
 long max_playtime = 105; // 
 
 // steppers
+// Pajaros
 int  stepper1_cycle_count   =      1;
 long stepper1_start_array[] =    {3};
-long stepper1_stop_array[]  =  {100};
+long stepper1_stop_array[]  =  {95};
 
 int stepper1_steps_cw  = 100*15; 
 int stepper1_steps_ccw = 100*15 ; 
 
-int  stepper2_cycle_count   =      1;
-long stepper2_start_array[] =    {3};
-long stepper2_stop_array[]  =  {100};
+boolean stepper1_start_direction = 0 ; 
+unsigned long step_period_1 = 1 ;
 
-int stepper2_steps_cw  = 100*15; 
-int stepper2_steps_ccw = 100*15 ; 
+// Conejo 
+int  stepper2_cycle_count   =      1;
+long stepper2_start_array[] =    {25};
+long stepper2_stop_array[]  =    {33};
+
+int stepper2_steps_cw  = 100*8; 
+int stepper2_steps_ccw = 100*8 ; 
+
+boolean stepper2_start_direction = 0 ; 
+unsigned long step_period_2 = 1 ;
 
 // LED lights
 int ramp_time_divisor = 5; 
@@ -386,9 +414,9 @@ int light5_stop_array[] = {86};
 
 // Servos
 // ciervo
-int min_servo_position_1 = 500;
-int max_servo_position_1 = 1500;
-int servo_default_position_1 = 1000;
+int min_servo_position_1 = 1200;
+int max_servo_position_1 = 1800;
+int servo_default_position_1 = 1200;
 
 int servo_move_count_1 = 1;
 int servo_start_array_1[] = {45};
@@ -403,10 +431,10 @@ int servo_move_count_2 = 1;
 int servo_start_array_2[] = {25};
 int servo_stop_array_2[] = {33};
 
-//  cucu
+//  cucu / buho 
 int min_servo_position_3 = 1200;
 int max_servo_position_3 = 1700;
-int servo_default_position_3 = 1300;
+int servo_default_position_3 = 1700;
 
 int servo_move_count_3 = 2;
 int servo_start_array_3[] = {13, 34};
@@ -460,6 +488,19 @@ int stepper1_stop_array[] =  {30, 59};
 
 int stepper1_steps_cw = 100*20; 
 int stepper1_steps_ccw = 100*20 ; 
+
+boolean stepper1_start_direction = 0 ; 
+unsigned long step_period_1 = 1 ; 
+
+int stepper2_cycle_count = 0;
+int stepper2_start_array[] = {0};
+int stepper2_stop_array[] =  {0};
+
+int stepper2_steps_cw = 0; 
+int stepper2_steps_ccw = 0 ; 
+
+boolean stepper2_start_direction = 0 ; 
+unsigned long step_period_2 = 1 ;
 
 // LED lights
 
@@ -515,7 +556,7 @@ int servo_stop_array_2[] = {15, 44 , 73 };
 // Llamas Der
 int min_servo_position_3 = 1800;
 int max_servo_position_3 = 2200;
-int servo_default_position_3 = 2200;
+int servo_default_position_3 = 1800;
 
 int servo_move_count_3 = 2;
 int servo_start_array_3[] = {5, 33};
@@ -567,6 +608,19 @@ long stepper1_stop_array[] = {64};  // 64
 
 int stepper1_steps_cw  = 9000; 
 int stepper1_steps_ccw = 9000 ; 
+
+boolean stepper1_start_direction = 0 ; 
+unsigned long step_period_1 = 1 ; 
+
+int stepper2_cycle_count = 0;
+int stepper2_start_array[] = {0};
+int stepper2_stop_array[] =  {0};
+
+int stepper2_steps_cw = 0; 
+int stepper2_steps_ccw = 0 ; 
+
+boolean stepper2_start_direction = 0 ; 
+unsigned long step_period_2 = 1 ;
 
 // LED lights
 int ramp_time_divisor = 5; 
