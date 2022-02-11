@@ -102,12 +102,29 @@ boolean manual_led_state_3;
 boolean manual_led_state_4;
 boolean manual_led_state_5;
 
-boolean stepper_state;
-boolean stepper_running;
-boolean stepper_direction;
-boolean stepper_stop_flag ; 
-int8_t stepper_step; 
-int16_t stepper_step_net_counter; 
+boolean stepper1_state;
+boolean stepper1_running;
+//boolean stepper1_start_direction;
+boolean stepper1_direction;
+boolean stepper1_stop_flag ; 
+int8_t stepper1_step; 
+int32_t stepper1_step_net_counter; 
+
+byte stepper1_time_cycle_index;
+unsigned long last_step_time_1  ; 
+// unsigned long step_period_1 = 1 ; 
+
+boolean stepper2_state;
+boolean stepper2_running;
+
+boolean stepper2_direction;
+boolean stepper2_stop_flag ; 
+int8_t stepper2_step; 
+int32_t stepper2_step_net_counter; 
+
+byte stepper2_time_cycle_index;
+unsigned long last_step_time_2  ; 
+//unsigned long step_period_2 = 1 ;
 
 boolean servo_state_1;
 boolean servo_state_2;
@@ -119,9 +136,7 @@ boolean servo_angle_active_2;
 boolean servo_angle_active_3;
 boolean servo_angle_active_4;
 
-byte stepper_time_cycle_index;
-unsigned long last_step_time  ; 
-unsigned long step_period = 1 ; 
+
 
 int light1_time_cycle_index;
 int light2_time_cycle_index;

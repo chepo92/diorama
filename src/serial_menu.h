@@ -372,32 +372,49 @@ void parse_menu(byte key_command)
   else if (key_command == 'C')
   {
     Serial.println("manual Step CCW");
-    stepper_running = true;
+    stepper1_running = true;
     stepper1_steps_ccw = 100;
     
   }
   else if (key_command == 'c')
   {
     Serial.println("manual Step CW");
-    stepper_running = true;   
+    stepper1_running = true;   
     stepper1_steps_cw = 100;
     
   }
   else if (key_command == 'x')
   {
     Serial.println("CW and CCW");
-    stepper_running = true;  
+    stepper1_running = true;  
+    stepper1_direction = stepper1_start_direction ;
     //stepper1_steps_cw = 100*10;
     //stepper1_steps_ccw = 100*10;    
   }  
   else if (key_command == 'X')
   {
     Serial.println("Stop stepper");
-    stepper_running = false;
-    stepperOff() ;
+    stepper1_running = false;
+    stepperOff_1() ;
     //stepper1_steps_cw = 0 ; 
     //stepper1_steps_ccw = 0 ;         
   }   
+else if (key_command == 'd')
+  {
+    Serial.println("CW and CCW");
+    stepper2_running = true;  
+    stepper2_direction = stepper2_start_direction ;
+    //stepper2_steps_cw = 200*20;
+    //stepper2_steps_ccw = 200*20;    
+  }  
+  else if (key_command == 'D')
+  {
+    Serial.println("Stop stepper");
+    stepper2_running = false;
+    stepperOff_2() ;
+    //stepper2_steps_cw = 0 ; 
+    //stepper2_steps_ccw = 0 ;         
+  }     
   else if (key_command == 'z')
   {
     run_state = true;

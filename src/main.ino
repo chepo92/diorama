@@ -18,6 +18,7 @@
 #include <config.h>
 #include <globals.h>
 #include <stepper_lite.h>
+#include <stepper_state_machine.h>
 #include <servo_control.h>
 #include <servo_state_machine.h>
 #include <led_control.h>
@@ -88,10 +89,16 @@ void setup()
 
 
   // Setup stepper pins
-  pinMode(STEPPER_PIN_A, OUTPUT);
-  pinMode(STEPPER_PIN_B, OUTPUT);
-  pinMode(STEPPER_PIN_C, OUTPUT);
-  pinMode(STEPPER_PIN_D, OUTPUT);
+  pinMode(STEPPER1_PIN_A, OUTPUT);
+  pinMode(STEPPER1_PIN_B, OUTPUT);
+  pinMode(STEPPER1_PIN_C, OUTPUT);
+  pinMode(STEPPER1_PIN_D, OUTPUT);
+
+  // Setup stepper pins
+  pinMode(STEPPER2_PIN_A, OUTPUT);
+  pinMode(STEPPER2_PIN_B, OUTPUT);
+  pinMode(STEPPER2_PIN_C, OUTPUT);
+  pinMode(STEPPER2_PIN_D, OUTPUT);
 
 
   PCA1.begin();
@@ -215,17 +222,21 @@ void loop()
     // Reset indexes
     servo_move_index_1 = 0;
     servo_move_index_2 = 0;
+    servo_move_index_3 = 0;
+    servo_move_index_4 = 0;
+
 
     reset_light_indexes(); 
 
-    stepper_time_cycle_index = 0 ; 
-    stepper_stop_flag = false ; 
+    stepper1_time_cycle_index = 0 ; 
+    stepper2_time_cycle_index = 0 ; 
+    //stepper1_stop_flag = false ; 
     // Reset lights and servos  
     reset_all(); 
 
   }
 
-
+  // Control luces
   checkTurnOn1(elapsed_s);
   checkTurnOn2(elapsed_s);
   checkTurnOn3(elapsed_s);
@@ -250,6 +261,7 @@ void loop()
   fadeOut4();
   fadeOut5();
 
+  // Control servos
   checkServoStart_1( elapsed_s); 
   checkServoStop_1( elapsed_s) ;
   updateServoPosition_1( elapsed_s);
@@ -266,102 +278,15 @@ void loop()
   checkServoStop_4( elapsed_s) ;
   updateServoPosition_4( elapsed_s);
 
-  // Control stepper
+  // Control steppers
+  checkStepperStart_1( elapsed_s); 
+  checkStepperStop_1( elapsed_s) ;
+  updateStepperPosition_1( elapsed_s);
 
-  if (run_state && !stepper_state && stepper_time_cycle_index < stepper1_cycle_count && 
-    ((elapsed_s > stepper1_start_array[stepper_time_cycle_index]) && 
-    (elapsed_s < stepper1_stop_array[stepper_time_cycle_index])))
-  {
-    stepper_state = true;
-    stepper_running = true;
-    // myStepper.step(stepsPerRevolution);
-    Serial.println(F("Move Stepper"));
-  }
+  checkStepperStart_2( elapsed_s); 
+  checkStepperStop_2( elapsed_s) ;
+  updateStepperPosition_2( elapsed_s);
 
-  if (stepper_running) // stepper is running
-  {
-    unsigned long current_step_time = millis() ;
-    if (current_step_time - last_step_time > step_period )
-    {
-      last_step_time = current_step_time ;   
-      if (stepper_direction) // CW direction 
-      {
-        if (stepCounter < stepper1_steps_cw)
-        {
-          //oneCycleCW();
-          asyncStep(stepper_step);
-          stepper_step++; 
-          if (stepper_step > 7 )
-          {
-            stepper_step = 0 ; 
-          }
-          //Serial.print(stepper_step);
-          
-          //Serial.print(stepCounter);
-          stepCounter++;
-          stepper_step_net_counter++ ; 
-        } 
-        else
-        {
-          stepCounter = 0;
-          stepper_direction = !stepper_direction;
-          Serial.println("");       
-          Serial.print("Change stepper Direction ");
-          Serial.println(stepper_direction);        
-        }
-      }
-      else   {
-        if (stepCounter < stepper1_steps_ccw)
-        {
-          //oneCycleCCW();
-          asyncStep(stepper_step);
-          stepper_step--; 
-          if (stepper_step < 0 )
-          {
-            stepper_step = 7 ; 
-          }
-          //Serial.print(stepper_step);
-          //Serial.print(stepCounter);
-          stepCounter++;
-          stepper_step_net_counter--;
-        }   
-        else
-        {
-          stepCounter = 0;
-          stepper_direction = !stepper_direction;
-          // Serial.println("reset stepper");
-          Serial.println("");       
-          Serial.print("Change stepper Direction ");
-          Serial.println(stepper_direction);
-        }
-      }
-      
-    }    
-  }
-
-  // flag stop stepper
-  if (run_state && stepper_state && (stepper_time_cycle_index < stepper1_cycle_count) && (elapsed_s > stepper1_stop_array[stepper_time_cycle_index]))
-  {
-    Serial.println("Stop stepper flag");
-    //stepper_state = false ;
-    stepper_stop_flag = true ; 
-    stepper_time_cycle_index++;
-  }
-
-  // Stop stepper 
-  if (run_state && stepper_state && stepper_stop_flag && stepper_step_net_counter==0 ) {
-    
-    stepper_state = false;
-    stepper_running = false; 
-    stepper_stop_flag = false;      
-
-    stepperOff(); 
-    // myStepper.step(-stepsPerRevolution);
-    Serial.println(F("Stop stepper"));
-    //Serial.print("Counter: ");
-    //Serial.println(stepCounter);   
-    stepCounter = 0;     
-  }   
 
   // Serial Commands
   if (Serial.available())
