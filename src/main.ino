@@ -39,7 +39,7 @@
 void reset_all()
 {
   all_lights_off();
-  servo_defaults();
+  servo_defaults(); //Ver lo de Soft_default
 }
 
 

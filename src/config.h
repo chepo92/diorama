@@ -15,7 +15,7 @@
 #define DIORAMA_NUMBER 4
 
 // Individual Settings for each Diorama
-#if   DIORAMA_NUMBER == 1 // El establo
+#if DIORAMA_NUMBER == 1 // El establo
 
 int max_playtime = 125; // 1:35 (60+35)
 
@@ -24,12 +24,12 @@ int stepper1_cycle_count = 1;
 int stepper1_start_array[] = {61}; //  {1} ; //
 int stepper1_stop_array[] = {94}; //  {34} ;// 
 
-int stepper1_steps_cw  = 20000; 
+int stepper1_steps_cw  = 20000; // No pasarme de 32mil o usar var long
 int stepper1_steps_ccw = 20000 ;
 
-boolean stepper1_start_direction = 0 ; 
+boolean stepper1_start_direction = 0 ;  // Direccion que avanza el stepper
 
-// LED lights
+// LED lights, rampla de luz
 int ramp_time_divisor = 5; 
 int ramp_pwm_step = 10;  
 
@@ -98,7 +98,7 @@ int servo_move_type_4 = 1; // 0 : initial, final; 1: move continuous.
 int servo_angles[] = {0};
 
 
-
+// Not used
 int servo_default_position_3 = 1300;
 int servo_default_position_4 = 1300;
 
@@ -117,18 +117,19 @@ unsigned long last_servo_update_2;
 unsigned long last_servo_update_3;
 unsigned long last_servo_update_4;
 
-unsigned long servo_update_period_1 = 5;
+// Mientras mayor el numero, mas lento se mueve
+unsigned long servo_update_period_1 = 5; 
 unsigned long servo_update_period_2 = 5;
 unsigned long servo_update_period_3 = 5;
 unsigned long servo_update_period_4 = 5;
 
+//Steps de cada servo, mientras mayor, mas rapido se mueve
 int servo_step_1 = 1;
 int servo_step_2 = 1;
 int servo_step_3 = 1;
 int servo_step_4 = 1;
 
 #elif DIORAMA_NUMBER == 2 // Se va la lancha
-
 
 long max_playtime = 120; // 1:50 = 60+50
 
@@ -181,12 +182,12 @@ int servo_move_count_2 = 1;
 int servo_start_array_2[] = {10};
 int servo_stop_array_2[] = {114};
 
-// 
+// Not used
 int servo_move_count_3 = 0;
 int servo_start_array_3[] = {0};
 int servo_stop_array_3[] = {0};
 
-// 
+// Not used
 int servo_move_count_4 = 0;
 int servo_start_array_4[] = {0};
 int servo_stop_array_4[] = {0};
