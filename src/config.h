@@ -12,7 +12,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define DIORAMA_NUMBER 4
+#define DIORAMA_NUMBER 4  
 
 // Individual Settings for each Diorama
 #if DIORAMA_NUMBER == 1 // El establo
@@ -71,9 +71,9 @@ int max_servo_position_1 = 1500;
 
 
 // Buey
-int servo_move_count_2 = 1;
-int servo_start_array_2[] = {33};
-int servo_stop_array_2[] = {45};
+int servo_move_count_2 = 3;
+int servo_start_array_2[] = {33, 50, 72};
+int servo_stop_array_2[] = {45, 67, 84};
 
 int servo_default_position_2 = 1500;
 int min_servo_position_2 = 1300;
@@ -254,10 +254,10 @@ unsigned long step_period_1 = 10 ;
 // Arbol   
 int  stepper2_cycle_count   =      1;
 long stepper2_start_array[] =    {12};
-long stepper2_stop_array[]  =    {84};
+long stepper2_stop_array[]  =    {55};
 
-int stepper2_steps_cw  = 100*100; 
-int stepper2_steps_ccw = 100*100; 
+int stepper2_steps_cw  = 100*75; 
+int stepper2_steps_ccw = 100*75; 
 
 boolean stepper2_start_direction = 0 ; 
 unsigned long step_period_2 = 3 ;
@@ -395,12 +395,12 @@ long light1_stop_array[] = {80};
 // conejito 
 int light2_cycle_lenght = 1;
 long light2_start_array[] = {24};
-long light2_stop_array[] = {75};
+long light2_stop_array[] = {80};
 
 // ciervos
 int light3_cycle_lenght = 1;
-int light3_start_array[] = {44};
-int light3_stop_array[] = {70};
+int light3_start_array[] = {25};
+int light3_stop_array[] = {80};
 
 // Cucu
 int light4_cycle_lenght = 1;
@@ -414,23 +414,23 @@ int light5_stop_array[] = {86};
 
 
 // Servos
-// ciervo
+// Huemul arriba
 int min_servo_position_1 = 1200;
 int max_servo_position_1 = 1800;
 int servo_default_position_1 = 1200;
 
-int servo_move_count_1 = 1;
-int servo_start_array_1[] = {45};
-int servo_stop_array_1[] = {67};
+int servo_move_count_1 = 2;
+int servo_start_array_1[] = {34, 62};
+int servo_stop_array_1[] = {48, 76};
 
-// conejo
+// Huemul abajo
 int min_servo_position_2 = 1300;
 int max_servo_position_2 = 1800;
 int servo_default_position_2 = 1300;
 
-int servo_move_count_2 = 1;
-int servo_start_array_2[] = {25};
-int servo_stop_array_2[] = {33};
+int servo_move_count_2 = 2;
+int servo_start_array_2[] = {25, 48};
+int servo_stop_array_2[] = {32, 64};
 
 //  cucu / buho 
 int min_servo_position_3 = 1200;
@@ -439,7 +439,7 @@ int servo_default_position_3 = 1700;
 
 int servo_move_count_3 = 2;
 int servo_start_array_3[] = {13, 34};
-int servo_stop_array_3[] = {23, 43};
+int servo_stop_array_3[] = {24, 43};
 
 // 
 int min_servo_position_4 = 1300;
@@ -526,7 +526,7 @@ int light3_stop_array[] = {98};
 // Pajarito
 int light4_cycle_lenght = 1;
 int light4_start_array[] = {4};
-int light4_stop_array[] = {15};
+int light4_stop_array[] = {78};
 
 // Light 5 is backlight
 int light5_cycle_lenght = 1;
@@ -543,7 +543,7 @@ int servo_default_position_1 = 2500;
 
 int servo_move_count_1 = 3;
 int servo_start_array_1[] = {17, 45, 75};
-int servo_stop_array_1[] = {30, 59, 94};
+int servo_stop_array_1[] = {32, 59, 98};
 
 // Pajarito
 int min_servo_position_2 = 1900;
@@ -552,7 +552,7 @@ int servo_default_position_2 = 2200;
 
 int servo_move_count_2 = 3;
 int servo_start_array_2[] = {5, 33 , 62};
-int servo_stop_array_2[] = {15, 44 , 73 };
+int servo_stop_array_2[] = {19, 48 , 77 };
 
 // Llamas Der
 int min_servo_position_3 = 1800;
