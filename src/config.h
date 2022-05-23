@@ -12,7 +12,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define DIORAMA_NUMBER 4  
+#define DIORAMA_NUMBER 6
 
 // Individual Settings for each Diorama
 #if DIORAMA_NUMBER == 1 // El establo
@@ -605,12 +605,12 @@ long max_playtime = 150; // 120+30
 // steppers
 int stepper1_cycle_count = 1;
 long stepper1_start_array[] = {45}; //45
-long stepper1_stop_array[] = {64};  // 64
+long stepper1_stop_array[] = {84};  // 64
 
-int stepper1_steps_cw  = 9000; 
-int stepper1_steps_ccw = 9000 ; 
+int stepper1_steps_cw  = 2500; 
+int stepper1_steps_ccw = 2500 ; 
 
-boolean stepper1_start_direction = 0 ; 
+boolean stepper1_start_direction = 1 ; 
 unsigned long step_period_1 = 1 ; 
 
 int stepper2_cycle_count = 0;
@@ -658,9 +658,9 @@ int min_servo_position_1 = 1000;
 int max_servo_position_1 = 1800;
 int servo_default_position_1 = 1800;
 
-int servo_move_count_1 = 1;
-int servo_start_array_1[] = {65};
-int servo_stop_array_1[] = {77};
+int servo_move_count_1 = 3;
+int servo_start_array_1[] = {54, 67, 105};
+int servo_stop_array_1[] = {62, 77, 113};
 
 // Ballena
 int min_servo_position_2 = 400;
