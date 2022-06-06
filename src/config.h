@@ -659,35 +659,35 @@ int max_servo_position_1 = 1800;
 int servo_default_position_1 = 1800;
 
 int servo_move_count_1 = 3;
-int servo_start_array_1[] = {54, 67, 105};
-int servo_stop_array_1[] = {62, 77, 113};
+int servo_start_array_1[] = {52, 68, 105};
+int servo_stop_array_1[] = {65, 79, 114};
 
 // Ballena
-int min_servo_position_2 = 400;
-int max_servo_position_2 = 2200;
-int servo_default_position_2 = 400;
+int min_servo_position_2 = 1300;
+int max_servo_position_2 = 1800;
+int servo_default_position_2 = 1300;
 
 int servo_move_count_2 = 1;
 int servo_start_array_2[] = {118};
-int servo_stop_array_2[] = {145};
+int servo_stop_array_2[] = {137};
 
 // 
 int min_servo_position_3 = 1300;
 int max_servo_position_3 = 1500;
 int servo_default_position_3 = 1300;
  
-int servo_move_count_3 = 0;
-int servo_start_array_3[] = {0};
-int servo_stop_array_3[] = {0};
+int servo_move_count_3 = 1;
+int servo_start_array_3[] = {10};
+int servo_stop_array_3[] = {15};
 
 // 
 int min_servo_position_4 = 1000;
 int max_servo_position_4 = 1800;
 int servo_default_position_4 = 1300;
 
-int servo_move_count_4 = 0;
-int servo_start_array_4[] = {0};
-int servo_stop_array_4[] = {0};
+int servo_move_count_4 = 1;
+int servo_start_array_4[] = {10};
+int servo_stop_array_4[] = {20};
 
 /* Servo Control */
 int servo_move_type_1 = 1; // 0 : initial, final; 1: move continuous.
